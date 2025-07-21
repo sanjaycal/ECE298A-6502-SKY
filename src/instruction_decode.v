@@ -56,11 +56,11 @@ reg [7:0] INSTRUCTION;
 // intermediate variables
 
     //wire is_shift_rotate_op;
-    wire [2:0] addr_mode_bits;
+    //wire [2:0] addr_mode_bits;
     //wire is_target_addr_mode;
 
     //assign is_shift_rotate_op = (OPCODE[1:0] == 2'b10);
-    assign addr_mode_bits = OPCODE[4:2];
+    //assign addr_mode_bits = OPCODE[4:2];
     //assign is_target_addr_mode = ((addr_mode_bits == `ADR_ZPG) ||   
     //                            (addr_mode_bits == `ADR_ABS)  || 
     //                            (addr_mode_bits == `ADR_ZPG_X)); 
