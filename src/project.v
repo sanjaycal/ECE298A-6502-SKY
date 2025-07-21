@@ -88,7 +88,7 @@ module tt_um_6502 (
   wire [7:0] ALU_inputB;
 
   wire [7:0] ALU_output;
-  wire [7:0] ALU_flags_output;
+  wire [6:0] ALU_flags_output;
 
   clock_generator clockGenerator(clk, clk_cpu, clk_output);
   instruction_decode instructionDecode(

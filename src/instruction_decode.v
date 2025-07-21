@@ -57,7 +57,7 @@ reg [7:0] INSTRUCTION;
 
     wire is_shift_rotate_op;
     wire [2:0] addr_mode_bits;
-    //wire is_target_addr_mode;
+    wire is_target_addr_mode;
 
     assign is_shift_rotate_op = (OPCODE[1:0] == 2'b10);
     assign addr_mode_bits = OPCODE[4:2];
