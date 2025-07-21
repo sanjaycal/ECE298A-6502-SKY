@@ -1,11 +1,11 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
+  title:        "NES Emulator"      # Project title
+  author:       "Sanjay Jayaram, Sri Charan Tadepalli, Dennis Chen"      # Your name
+  discord:      "12344man, dechair3, mmmmmmman."      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
+  description:  "An NES emulator"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     10000000       # Clock frequency in Hz (or 0 if not applicable)
+  clock_hz:     22000000       # Clock frequency in Hz (or 0 if not applicable)
 
   # How many tiles your design occupies? A single tile is about 167x108 uM.
   tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
@@ -23,27 +23,27 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "input"
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
-  ui[6]: ""
-  ui[7]: ""
+  ui[0]: "controllerA"
+  ui[1]: "controllerB"
+  ui[2]: "controllerDpadUP"
+  ui[3]: "controllerDpadLEFT"
+  ui[4]: "controllerDpadRIGHT"
+  ui[5]: "controllerDpadDOWN"
+  ui[6]: "controllerSTART"
+  ui[7]: "controllerSELECT"
 
   # Outputs
-  uo[0]: "output"
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
+  uo[0]: "vga1"
+  uo[1]: "vga2"
+  uo[2]: "vga3"
+  uo[3]: "vga4"
+  uo[4]: "vga5"
   uo[5]: ""
   uo[6]: ""
   uo[7]: ""
 
   # Bidirectional pins
-  uio[0]: "bidirectional"
+  uio[0]: ""
   uio[1]: ""
   uio[2]: ""
   uio[3]: ""

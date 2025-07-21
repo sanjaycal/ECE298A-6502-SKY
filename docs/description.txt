@@ -1,0 +1,20 @@
+The 6502 resources we found compiled online did not reflect the hardware as much as expected
+most likely due to the fact that the provided information was for developers using the 6502 and
+not the actual design manual itself. 
+
+We also found that the 6502 was made with some strange practices in mind - at the time, the design 
+space was not as advanced and explored; for instance, modern CPUs do not use multi-phase clock signals.
+
+Thus, we decided to make some educated guesses and edits to 'improve' the design for our use cases.
+That said, we do intend for our 6502 to remain relatively authentic.
+
+Notation:
+-> is a 1 bit line,
+=> is a 8 bit bus
+
+Changes to Base Design Made:
+    - INTERNAL DATA BUS=>DATA BUS BUFFER is now bidirectional
+    - Created ADDR SELECT, a mux that selects between 16 bit input from Program counter and 16 bit input from
+      Instruction Decode
+        - Added a 2 8 bit busses INSTRUCTION DECODE=>ADDR SELECT
+        - Set the 8 bit bus PCL=>ADL to PCL=>ADDR SELECT 
