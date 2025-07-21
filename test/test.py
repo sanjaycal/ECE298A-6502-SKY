@@ -40,7 +40,7 @@ async def test_ASL_ZPG_Clear(dut):
 @cocotb.test()
 async def test_ASL_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 1, units="us")
+    clock = Clock(dut.clk, 0.1, units="us")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
