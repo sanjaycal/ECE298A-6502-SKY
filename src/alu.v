@@ -8,9 +8,9 @@ module alu (
     input  wire [4:0]   alu_op,
     input  wire [7:0]   inputA,
     input  wire [7:0]   inputB,
-    input  wire [6:0]   status_flags_in,
+    input  wire [7:0]   status_flags_in,
     output reg  [7:0]   ALU_output,
-    output reg  [6:0]   ALU_flags_output  
+    output reg  [7:0]   ALU_flags_output  
 );
 
     // These calculate the result for every possible operation, all the time.

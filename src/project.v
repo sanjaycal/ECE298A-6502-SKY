@@ -8,11 +8,11 @@
 `include "../inc/buf_instructions.vh"
 
 
-  localparam BUF_IDLE_TWO      = 2'b00;
+  //localparam BUF_IDLE_TWO      = 2'b00;
   localparam BUF_LOAD_TWO      = 2'b01; // Take from a BUS and keep
   localparam BUF_STORE_TWO     = 2'b10; // Put the register value on a BUS
   
-  localparam BUF_IDLE_THREE    = 3'b000;
+  //localparam BUF_IDLE_THREE    = 3'b000;
   localparam BUF_LOAD1_THREE   = 3'b100; // Take from a BUS and keep
   localparam BUF_LOAD2_THREE   = 3'b101; // Take from a BUS and keep
   localparam BUF_STORE1_THREE  = 3'b110; // Put the register value on a BUS
