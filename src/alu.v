@@ -76,10 +76,8 @@ module alu (
 
 
 
-    always @(posedge clk) begin
+    always @(edge clk) begin
         ALU_output <= next_alu_result;
-    end
-    always @(*) begin
         ALU_flags_output = next_alu_flags[6:0]; 
     end
 

@@ -63,7 +63,7 @@ module tt_um_6502 (
   wire [6:0] processor_status_register_write;
 
 
-  reg [15:0] ab;
+  wire [15:0] ab;
 
   reg [7:0] input_data_latch;
   reg [7:0] bus1;
@@ -234,14 +234,10 @@ assign ALU_inputA = bus1;
 assign ALU_inputB = bus2;
 
 // The address bus mux
-always @(*) begin
-    case (address_select)
-        2'b00:   ab = pc;
-        2'b01:   ab = memory_address;
-        2'b10:   ab = {8'h0, ALU_output};
-        default: ab = 16'b0;
-    endcase
-end
+  assign ab = (address_select==2'b00)?pc:
+	    	(address_select==2'b01)?memory_address:
+		(address_select==2'b10)?{8'h0, ALU_output}:
+		0;
             
   assign instruction_register = uio_in;
 
