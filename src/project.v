@@ -115,7 +115,7 @@ module tt_um_6502 (
   );
   
   alu ALU(
-    .clk               (clk_cpu),
+    .clk               (clk_output),
     .alu_op            (ALU_op),
     .inputA            (ALU_inputA),
     .inputB            (ALU_inputB),
