@@ -75,7 +75,6 @@ always @(*) begin
     rw = 1;
     data_buffer_enable = `BUF_IDLE_TWO;
     input_data_latch_enable = `BUF_IDLE_TWO;
-    pc_enable = 0;
     accumulator_enable = `BUF_IDLE_THREE;
     stack_pointer_register_enable = `BUF_IDLE_THREE;
     index_register_X_enable = `BUF_IDLE_THREE;
@@ -85,7 +84,6 @@ always @(*) begin
         NEXT_STATE = S_OPCODE_READ;
     end
     S_OPCODE_READ: begin
-        pc_enable = 1;   // Increment Program Counter
         // In this state, we just need to increment the PC and decide where to go next.
         // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
         if(INSTRUCTION == `OP_NOP) begin
@@ -104,7 +102,6 @@ always @(*) begin
     end
     S_ZPG_ABS_ADR_READ: begin
         address_select = 1;
-        pc_enable = 1;
         memory_address = MEMORY_ADDRESS; // Puts the memory address read in adh/adl
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
@@ -237,11 +234,9 @@ always @(*) begin
         end
     end
     S_ABS_LB: begin
-        pc_enable = 1;
         NEXT_STATE = S_ABS_HB;
     end
     S_ABS_HB: begin
-        pc_enable = 1;
         NEXT_STATE = S_IDL_DATA_WRITE;
         memory_address = MEMORY_ADDRESS; // Puts the memory address read in adh/adl
         address_select = 1;
@@ -260,7 +255,8 @@ always @(posedge clk ) begin
     end else if(rdy) begin
         STATE <= NEXT_STATE;
         if(NEXT_STATE == S_OPCODE_READ) begin
-             OPCODE <= instruction;
+            pc_enable <= 1; 
+            OPCODE <= instruction;
             if(instruction[4:2] == `ADR_ZPG) begin
                 ADDRESSING <= `ADR_ZPG;
             end else if(instruction[4:2] == `ADR_ABS) begin
@@ -271,10 +267,14 @@ always @(posedge clk ) begin
                 ADDRESSING <= `ADR_ZPG_X;
             end
         end else if(NEXT_STATE == S_ABS_LB || NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
+	    pc_enable <= 1;
             MEMORY_ADDRESS <= {8'h00, instruction};
         end else if(NEXT_STATE == S_ABS_HB) begin
+	    pc_enable <= 1;
             MEMORY_ADDRESS <= {instruction, MEMORY_ADDRESS[7:0]};
-        end
+        end else begin
+	    pc_enable <= 0;
+	end
     end
 end
 
