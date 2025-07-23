@@ -78,7 +78,7 @@ module alu (
 
     always @(posedge clk) begin
         ALU_output <= next_alu_result;
-        ALU_flags_output <= next_alu_flags[6:0]; 
+        ALU_flags_output = next_alu_flags[6:0]; 
     end
 
 
