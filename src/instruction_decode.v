@@ -70,7 +70,6 @@ always @(*) begin
     NEXT_STATE = STATE;
     alu_enable = `NOP;
     processor_status_register_write = 7'b0;
-    address_select = 2'b00;
     processor_status_register_rw = 1;
     rw = 1;
     data_buffer_enable = `BUF_IDLE_TWO;
@@ -101,7 +100,6 @@ always @(*) begin
         end  
     end
     S_ZPG_ABS_ADR_READ: begin
-        address_select = 1;
         memory_address = MEMORY_ADDRESS; // Puts the memory address read in adh/adl
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
@@ -214,7 +212,6 @@ always @(*) begin
     S_DBUF_OUTPUT: begin
         data_buffer_enable = `BUF_STORE_TWO;
         memory_address = MEMORY_ADDRESS;
-        address_select = 2'd1;
         rw = 0;
         NEXT_STATE = S_IDLE;
     end
@@ -239,7 +236,6 @@ always @(*) begin
     S_ABS_HB: begin
         NEXT_STATE = S_IDL_DATA_WRITE;
         memory_address = MEMORY_ADDRESS; // Puts the memory address read in adh/adl
-        address_select = 1;
     end
     default: NEXT_STATE = S_IDLE;
     endcase
@@ -254,6 +250,8 @@ always @(posedge clk ) begin
         MEMORY_ADDRESS <= 0;
     end else if(rdy) begin
         STATE <= NEXT_STATE;
+        address_select <= 0;
+	pc_enable <= 0;
         if(NEXT_STATE == S_OPCODE_READ) begin
             pc_enable <= 1; 
             OPCODE <= instruction;
@@ -266,15 +264,20 @@ always @(posedge clk ) begin
             end else if (instruction[4:2] == `ADR_ZPG_X) begin
                 ADDRESSING <= `ADR_ZPG_X;
             end
-        end else if(NEXT_STATE == S_ABS_LB || NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
+        end else if(NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
+            address_select <= 1;
+	    pc_enable <= 1;
+            MEMORY_ADDRESS <= {8'h00, instruction};
+        end else if(NEXT_STATE == S_ABS_LB) begin
 	    pc_enable <= 1;
             MEMORY_ADDRESS <= {8'h00, instruction};
         end else if(NEXT_STATE == S_ABS_HB) begin
+            address_select <= 1;
 	    pc_enable <= 1;
             MEMORY_ADDRESS <= {instruction, MEMORY_ADDRESS[7:0]};
-        end else begin
-	    pc_enable <= 0;
-	end
+        end else if(NEXT_STATE == S_DBUF_OUTPUT) begin
+	    address_select <= 2'd1;
+        end 
     end
 end
 
