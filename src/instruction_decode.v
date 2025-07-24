@@ -66,7 +66,6 @@ reg [7:0] INSTRUCTION;
     //                            (addr_mode_bits == `ADR_ZPG_X)); 
 
 always @(*) begin
-    memory_address = 16'b0;
     NEXT_STATE = STATE;
     alu_enable = `NOP;
     processor_status_register_write = 7'b0;
@@ -100,23 +99,15 @@ always @(*) begin
         end  
     end
     S_ZPG_ABS_ADR_READ: begin
-        memory_address = MEMORY_ADDRESS; // Puts the memory address read in adh/adl
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
     S_IDL_DATA_WRITE: begin
         input_data_latch_enable = `BUF_LOAD_TWO;
-
- 
-
-        //if (is_shift_rotate_op && is_target_addr_mode || (OPCODE == `OP_LD_X_ZPG)) begin
-            NEXT_STATE = S_ALU_FINAL;
-        //end
+        NEXT_STATE = S_ALU_FINAL;
     end
     S_IDL_ADR_WRITE: begin
         input_data_latch_enable = `BUF_IDLE_TWO;
-        if((OPCODE & `OP_ALU_MASK) == `OP_ALU_SHIFT_ZPG_X) begin 
-            NEXT_STATE = S_ALU_ADR_CALC_1;
-        end   
+        NEXT_STATE = S_ALU_ADR_CALC_1;
     end
     S_ALU_FINAL: begin
         processor_status_register_rw = 0;
@@ -211,31 +202,24 @@ always @(*) begin
     end 
     S_DBUF_OUTPUT: begin
         data_buffer_enable = `BUF_STORE_TWO;
-        memory_address = MEMORY_ADDRESS;
         rw = 0;
         NEXT_STATE = S_IDLE;
     end
     S_ALU_ADR_CALC_1:  begin
         alu_enable  = `ADD;
-        if((OPCODE & `OP_ALU_MASK) == `OP_ALU_SHIFT_ZPG_X) begin
-            input_data_latch_enable = `BUF_STORE_TWO;
-            index_register_X_enable = `BUF_STORE2_THREE;
-        end
+        input_data_latch_enable = `BUF_STORE_TWO;
+        index_register_X_enable = `BUF_STORE2_THREE;
         NEXT_STATE = S_ALU_ADR_CALC_2;
     end
     S_ALU_ADR_CALC_2: begin
         alu_enable = `TMX;
-        if((OPCODE & `OP_ALU_MASK) == `OP_ALU_SHIFT_ZPG_X) begin
-            address_select = 2'd2;
-            NEXT_STATE = S_IDL_DATA_WRITE;
-        end
+        NEXT_STATE = S_IDL_DATA_WRITE;
     end
     S_ABS_LB: begin
         NEXT_STATE = S_ABS_HB;
     end
     S_ABS_HB: begin
         NEXT_STATE = S_IDL_DATA_WRITE;
-        memory_address = MEMORY_ADDRESS; // Puts the memory address read in adh/adl
     end
     default: NEXT_STATE = S_IDLE;
     endcase
@@ -252,6 +236,7 @@ always @(posedge clk ) begin
         STATE <= NEXT_STATE;
         address_select <= 0;
 	pc_enable <= 0;
+        memory_address = 16'b0;
         if(NEXT_STATE == S_OPCODE_READ) begin
             pc_enable <= 1; 
             OPCODE <= instruction;
@@ -268,6 +253,7 @@ always @(posedge clk ) begin
             address_select <= 1;
 	    pc_enable <= 1;
             MEMORY_ADDRESS <= {8'h00, instruction};
+            memory_address <= {8'h00, instruction};
         end else if(NEXT_STATE == S_ABS_LB) begin
 	    pc_enable <= 1;
             MEMORY_ADDRESS <= {8'h00, instruction};
@@ -275,9 +261,13 @@ always @(posedge clk ) begin
             address_select <= 1;
 	    pc_enable <= 1;
             MEMORY_ADDRESS <= {instruction, MEMORY_ADDRESS[7:0]};
+            memory_address <= {instruction, MEMORY_ADDRESS[7:0]};
         end else if(NEXT_STATE == S_DBUF_OUTPUT) begin
 	    address_select <= 2'd1;
-        end 
+            memory_address <= MEMORY_ADDRESS;
+        end else if(NEXT_STATE == S_ALU_ADR_CALC_2) begin
+            address_select <= 2'd2;
+	end
     end
 end
 
