@@ -173,53 +173,35 @@ end
     if(ALU_op != `NOP && ALU_op != `TMX) begin
       next_processor_status_register <= ALU_flags_output & processor_status_register_write;
     end
-  end
-
-  always @(posedge clk) begin
     if(clk_enable==0)begin
-    if (rst_n == 0) begin
-      pc <= 0;
-    end else if(pc_enable) begin
+      if (rst_n == 0) begin
+        processor_status_register <= 0;
+        input_data_latch <= 8'b0;
+        pc <= 0;
+
+      end else begin
+        processor_status_register <= next_processor_status_register;
+        if(input_data_latch_enable == 1) begin
+          input_data_latch <= uio_in;
+        end
+        if(pc_enable) begin
           pc <= pc + 1;
-    end
-  end
-  end
+        end
+      end
+    end else if(clk_enable==1)begin
+      if (rst_n == 0) begin
+        accumulator <= 0;
+        data_bus_buffer <= 0;
+        index_register_x <= 0;
+        index_register_y <= 0;
 
-  always @(posedge clk) begin
-    if(clk_enable==0)begin
-    if (rst_n == 0) begin
-      processor_status_register <= 0;
-      input_data_latch <= 8'b0;
-
-    end else begin
-    // if(rw == 0 && data_buffer_enable == BUF_STORE_TWO) begin
-    //   uio_out <= data_bus_buffer;
-    // end
-      processor_status_register <= next_processor_status_register;
-      if(input_data_latch_enable == 1) begin
-        input_data_latch <= uio_in;
+      end else begin
+        accumulator <= next_accumulator;
+        data_bus_buffer <= next_data_bus_buffer;
+        index_register_x <= next_index_register_x;
+        index_register_y <= next_index_register_y;
       end
     end
-  end
-  end
-  always @(posedge clk) begin
-    if(clk_enable==1)begin
-    if (rst_n == 0) begin
-      accumulator <= 0;
-      data_bus_buffer <= 0;
-      index_register_x <= 0;
-      index_register_y <= 0;
-
-    end else begin
-    // if(rw == 0 && data_buffer_enable == BUF_STORE_TWO) begin
-    //   uio_out <= data_bus_buffer;
-    // end
-      accumulator <= next_accumulator;
-      data_bus_buffer <= next_data_bus_buffer;
-      index_register_x <= next_index_register_x;
-      index_register_y <= next_index_register_y;
-    end
-  end
   end
 
   // List all unused inputs to prevent warnings
