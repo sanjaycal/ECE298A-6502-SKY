@@ -158,6 +158,7 @@ always @(posedge clk ) begin
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 0;
     end else if(rdy) begin
+        // Default assignments for all states
         STATE <= NEXT_STATE;
         address_select <= 0;
 	    pc_enable <= 0;
@@ -172,147 +173,163 @@ always @(posedge clk ) begin
         stack_pointer_register_enable <= `BUF_IDLE_THREE;
         index_register_X_enable <= `BUF_IDLE_THREE;
         index_register_Y_enable <= `BUF_IDLE_THREE;
-        if(NEXT_STATE == S_OPCODE_READ) begin
-            pc_enable <= 1;
-            OPCODE <= instruction;
-            if(instruction[4:2] == `ADR_ZPG) begin
-                ADDRESSING <= `ADR_ZPG;
-            end else if(instruction[4:2] == `ADR_ABS) begin
-                ADDRESSING <= `ADR_ABS; // THIS DOES NOT HANDLE JUMP SUBROUTINE (JSR). THAT WILL NEED ITS OWN STATES IN THE SM!!!!
-            end else if(instruction[4:2] == `ADR_A) begin
-                ADDRESSING <= `ADR_A;
-            end else if (instruction[4:2] == `ADR_ZPG_X) begin
-                ADDRESSING <= `ADR_ZPG_X;
-            end
-        end else if(NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
-            address_select <= 1;
-	    pc_enable <= 1;
-            MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
-            memory_address <= {8'h00, instruction};
-        end else if(NEXT_STATE == S_ABS_LB) begin
-	    pc_enable <= 1;
-            MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
-        end else if(NEXT_STATE == S_ABS_HB) begin
-            address_select <= 1;
-	    pc_enable <= 1;
-            MEMORY_ADDRESS_INTERNAL <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
-            memory_address <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
-        end else if(NEXT_STATE == S_DBUF_OUTPUT) begin
-            rw <= 0;
-            data_buffer_enable <= `BUF_STORE_TWO;
-	    address_select <= 2'd1;
-            memory_address <= MEMORY_ADDRESS_INTERNAL;
-        end else if(NEXT_STATE == S_ALU_ADR_CALC_1) begin
-            alu_enable  <= `ADD;
-            input_data_latch_enable <= `BUF_STORE_TWO;
-            index_register_X_enable <= `BUF_STORE2_THREE;
-        end else if(NEXT_STATE == S_ALU_ADR_CALC_2) begin
-            alu_enable <= `TMX;
-            address_select <= 2'd2;
-        end else if(NEXT_STATE == S_ALU_FINAL) begin
-            processor_status_register_rw <= 0;
-            if(OPCODE == `OP_ASL_ZPG || OPCODE ==  `OP_ASL_ZPG_X || OPCODE == `OP_ASL_ABS) begin
-            	input_data_latch_enable <= `BUF_STORE_TWO;
-	        alu_enable  <= `ASL;
-		processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_ASL_A) begin
-                accumulator_enable <= `BUF_STORE2_THREE;
-                alu_enable <= `ASL;
-                processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_LSR_ZPG || OPCODE == `OP_LSR_ZPG_X || OPCODE == `OP_LSR_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-		alu_enable  <= `LSR;
-		processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_LSR_A ) begin
-                accumulator_enable <= `BUF_STORE2_THREE;
-                alu_enable <= `LSR;
-                processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_ROL_ZPG || OPCODE == `OP_ROL_ZPG_X || OPCODE == `OP_ROL_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `ROL;
-                processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_ROR_ZPG || OPCODE == `OP_ROR_ZPG_X || OPCODE == `OP_ROR_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `ROR;
-                processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ZPG_X || OPCODE == `OP_AND_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                accumulator_enable <= `BUF_STORE2_THREE;
-                alu_enable <= `AND;
-                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_INC_ZPG || OPCODE == `OP_INC_ZPG_X || OPCODE == `OP_INC_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `INC;
-                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
-            end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `DEC;
-                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
-            end
         
-            // LOAD
-            else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG) begin
+        // State-specific logic using a case statement
+        case(NEXT_STATE)
+            S_OPCODE_READ: begin
+                pc_enable <= 1;
+                OPCODE <= instruction;
+                if(instruction[4:2] == `ADR_ZPG) begin
+                    ADDRESSING <= `ADR_ZPG;
+                end else if(instruction[4:2] == `ADR_ABS) begin
+                    ADDRESSING <= `ADR_ABS; // THIS DOES NOT HANDLE JUMP SUBROUTINE (JSR). THAT WILL NEED ITS OWN STATES IN THE SM!!!!
+                end else if(instruction[4:2] == `ADR_A) begin
+                    ADDRESSING <= `ADR_A;
+                end else if (instruction[4:2] == `ADR_ZPG_X) begin
+                    ADDRESSING <= `ADR_ZPG_X;
+                end
+            end
+            S_ZPG_ABS_ADR_READ: begin
+                address_select <= 1;
+                pc_enable <= 1;
+                MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
+                memory_address <= {8'h00, instruction};
+            end
+            S_ABS_LB: begin
+                pc_enable <= 1;
+                MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
+            end
+            S_ABS_HB: begin
+                address_select <= 1;
+                pc_enable <= 1;
+                MEMORY_ADDRESS_INTERNAL <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
+                memory_address <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
+            end
+            S_DBUF_OUTPUT: begin
+                rw <= 0;
+                data_buffer_enable <= `BUF_STORE_TWO;
+                address_select <= 2'd1;
+                memory_address <= MEMORY_ADDRESS_INTERNAL;
+            end
+            S_ALU_ADR_CALC_1: begin
+                alu_enable  <= `ADD;
                 input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `FLG;
-                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
-            end
-            
-        end else if(NEXT_STATE == S_ALU_TMX) begin
-            if(OPCODE == `OP_LD_X_ZPG) begin
-                index_register_X_enable <= `BUF_LOAD2_THREE;
-                alu_enable <= `TMX;
-            end
-            else if(OPCODE == `OP_LD_Y_ZPG) begin
-                index_register_Y_enable <= `BUF_LOAD2_THREE;
-                alu_enable <= `TMX;
-            end
-            else if(OPCODE == `OP_LD_A_ZPG) begin
-                accumulator_enable <= `BUF_LOAD2_THREE;
-                alu_enable <= `TMX;
-            end
-            else if(OPCODE == `OP_AND_ZPG) begin
-                accumulator_enable <= `BUF_LOAD2_THREE;
-                alu_enable <= `TMX;
-            end
-            else if(OPCODE == `OP_ST_X_ZPG) begin
                 index_register_X_enable <= `BUF_STORE2_THREE;
-                data_buffer_enable <= `BUF_LOAD_TWO;
             end
-            else if(OPCODE == `OP_ST_Y_ZPG) begin
-                index_register_Y_enable <= `BUF_STORE2_THREE;
-                data_buffer_enable <= `BUF_LOAD_TWO;         
-	    end
-            else if(OPCODE == `OP_ST_A_ZPG) begin
-                accumulator_enable <= `BUF_STORE2_THREE;
-                data_buffer_enable <= `BUF_LOAD_TWO;
-            end
-            else if(ADDRESSING == `ADR_ZPG || ADDRESSING == `ADR_ZPG_X || ADDRESSING == `ADR_ABS) begin
-                data_buffer_enable <= `BUF_LOAD_TWO;
+            S_ALU_ADR_CALC_2: begin
                 alu_enable <= `TMX;
+                address_select <= 2'd2;
             end
-	    else if(ADDRESSING == `ADR_A) begin
-                accumulator_enable <= `BUF_LOAD2_THREE;
-                alu_enable <= `TMX;
+            S_ALU_FINAL: begin
+                processor_status_register_rw <= 0;
+                if(OPCODE == `OP_ASL_ZPG || OPCODE ==  `OP_ASL_ZPG_X || OPCODE == `OP_ASL_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable  <= `ASL;
+                    processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_ASL_A) begin
+                    accumulator_enable <= `BUF_STORE2_THREE;
+                    alu_enable <= `ASL;
+                    processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_LSR_ZPG || OPCODE == `OP_LSR_ZPG_X || OPCODE == `OP_LSR_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable  <= `LSR;
+                    processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_LSR_A ) begin
+                    accumulator_enable <= `BUF_STORE2_THREE;
+                    alu_enable <= `LSR;
+                    processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_ROL_ZPG || OPCODE == `OP_ROL_ZPG_X || OPCODE == `OP_ROL_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable <= `ROL;
+                    processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_ROR_ZPG || OPCODE == `OP_ROR_ZPG_X || OPCODE == `OP_ROR_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable <= `ROR;
+                    processor_status_register_write <= `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ZPG_X || OPCODE == `OP_AND_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    accumulator_enable <= `BUF_STORE2_THREE;
+                    alu_enable <= `AND;
+                    processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_INC_ZPG || OPCODE == `OP_INC_ZPG_X || OPCODE == `OP_INC_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable <= `INC;
+                    processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+                end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable <= `DEC;
+                    processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+                end
+                // LOAD
+                else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG) begin
+                    input_data_latch_enable <= `BUF_STORE_TWO;
+                    alu_enable <= `FLG;
+                    processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+                end
             end
-        end else if(NEXT_STATE == S_IDL_ADR_WRITE) begin
-            input_data_latch_enable <= `BUF_IDLE_TWO;
-        end else if(NEXT_STATE == S_IDL_DATA_WRITE) begin
-            input_data_latch_enable <= `BUF_LOAD_TWO;
-        end else begin
-        address_select <= 0;
-	pc_enable <= 0;
-        memory_address <= 16'b0;
-        rw <= 1;
-        alu_enable <= `NOP;
-        processor_status_register_write <= 7'b0;
-        processor_status_register_rw <= 1;
-        data_buffer_enable <= `BUF_IDLE_TWO;
-        input_data_latch_enable <= `BUF_IDLE_TWO;
-        accumulator_enable <= `BUF_IDLE_THREE;
-        stack_pointer_register_enable <= `BUF_IDLE_THREE;
-        index_register_X_enable <= `BUF_IDLE_THREE;
-        index_register_Y_enable <= `BUF_IDLE_THREE;
-        end
+            S_ALU_TMX: begin
+                if(OPCODE == `OP_LD_X_ZPG) begin
+                    index_register_X_enable <= `BUF_LOAD2_THREE;
+                    alu_enable <= `TMX;
+                end
+                else if(OPCODE == `OP_LD_Y_ZPG) begin
+                    index_register_Y_enable <= `BUF_LOAD2_THREE;
+                    alu_enable <= `TMX;
+                end
+                else if(OPCODE == `OP_LD_A_ZPG) begin
+                    accumulator_enable <= `BUF_LOAD2_THREE;
+                    alu_enable <= `TMX;
+                end
+                else if(OPCODE == `OP_AND_ZPG) begin
+                    accumulator_enable <= `BUF_LOAD2_THREE;
+                    alu_enable <= `TMX;
+                end
+                else if(OPCODE == `OP_ST_X_ZPG) begin
+                    index_register_X_enable <= `BUF_STORE2_THREE;
+                    data_buffer_enable <= `BUF_LOAD_TWO;
+                end
+                else if(OPCODE == `OP_ST_Y_ZPG) begin
+                    index_register_Y_enable <= `BUF_STORE2_THREE;
+                    data_buffer_enable <= `BUF_LOAD_TWO;         
+                end
+                else if(OPCODE == `OP_ST_A_ZPG) begin
+                    accumulator_enable <= `BUF_STORE2_THREE;
+                    data_buffer_enable <= `BUF_LOAD_TWO;
+                end
+                else if(ADDRESSING == `ADR_ZPG || ADDRESSING == `ADR_ZPG_X || ADDRESSING == `ADR_ABS) begin
+                    data_buffer_enable <= `BUF_LOAD_TWO;
+                    alu_enable <= `TMX;
+                end
+                else if(ADDRESSING == `ADR_A) begin
+                    accumulator_enable <= `BUF_LOAD2_THREE;
+                    alu_enable <= `TMX;
+                end
+            end
+            S_IDL_ADR_WRITE: begin
+                input_data_latch_enable <= `BUF_IDLE_TWO;
+            end
+            S_IDL_DATA_WRITE: begin
+                input_data_latch_enable <= `BUF_LOAD_TWO;
+            end
+            default: begin
+                // Default assignments are already handled at the top of the if(rdy) block.
+                // This case handles any state not explicitly covered above,
+                // ensuring defined behavior.
+                address_select <= 0;
+                pc_enable <= 0;
+                memory_address <= 16'b0;
+                rw <= 1;
+                alu_enable <= `NOP;
+                processor_status_register_write <= 7'b0;
+                processor_status_register_rw <= 1;
+                data_buffer_enable <= `BUF_IDLE_TWO;
+                input_data_latch_enable <= `BUF_IDLE_TWO;
+                accumulator_enable <= `BUF_IDLE_THREE;
+                stack_pointer_register_enable <= `BUF_IDLE_THREE;
+                index_register_X_enable <= `BUF_IDLE_THREE;
+                index_register_Y_enable <= `BUF_IDLE_THREE;
+            end
+        endcase
     end
 end
 
