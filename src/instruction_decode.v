@@ -65,7 +65,7 @@ reg [7:0] INSTRUCTION=0;
     //                            (addr_mode_bits == `ADR_ABS)  ||
     //                            (addr_mode_bits == `ADR_ZPG_X));
 
-always @(*) begin
+always @(negedge clk) begin
     NEXT_STATE = STATE;
     case(STATE)
     S_IDLE: begin
