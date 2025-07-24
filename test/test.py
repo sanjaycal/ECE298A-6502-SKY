@@ -9,6 +9,14 @@ import helper
 
 
 @cocotb.test()
+async def test_RESET(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 1000, units="us")
+    cocotb.start_soon(clock.start())
+    await helper.reset_cpu(dut)
+
+
+@cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 1000, units="us")
