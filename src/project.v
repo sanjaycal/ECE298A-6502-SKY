@@ -140,37 +140,37 @@ module tt_um_6502 (
 		0;
 
   always @(posedge clk) begin
-    next_accumulator = accumulator;
-    next_index_register_x = index_register_x;
-    next_index_register_y = index_register_y;
-    next_data_bus_buffer = data_bus_buffer;
-    next_processor_status_register = processor_status_register;
+    next_accumulator <= accumulator;
+    next_index_register_x <= index_register_x;
+    next_index_register_y <= index_register_y;
+    next_data_bus_buffer <= data_bus_buffer;
+    next_processor_status_register <= processor_status_register;
     //reading data from the bus 1
     if(accumulator_enable == BUF_LOAD1_THREE) begin
-       next_accumulator = bus1;
+       next_accumulator <= bus1;
     end
     if(index_register_x_enable == BUF_LOAD1_THREE) begin
-      next_index_register_x = bus1;
+      next_index_register_x <= bus1;
     end
     if(index_register_y_enable == BUF_LOAD1_THREE) begin
-      next_index_register_y = bus1;
+      next_index_register_y <= bus1;
     end
     //reading data from the bus 2
     if(data_buffer_enable == BUF_LOAD_TWO) begin
-      next_data_bus_buffer = bus2;
+      next_data_bus_buffer <= bus2;
     end
     if(accumulator_enable == BUF_LOAD2_THREE) begin
-       next_accumulator = bus2;
+       next_accumulator <= bus2;
     end
     if(index_register_x_enable == BUF_LOAD2_THREE) begin
-      next_index_register_x = bus2;
+      next_index_register_x <= bus2;
     end
     if(index_register_y_enable == BUF_LOAD2_THREE) begin
-      next_index_register_y = bus2;
+      next_index_register_y <= bus2;
     end
     //alu stuff
     if(ALU_op != `NOP && ALU_op != `TMX) begin
-      next_processor_status_register = ALU_flags_output & processor_status_register_write;
+      next_processor_status_register <= ALU_flags_output & processor_status_register_write;
     end
   end
 
