@@ -146,6 +146,11 @@ module tt_um_6502 (
       processor_status_register <= 7'h00;
       input_data_latch <= 8'h00;
       data_bus_buffer <= 8'h00;
+    next_accumulator <= 0;
+    next_index_register_x <= 0;
+    next_index_register_y <= 0;
+    next_data_bus_buffer <= 0;
+    next_processor_status_register <= 0;
     end else begin
     next_accumulator <= accumulator;
     next_index_register_x <= index_register_x;
