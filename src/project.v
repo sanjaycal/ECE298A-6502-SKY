@@ -139,7 +139,7 @@ module tt_um_6502 (
 		(index_register_y_enable == BUF_STORE2_THREE)?index_register_y:
 		0;
 
-  always @(*) begin
+  always @(posedge clk) begin
     next_accumulator = accumulator;
     next_index_register_x = index_register_x;
     next_index_register_y = index_register_y;
