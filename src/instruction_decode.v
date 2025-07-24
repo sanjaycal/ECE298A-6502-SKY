@@ -48,7 +48,7 @@ localparam S_ABS_HB         = 4'd11;
 
 reg [3:0] STATE      = S_IDLE;
 reg [3:0] NEXT_STATE = S_IDLE;
-reg [15:0] MEMORY_ADDRESS   = 16'b0; 
+reg [15:0] MEMORY_ADDRESS_INTERNAL  = 16'b0; 
 reg [2:0] ADDRESSING;
 reg [7:0] OPCODE;
 reg [7:0] INSTRUCTION;
@@ -154,7 +154,7 @@ always @(posedge clk ) begin
         STATE <= S_IDLE;
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
-        MEMORY_ADDRESS <= 0;
+        MEMORY_ADDRESS_INTERNAL <= 0;
     end else if(rdy) begin
         STATE <= NEXT_STATE;
         address_select <= 0;
@@ -185,21 +185,21 @@ always @(posedge clk ) begin
         end else if(NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
             address_select <= 1;
 	    pc_enable <= 1;
-            MEMORY_ADDRESS <= {8'h00, instruction};
+            MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
             memory_address <= {8'h00, instruction};
         end else if(NEXT_STATE == S_ABS_LB) begin
 	    pc_enable <= 1;
-            MEMORY_ADDRESS <= {8'h00, instruction};
+            MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
         end else if(NEXT_STATE == S_ABS_HB) begin
             address_select <= 1;
 	    pc_enable <= 1;
-            MEMORY_ADDRESS <= {instruction, MEMORY_ADDRESS[7:0]};
-            memory_address <= {instruction, MEMORY_ADDRESS[7:0]};
+            MEMORY_ADDRESS_INTERNAL <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
+            memory_address <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
         end else if(NEXT_STATE == S_DBUF_OUTPUT) begin
             rw <= 0;
             data_buffer_enable <= `BUF_STORE_TWO;
 	    address_select <= 2'd1;
-            memory_address <= MEMORY_ADDRESS;
+            memory_address <= MEMORY_ADDRESS_INTERNAL;
         end else if(NEXT_STATE == S_ALU_ADR_CALC_1) begin
             alu_enable  <= `ADD;
             input_data_latch_enable <= `BUF_STORE_TWO;
