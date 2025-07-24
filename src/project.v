@@ -70,19 +70,19 @@ module tt_um_6502 (
   reg [7:0] bus2;
   reg [7:0] data_bus_buffer=8'b0;
 
-  reg [15:0] pc;
+  reg [15:0] pc=0;
   wire [15:0] memory_address;
-  reg [7:0] accumulator;
-  reg [7:0] index_register_x;
-  reg [7:0] index_register_y;
+  reg [7:0] accumulator=0;
+  reg [7:0] index_register_x=0;
+  reg [7:0] index_register_y=0;
   wire [7:0] instruction_register;
-  reg [6:0] processor_status_register;
+  reg [6:0] processor_status_register=0;
 
-  reg [7:0] next_accumulator;
-  reg [7:0] next_index_register_x;
-  reg [7:0] next_index_register_y;
-  reg [7:0] next_data_bus_buffer;
-  reg [6:0] next_processor_status_register;
+  reg [7:0] next_accumulator=0;
+  reg [7:0] next_index_register_x=0;
+  reg [7:0] next_index_register_y=0;
+  reg [7:0] next_data_bus_buffer=0;
+  reg [6:0] next_processor_status_register=0;
 
   wire [7:0] ALU_inputA;
   wire [7:0] ALU_inputB;

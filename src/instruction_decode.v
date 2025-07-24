@@ -49,9 +49,9 @@ localparam S_ABS_HB         = 4'd11;
 reg [3:0] STATE      = S_IDLE;
 reg [3:0] NEXT_STATE = S_IDLE;
 reg [15:0] MEMORY_ADDRESS_INTERNAL  = 16'b0;
-reg [2:0] ADDRESSING;
-reg [7:0] OPCODE;
-reg [7:0] INSTRUCTION;
+reg [2:0] ADDRESSING=0;
+reg [7:0] OPCODE=0;
+reg [7:0] INSTRUCTION=0;
 
 // intermediate variables
 
