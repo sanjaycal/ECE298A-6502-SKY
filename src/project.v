@@ -147,12 +147,12 @@ module tt_um_6502 (
           processor_status_register <= 7'd0;
           input_data_latch <= 8'd0;
           data_bus_buffer <= 8'd0;
-          uo_out_reg <= 8'd0;
+          uo_out_reg = 8'd0;
           uio_out_reg <= 8'd0;
           uio_oe_reg <= 8'h00;
       end else begin
           // Default assignments (hold value)
-          uo_out_reg <= uo_out_reg;
+          uo_out_reg = uo_out_reg;
           uio_out_reg <= uio_out_reg;
 
           // Logic for the "first phase" of the internal clock
