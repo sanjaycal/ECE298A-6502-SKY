@@ -23,8 +23,8 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "controllerA"
-  ui[1]: "controllerB"
+  ui[0]: "rw pin"
+  ui[1]: "?"
   ui[2]: "controllerDpadUP"
   ui[3]: "controllerDpadLEFT"
   ui[4]: "controllerDpadRIGHT"
@@ -33,24 +33,24 @@ pinout:
   ui[7]: "controllerSELECT"
 
   # Outputs
-  uo[0]: "vga1"
-  uo[1]: "vga2"
-  uo[2]: "vga3"
-  uo[3]: "vga4"
-  uo[4]: "vga5"
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "addr 0/8"
+  uo[1]: "addr 1/9"
+  uo[2]: "addr 2/10"
+  uo[3]: "addr 3/11"
+  uo[4]: "addr 4/12"
+  uo[5]: "addr 5/13"
+  uo[6]: "addr 6/14"
+  uo[7]: "addr 7/15"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "data 0"
+  uio[1]: "data 1"
+  uio[2]: "data 2"
+  uio[3]: "data 3"
+  uio[4]: "data 4"
+  uio[5]: "data 5"
+  uio[6]: "data 6"
+  uio[7]: "data 7"
 
 # Do not change!
 yaml_version: 6
