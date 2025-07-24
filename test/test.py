@@ -512,3 +512,21 @@ async def test_INC_ZPG_Base(dut):
             test_num,
             (test_num + 1) % 256,
         )  # INC
+
+@cocotb.test()
+async def test_DEC_ZPG_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 1000, units="us")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(256):
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("c6"),
+            memory_addr_with_value,
+            1,
+            test_num,
+            (test_num - 1) % 256,
+        )  # DEC

@@ -158,7 +158,7 @@ always @(posedge clk ) begin
     end else if(rdy) begin
         STATE <= NEXT_STATE;
         address_select <= 0;
-	pc_enable <= 0;
+	    pc_enable <= 0;
         memory_address <= 16'b0;
         rw <= 1;
         alu_enable <= `NOP;
@@ -242,13 +242,19 @@ always @(posedge clk ) begin
                 input_data_latch_enable <= `BUF_STORE_TWO;
                 alu_enable <= `INC;
                 processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+            end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
+                input_data_latch_enable <= `BUF_STORE_TWO;
+                alu_enable <= `DEC;
+                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
             end
+        
             // LOAD
             else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG) begin
                 input_data_latch_enable <= `BUF_STORE_TWO;
                 alu_enable <= `FLG;
                 processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
             end
+            
         end else if(NEXT_STATE == S_ALU_TMX) begin
             if(OPCODE == `OP_LD_X_ZPG) begin
                 index_register_X_enable <= `BUF_LOAD2_THREE;
@@ -272,7 +278,7 @@ always @(posedge clk ) begin
             end
             else if(OPCODE == `OP_ST_Y_ZPG) begin
                 index_register_Y_enable <= `BUF_STORE2_THREE;
-                data_buffer_enable <= `BUF_LOAD_TWO;
+                data_buffer_enable <= `BUF_LOAD_TWO;         
 	    end
             else if(OPCODE == `OP_ST_A_ZPG) begin
                 accumulator_enable <= `BUF_STORE2_THREE;

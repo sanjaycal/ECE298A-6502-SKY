@@ -54,6 +54,10 @@
     `define OP_INC_ABS      8'b11101110
     `define OP_INC_ZPG_X    8'b11110110
 
+    `define OP_DEC_ZPG      8'b11000110
+    `define OP_DEC_ABS      8'b11001110
+    `define OP_DEC_ZPG_X    8'b11011110  
+
     // MISC OPCODES
     `define OP_JSR          8'b00100000
 

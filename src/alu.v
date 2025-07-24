@@ -20,6 +20,7 @@ module alu (
     wire [7:0] result_ror = {status_flags_in[`CARRY_FLAG],inputA[7:1]};
     wire [7:0] result_and = inputA&inputB;
     wire [7:0] result_inc = inputA+1;
+    wire [7:0] result_dec = inputA-1;
 
     wire [6:0] ALU_flags_output_internal = next_alu_flags[6:0];
 
@@ -62,6 +63,11 @@ module alu (
                 next_alu_result = result_inc;
                 next_alu_flags[`ZERO_FLAG]     = (result_inc == 8'b0);
                 next_alu_flags[`NEGATIVE_FLAG] = result_inc[7];
+            end
+            `DEC: begin
+                next_alu_result = result_dec;
+                next_alu_flags[`ZERO_FLAG]     = (result_dec == 8'b0);
+                next_alu_flags[`NEGATIVE_FLAG] = result_dec[7];
             end
             `FLG: begin
                 next_alu_result = inputA;
