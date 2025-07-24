@@ -84,11 +84,11 @@ module tt_um_6502 (
   reg [7:0] next_data_bus_buffer=0;
   reg [6:0] next_processor_status_register=0;
 
-  wire [7:0] ALU_inputA;
-  wire [7:0] ALU_inputB;
+  //wire [7:0] ALU_inputA;
+  //wire [7:0] ALU_inputB;
 
-  wire [7:0] ALU_output;
-  wire [6:0] ALU_flags_output;
+  wire [7:0] ALU_output = 0;
+  wire [6:0] ALU_flags_output = 0;
 
   clock_generator clockGenerator(clk, clk_cpu, clk_output);
   instruction_decode instructionDecode(
