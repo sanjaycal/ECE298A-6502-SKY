@@ -66,86 +66,86 @@ reg [7:0] INSTRUCTION=0;
     //                            (addr_mode_bits == `ADR_ZPG_X));
 
 always @(negedge clk) begin
-    NEXT_STATE = STATE;
+    NEXT_STATE <= STATE;
     case(STATE)
     S_IDLE: begin
-        NEXT_STATE = S_OPCODE_READ;
+        NEXT_STATE <= S_OPCODE_READ;
     end
     S_OPCODE_READ: begin
         // In this state, we just need to increment the PC and decide where to go next.
         // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
         if(INSTRUCTION == `OP_NOP) begin
-            NEXT_STATE = S_IDLE; // NOP is a no-operation, so we just stay idle.
+            NEXT_STATE <= S_IDLE; // NOP is a no-operation, so we just stay idle.
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
-            NEXT_STATE = S_ZPG_ABS_ADR_READ;
+            NEXT_STATE <= S_ZPG_ABS_ADR_READ;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin
-            NEXT_STATE = S_IDL_ADR_WRITE;
+            NEXT_STATE <= S_IDL_ADR_WRITE;
         end else if(INSTRUCTION[4:2] == `ADR_ABS) begin
-            NEXT_STATE = S_ABS_LB;
+            NEXT_STATE <= S_ABS_LB;
         end else if(INSTRUCTION[4:2] == `ADR_A) begin
-            NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
+            NEXT_STATE <= S_ALU_FINAL;   // because this involves registers we can go straight to final
         end else begin
-            NEXT_STATE = S_IDLE; // Default case, should not happen.
+            NEXT_STATE <= S_IDLE; // Default case, should not happen.
         end
     end
     S_ZPG_ABS_ADR_READ: begin
-        NEXT_STATE = S_IDL_DATA_WRITE;
+        NEXT_STATE <= S_IDL_DATA_WRITE;
     end
     S_IDL_DATA_WRITE: begin
-        NEXT_STATE = S_ALU_FINAL;
+        NEXT_STATE <= S_ALU_FINAL;
     end
     S_IDL_ADR_WRITE: begin
-        NEXT_STATE = S_ALU_ADR_CALC_1;
+        NEXT_STATE <= S_ALU_ADR_CALC_1;
     end
     S_ALU_FINAL: begin
         //SHIFTING
-        NEXT_STATE = S_ALU_TMX;
+        NEXT_STATE <= S_ALU_TMX;
     end
     S_ALU_TMX: begin
         if(OPCODE == `OP_LD_X_ZPG) begin
-            NEXT_STATE = S_OPCODE_READ;
+            NEXT_STATE <= S_OPCODE_READ;
         end
         else if(OPCODE == `OP_LD_Y_ZPG) begin
-            NEXT_STATE = S_OPCODE_READ;
+            NEXT_STATE <= S_OPCODE_READ;
         end
         else if(OPCODE == `OP_LD_A_ZPG) begin
-            NEXT_STATE = S_OPCODE_READ;
+            NEXT_STATE <= S_OPCODE_READ;
         end
         else if(OPCODE == `OP_AND_ZPG) begin
-            NEXT_STATE = S_OPCODE_READ;
+            NEXT_STATE <= S_OPCODE_READ;
         end
         else if(OPCODE == `OP_ST_X_ZPG) begin
-            NEXT_STATE = S_DBUF_OUTPUT;
+            NEXT_STATE <= S_DBUF_OUTPUT;
         end
         else if(OPCODE == `OP_ST_Y_ZPG) begin
-            NEXT_STATE = S_DBUF_OUTPUT;
+            NEXT_STATE <= S_DBUF_OUTPUT;
         end
         else if(OPCODE == `OP_ST_A_ZPG) begin
-            NEXT_STATE = S_DBUF_OUTPUT;
+            NEXT_STATE <= S_DBUF_OUTPUT;
         end
         else if(ADDRESSING == `ADR_ZPG || ADDRESSING == `ADR_ZPG_X || ADDRESSING == `ADR_ABS) begin
-            NEXT_STATE = S_DBUF_OUTPUT;
+            NEXT_STATE <= S_DBUF_OUTPUT;
         end else if(ADDRESSING == `ADR_A) begin
-            NEXT_STATE = S_OPCODE_READ;
+            NEXT_STATE <= S_OPCODE_READ;
         end
     end
     S_DBUF_OUTPUT: begin
-        NEXT_STATE = S_IDLE;
+        NEXT_STATE <= S_IDLE;
     end
     S_ALU_ADR_CALC_1:  begin
-        NEXT_STATE = S_ALU_ADR_CALC_2;
+        NEXT_STATE <= S_ALU_ADR_CALC_2;
     end
     S_ALU_ADR_CALC_2: begin
-        NEXT_STATE = S_IDL_DATA_WRITE;
+        NEXT_STATE <= S_IDL_DATA_WRITE;
     end
     S_ABS_LB: begin
-        NEXT_STATE = S_ABS_HB;
+        NEXT_STATE <= S_ABS_HB;
     end
     S_ABS_HB: begin
-        NEXT_STATE = S_IDL_DATA_WRITE;
+        NEXT_STATE <= S_IDL_DATA_WRITE;
     end
     default: begin
-        NEXT_STATE = S_IDLE;
+        NEXT_STATE <= S_IDLE;
     end
     endcase
 end
