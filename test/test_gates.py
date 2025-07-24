@@ -6,7 +6,7 @@ from cocotb.clock import Clock
 import random
 
 import helper
-import reset
+import reset_gates as reset
 
 
 @cocotb.test()
