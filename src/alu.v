@@ -21,6 +21,8 @@ module alu (
     wire [7:0] result_and = inputA&inputB;
     wire [7:0] result_inc = inputA+1;
 
+    wire [6:0] ALU_flags_output_internal = next_alu_flags[6:0];
+
     reg [7:0] next_alu_result = 8'b0;
     reg [7:0] next_alu_flags = 8'b0;
     always @(*) begin
@@ -75,12 +77,11 @@ module alu (
     end
 
 
-    always @(*) begin
-        ALU_flags_output = next_alu_flags[6:0]; 
-    end
-
     always @(posedge clk) begin
         ALU_output <= next_alu_result;
+    end
+    always @(negedge clk) begin
+        ALU_flags_output <= ALU_flags_output_internal;
     end
 
 
