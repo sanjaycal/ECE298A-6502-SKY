@@ -66,8 +66,8 @@ module tt_um_6502 (
   wire [15:0] ab;
 
   reg [7:0] input_data_latch;
-  reg [7:0] bus1;
-  reg [7:0] bus2;
+  wire [7:0] bus1;
+  wire [7:0] bus2;
   reg [7:0] data_bus_buffer=8'b0;
 
   reg [15:0] pc=0;
@@ -126,24 +126,25 @@ module tt_um_6502 (
 
   interrupt_logic interruptLogic(clk, res_in, irq_in, nmi_in, res, irq, nmi);
 
+  //putting data on the bus 1
+  assign bus1 = (input_data_latch_enable == BUF_STORE_TWO)?input_data_latch:
+                (accumulator_enable == BUF_STORE1_THREE)?accumulator:
+		(index_register_x_enable == BUF_STORE1_THREE)?index_register_x:
+		(index_register_y_enable == BUF_STORE1_THREE)?index_register_y:
+		0;
+  //putting data on the bus 2
+  assign bus2 = (ALU_op == `TMX)?ALU_output:
+                (accumulator_enable == BUF_STORE2_THREE)?accumulator:
+		(index_register_x_enable == BUF_STORE2_THREE)?index_register_x:
+		(index_register_y_enable == BUF_STORE2_THREE)?index_register_y:
+		0;
+
   always @(*) begin
-    bus1 = 8'h00;
-    bus2    = 8'h00;
     next_accumulator = accumulator;
     next_index_register_x = index_register_x;
     next_index_register_y = index_register_y;
     next_data_bus_buffer = data_bus_buffer;
     next_processor_status_register = processor_status_register;
-    //putting data on the bus 1
-    if(input_data_latch_enable == BUF_STORE_TWO) begin
-      bus1 = input_data_latch;
-    end else if(accumulator_enable == BUF_STORE1_THREE) begin
-      bus1 = accumulator;
-    end else if(index_register_x_enable == BUF_STORE1_THREE) begin
-      bus1 = index_register_x;
-    end else if(index_register_y_enable == BUF_STORE1_THREE) begin
-      bus1 = index_register_y;
-    end
     //reading data from the bus 1
     if(accumulator_enable == BUF_LOAD1_THREE) begin
        next_accumulator = bus1;
@@ -153,16 +154,6 @@ module tt_um_6502 (
     end
     if(index_register_y_enable == BUF_LOAD1_THREE) begin
       next_index_register_y = bus1;
-    end
-    //putting data on the bus 2
-    if(ALU_op == `TMX) begin
-      bus2 = ALU_output;
-    end else if(accumulator_enable == BUF_STORE2_THREE) begin
-      bus2 = accumulator;
-    end else if(index_register_x_enable == BUF_STORE2_THREE) begin
-      bus2 = index_register_x;
-    end else if(index_register_y_enable == BUF_STORE2_THREE) begin
-      bus2 = index_register_y;
     end
     //reading data from the bus 2
     if(data_buffer_enable == BUF_LOAD_TWO) begin
