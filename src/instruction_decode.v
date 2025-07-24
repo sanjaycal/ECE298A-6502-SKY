@@ -63,6 +63,7 @@ always @(posedge clk) begin
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 16'b0;
+        INSTRUCTION <= 8'b0; // FIX: Ensure the internal instruction register is cleared on reset.
         memory_address <= 0;
         address_select <= 2'b0;
         rw <= 1; // Default to read

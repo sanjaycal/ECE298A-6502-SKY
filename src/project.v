@@ -137,7 +137,17 @@ module tt_um_6502 (
 		(index_register_y_enable == BUF_STORE2_THREE)?index_register_y:
 		0;
 
-  always @(posedge clk) begin
+  always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      // Reset all state elements to a known value
+      pc <= 16'h0000;
+      accumulator <= 8'h00;
+      index_register_x <= 8'h00;
+      index_register_y <= 8'h00;
+      processor_status_register <= 7'h00;
+      input_data_latch <= 8'h00;
+      data_bus_buffer <= 8'h00;
+    end else begin
     next_accumulator <= accumulator;
     next_index_register_x <= index_register_x;
     next_index_register_y <= index_register_y;
@@ -201,6 +211,7 @@ module tt_um_6502 (
         index_register_y <= next_index_register_y;
       end
     end
+  end
   end
 
   // List all unused inputs to prevent warnings
