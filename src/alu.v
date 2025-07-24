@@ -24,8 +24,9 @@ module alu (
     wire [6:0] ALU_flags_output_internal = next_alu_flags;
 
     reg [7:0] next_alu_result = 8'b0;
-    reg [6:0] next_alu_flags = 8'b0;
+    reg [6:0] next_alu_flags = 7'b0;
     always @(*) begin
+        next_alu_flags = 7'b0;
         case(alu_op)
             `ASL: begin
                 next_alu_result = result_asl;
@@ -69,7 +70,7 @@ module alu (
             // If need be add a condition that checks for tmx
             default: begin
                 next_alu_result = 8'b0;
-                next_alu_flags = 8'b0;
+                next_alu_flags = 7'b0;
             end
         endcase
     end
