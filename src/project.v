@@ -139,7 +139,7 @@ module tt_um_6502 (
 		0;
 
   always @(posedge clk or negedge rst_n) begin
-    if (!rst_n) begin
+    if (rst_n == 0) begin
       // Reset all state elements to a known value
       pc <= 16'h0000;
       accumulator <= 8'h00;
