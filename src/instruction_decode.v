@@ -56,10 +56,8 @@ reg [7:0] OPCODE=0;
 reg [7:0] INSTRUCTION=0;
 
 always @(posedge clk or negedge res) begin
-    if(clk_enable) begin
-    INSTRUCTION <= instruction;
     // Reset logic is expanded to set all control signals to a default state.
-    if(res || !rdy || rst_n==0) begin
+    if(rst_n==0) begin
         STATE <= S_IDLE;
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
@@ -79,6 +77,8 @@ always @(posedge clk or negedge res) begin
         index_register_X_enable <= `BUF_IDLE_THREE;
         index_register_Y_enable <= `BUF_IDLE_THREE;
     end else begin
+        if(clk_enable) begin
+        INSTRUCTION <= instruction;
         address_select <= 0;
         pc_enable <= 0;
         memory_address <= 16'b0;
