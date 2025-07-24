@@ -11,11 +11,9 @@ module instruction_decode (
     input  wire [7:0] instruction,
     input  wire       clk,
     input  wire       clk_enable,
-    input  wire       res,
     input  wire       rst_n,
     input  wire       irq,
     input  wire       nmi,
-    input  wire       rdy,
     input  wire [6:0] processor_status_register_read,
     output reg [6:0] processor_status_register_write,
     output reg [15:0] memory_address,  // better name for this
@@ -55,7 +53,7 @@ reg [2:0] ADDRESSING=0;
 reg [7:0] OPCODE=0;
 reg [7:0] INSTRUCTION=0;
 
-always @(posedge clk or negedge res) begin
+always @(posedge clk or negedge rst_n) begin
     // Reset logic is expanded to set all control signals to a default state.
     if(rst_n==0) begin
         STATE <= S_IDLE;
