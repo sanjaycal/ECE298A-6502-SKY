@@ -93,6 +93,7 @@ module tt_um_6502 (
     .clk                           (clk),
     .clk_enable                    (clk_enable),
     .res                           (res),
+    .rst_n                           (rst_n),
     .irq                           (irq),
     .nmi                           (nmi),
     .rdy                           (rdy),

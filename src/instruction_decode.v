@@ -12,6 +12,7 @@ module instruction_decode (
     input  wire       clk,
     input  wire       clk_enable,
     input  wire       res,
+    input  wire       rst_n,
     input  wire       irq,
     input  wire       nmi,
     input  wire       rdy,
@@ -54,16 +55,16 @@ reg [2:0] ADDRESSING=0;
 reg [7:0] OPCODE=0;
 reg [7:0] INSTRUCTION=0;
 
-always @(posedge clk) begin
+always @(posedge clk or negedge res) begin
     if(clk_enable) begin
     INSTRUCTION <= instruction;
     // Reset logic is expanded to set all control signals to a default state.
-    if(res || !rdy) begin
+    if(res || !rdy || rst_n==0) begin
         STATE <= S_IDLE;
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 16'b0;
-        INSTRUCTION <= 8'b0; // FIX: Ensure the internal instruction register is cleared on reset.
+        INSTRUCTION <= 8'b0; 
         memory_address <= 0;
         address_select <= 2'b0;
         rw <= 1; // Default to read
@@ -77,7 +78,7 @@ always @(posedge clk) begin
         stack_pointer_register_enable <= `BUF_IDLE_THREE;
         index_register_X_enable <= `BUF_IDLE_THREE;
         index_register_Y_enable <= `BUF_IDLE_THREE;
-    end else if(rdy) begin
+    end else begin
         address_select <= 0;
         pc_enable <= 0;
         memory_address <= 16'b0;
