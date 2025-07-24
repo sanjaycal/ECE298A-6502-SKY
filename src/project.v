@@ -174,13 +174,12 @@ module tt_um_6502 (
     end
   end
 
-  always @(negedge clk_cpu) begin
+  always @(posedge pc_enable) begin
+    pc <= pc + 1;
+  end
+  always @(posedge clk) begin
     if (rst_n == 0) begin
       pc <= 0;
-    end else begin
-      if (pc_enable) begin
-        pc <= pc+1;
-      end
     end
   end
 
