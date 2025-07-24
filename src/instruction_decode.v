@@ -10,6 +10,7 @@
 module instruction_decode (
     input  wire [7:0] instruction,
     input  wire       clk,
+    input  wire       clk_enable,
     input  wire       res,
     input  wire       irq,
     input  wire       nmi,
@@ -66,6 +67,7 @@ reg [7:0] INSTRUCTION=0;
     //                            (addr_mode_bits == `ADR_ZPG_X));
 
 always @(posedge clk) begin
+    if(clk_enable) begin
     INSTRUCTION <= instruction;
     if(res | !rdy) begin
         STATE <= S_IDLE;
@@ -296,6 +298,7 @@ always @(posedge clk) begin
         endcase
 
     end
+end
 end
 
 wire _unused = &{irq, nmi, processor_status_register_read};

@@ -89,11 +89,16 @@ module tt_um_6502 (
 
   wire [7:0] ALU_output;
   wire [6:0] ALU_flags_output;
+  reg clk_enable = 1;
+always @(posedge clk) begin
+    clk_enable <= ~clk_enable;
+end
 
   clock_generator clockGenerator(clk, clk_cpu, clk_output);
   instruction_decode instructionDecode(
     .instruction                   (instruction_register),
-    .clk                           (clk_cpu),
+    .clk                           (clk),
+    .clk_enable                    (clk_enable),
     .res                           (res),
     .irq                           (irq),
     .nmi                           (nmi),
