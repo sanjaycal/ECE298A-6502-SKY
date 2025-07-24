@@ -54,28 +54,28 @@ reg [2:0] ADDRESSING=0;
 reg [7:0] OPCODE=0;
 reg [7:0] INSTRUCTION=0;
 
-// intermediate variables
-
-    //wire is_shift_rotate_op;
-    //wire [2:0] addr_mode_bits;
-    //wire is_target_addr_mode;
-
-    //assign is_shift_rotate_op = (OPCODE[1:0] == 2'b10);
-    //assign addr_mode_bits = OPCODE[4:2];
-    //assign is_target_addr_mode = ((addr_mode_bits == `ADR_ZPG) ||
-    //                            (addr_mode_bits == `ADR_ABS)  ||
-    //                            (addr_mode_bits == `ADR_ZPG_X));
-
 always @(posedge clk) begin
     if(clk_enable) begin
     INSTRUCTION <= instruction;
-    if(res | !rdy) begin
+    // Reset logic is expanded to set all control signals to a default state.
+    if(res || !rdy) begin
         STATE <= S_IDLE;
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
-        MEMORY_ADDRESS_INTERNAL <= 0;
-	address_select <= 0;
-	rw <= 0;
+        MEMORY_ADDRESS_INTERNAL <= 16'b0;
+        memory_address <= 0;
+        address_select <= 2'b0;
+        rw <= 1; // Default to read
+        pc_enable <= 0;
+        alu_enable <= `NOP;
+        processor_status_register_write <= 7'b0;
+        processor_status_register_rw <= 1; // 1 = Read enabled
+        data_buffer_enable <= `BUF_IDLE_TWO;
+        input_data_latch_enable <= `BUF_IDLE_TWO;
+        accumulator_enable <= `BUF_IDLE_THREE;
+        stack_pointer_register_enable <= `BUF_IDLE_THREE;
+        index_register_X_enable <= `BUF_IDLE_THREE;
+        index_register_Y_enable <= `BUF_IDLE_THREE;
     end else if(rdy) begin
         address_select <= 0;
         pc_enable <= 0;
@@ -303,6 +303,6 @@ always @(posedge clk) begin
 end
 end
 
-wire _unused = &{irq, nmi, processor_status_register_read};
+wire _unused = &{irq, nmi, processor_status_register_read, clk_enable};
 
 endmodule
