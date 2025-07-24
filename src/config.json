@@ -32,7 +32,7 @@
   "CLOCK_PORT": "clk",
   
   "SYNTH_TIE_UNDEFINED": "tie_zero",
-  "SYNTH_STRATEGY": "area 0",
+  "SYNTH_STRATEGY": "AREA 0",
 
   "//": "Configuration docs: https://openlane.readthedocs.io/en/latest/reference/configuration.html",
 
