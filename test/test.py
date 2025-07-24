@@ -513,6 +513,7 @@ async def test_INC_ZPG_Base(dut):
             (test_num + 1) % 256,
         )  # INC
 
+
 @cocotb.test()
 async def test_DEC_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
