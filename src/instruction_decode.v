@@ -74,6 +74,8 @@ always @(posedge clk) begin
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 0;
+	address_select <= 0;
+	rw <= 0;
     end else if(rdy) begin
         address_select <= 0;
         pc_enable <= 0;
