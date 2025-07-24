@@ -184,7 +184,6 @@ module tt_um_6502 (
     end
   end
 
-  // assign input_data_latch = (input_data_latch_enable == BUF_LOAD_TWO) ? instruction_register : input_data_latch;
   always @(negedge clk_cpu) begin
     if (rst_n == 0) begin
       accumulator <= 0;

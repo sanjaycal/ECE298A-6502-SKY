@@ -144,7 +144,9 @@ always @(*) begin
     S_ABS_HB: begin
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
-    default: NEXT_STATE = S_IDLE;
+    default: begin
+        NEXT_STATE = S_IDLE;
+    end
     endcase
 end
 
@@ -296,7 +298,21 @@ always @(posedge clk ) begin
             input_data_latch_enable <= `BUF_IDLE_TWO;
         end else if(NEXT_STATE == S_IDL_DATA_WRITE) begin
             input_data_latch_enable <= `BUF_LOAD_TWO;
-	end
+        end else begin
+        address_select <= 0;
+	pc_enable <= 0;
+        memory_address <= 16'b0;
+        rw <= 1;
+        alu_enable <= `NOP;
+        processor_status_register_write <= 7'b0;
+        processor_status_register_rw <= 1;
+        data_buffer_enable <= `BUF_IDLE_TWO;
+        input_data_latch_enable <= `BUF_IDLE_TWO;
+        accumulator_enable <= `BUF_IDLE_THREE;
+        stack_pointer_register_enable <= `BUF_IDLE_THREE;
+        index_register_X_enable <= `BUF_IDLE_THREE;
+        index_register_Y_enable <= `BUF_IDLE_THREE;
+        end
     end
 end
 
