@@ -179,12 +179,14 @@ end
     end
   end
 
-  always @(negedge clk_cpu) begin
+  always @(negedge clk) begin
+    if(clk_enable==1)begin
     if (rst_n == 0) begin
       pc <= 0;
     end else if(pc_enable) begin
           pc <= pc + 1;
     end
+  end
   end
 
   always @(negedge clk_cpu) begin
@@ -219,8 +221,8 @@ end
   wire _unused = &{ena, 1'b0, dbe, stack_pointer_register_enable, ALU_flags_output, ui_in, processor_status_register, processor_status_register_rw};
 
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out = clk_cpu?ab[15:8]:ab[7:0];
-  assign uio_out = clk_cpu?(data_buffer_enable == 2'd2 ? data_bus_buffer : 8'b0 ) : {7'b0,rw} ;
+  assign uo_out = (clk_enable==0)?ab[15:8]:ab[7:0];
+  assign uio_out = (clk_enable==0)?(data_buffer_enable == 2'd2 ? data_bus_buffer : 8'b0 ) : {7'b0,rw} ;
   assign uio_oe  = rw?8'h00:8'hff;
 
 assign ALU_inputA = bus1;
