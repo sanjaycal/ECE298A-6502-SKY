@@ -114,15 +114,15 @@ module tt_um_6502 (
     .index_register_Y_enable       (index_register_y_enable)
   );
   
-  alu ALU(
-    .clk               (clk_output),
-    .alu_op            (ALU_op),
-    .inputA            (ALU_inputA),
-    .inputB            (ALU_inputB),
-    .status_flags_in   (processor_status_register),
-    .ALU_output        (ALU_output),
-    .ALU_flags_output  (ALU_flags_output)
-  );
+  //alu ALU(
+  //  .clk               (clk_output),
+  //  .alu_op            (ALU_op),
+  //  .inputA            (ALU_inputA),
+  //  .inputB            (ALU_inputB),
+  //  .status_flags_in   (processor_status_register),
+  //  .ALU_output        (ALU_output),
+  //  .ALU_flags_output  (ALU_flags_output)
+  //);
 
   interrupt_logic interruptLogic(clk, res_in, irq_in, nmi_in, res, irq, nmi);
 
