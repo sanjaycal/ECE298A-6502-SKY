@@ -26,7 +26,7 @@ module alu (
     reg [7:0] next_alu_result = 8'b0;
     reg [7:0] next_alu_flags = 8'b0;
     always @(*) begin
-        next_alu_flags = next_alu_flags;
+        //next_alu_flags = next_alu_flags;
 
         case(alu_op)
             `ASL: begin
