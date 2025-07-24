@@ -19,7 +19,6 @@
   localparam BUF_STORE2_THREE  = 3'b111; // Put the register value on a BUS
 
 
-`include "../src/clock_generator.v"
 `include "../src/instruction_decode.v"
 `include "../src/interrupt_logic.v"
 `include "../src/alu.v"
@@ -54,8 +53,6 @@ module tt_um_6502 (
   wire res;
   wire irq;
   wire nmi;
-  wire clk_cpu;
-  wire clk_output;
   wire [1:0] address_select;
   wire [1:0] data_buffer_enable;
   wire processor_status_register_rw;
@@ -94,7 +91,6 @@ always @(posedge clk) begin
     clk_enable <= ~clk_enable;
 end
 
-  clock_generator clockGenerator(clk, clk_cpu, clk_output);
   instruction_decode instructionDecode(
     .instruction                   (instruction_register),
     .clk                           (clk),
@@ -120,7 +116,7 @@ end
   );
   
   alu ALU(
-    .clk               (clk_output),
+    .clk               (clk),
     .alu_op            (ALU_op),
     .inputA            (ALU_inputA),
     .inputB            (ALU_inputB),
@@ -179,8 +175,8 @@ end
     end
   end
 
-  always @(negedge clk) begin
-    if(clk_enable==1)begin
+  always @(posedge clk) begin
+    if(clk_enable==0)begin
     if (rst_n == 0) begin
       pc <= 0;
     end else if(pc_enable) begin
@@ -189,11 +185,9 @@ end
   end
   end
 
-  always @(negedge clk_cpu) begin
+  always @(posedge clk) begin
+    if(clk_enable==0)begin
     if (rst_n == 0) begin
-      accumulator <= 0;
-      index_register_x <= 0;
-      index_register_y <= 0;
       processor_status_register <= 0;
       input_data_latch <= 8'b0;
 
@@ -201,15 +195,31 @@ end
     // if(rw == 0 && data_buffer_enable == BUF_STORE_TWO) begin
     //   uio_out <= data_bus_buffer;
     // end
-      data_bus_buffer <= next_data_bus_buffer;
-      index_register_x <= next_index_register_x;
-      index_register_y <= next_index_register_y;
-      accumulator <= next_accumulator;
       processor_status_register <= next_processor_status_register;
       if(input_data_latch_enable == 1) begin
         input_data_latch <= uio_in;
       end
     end
+  end
+  end
+  always @(posedge clk) begin
+    if(clk_enable==1)begin
+    if (rst_n == 0) begin
+      accumulator <= 0;
+      data_bus_buffer <= 0;
+      index_register_x <= 0;
+      index_register_y <= 0;
+
+    end else begin
+    // if(rw == 0 && data_buffer_enable == BUF_STORE_TWO) begin
+    //   uio_out <= data_bus_buffer;
+    // end
+      accumulator <= next_accumulator;
+      data_bus_buffer <= next_data_bus_buffer;
+      index_register_x <= next_index_register_x;
+      index_register_y <= next_index_register_y;
+    end
+  end
   end
 
   // List all unused inputs to prevent warnings
