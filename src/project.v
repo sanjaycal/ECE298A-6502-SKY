@@ -87,9 +87,6 @@ module tt_um_6502 (
   wire [7:0] ALU_output;
   wire [6:0] ALU_flags_output;
   reg clk_enable = 1;
-always @(posedge clk) begin
-    clk_enable <= ~clk_enable;
-end
 
   instruction_decode instructionDecode(
     .instruction                   (instruction_register),
@@ -141,6 +138,7 @@ end
 		0;
 
   always @(posedge clk) begin
+    clk_enable <= ~clk_enable;
     next_accumulator <= accumulator;
     next_index_register_x <= index_register_x;
     next_index_register_y <= index_register_y;
