@@ -17,12 +17,13 @@ module instruction_decode (
     input  wire [6:0] processor_status_register_read,
     output reg [6:0] processor_status_register_write,
     output reg [15:0] memory_address,  // better name for this
-    output reg [1:0]    address_select, // 0 = PC, 1 = Memory Address (Remove?), 2 = ALU,
+    output reg [1:0] address_select, // 0 = PC, 1 = Memory Address (Remove?), 2 = ALU,
+    output reg       memory_address_write,
     output reg       processor_status_register_rw,
     output reg       rw, //1 for read, 0 for write
     output reg [1:0] data_buffer_enable, // 00 IDLE, 01 LOAD, 10 STORE
     output reg [1:0] input_data_latch_enable, // 00 IDLE, 01 LOAD, 10 STORE
-    output reg       pc_enable,
+    output reg [1:0] pc_enable, // 00 IDLE, 01 LOAD, 10 STORE
     output reg [4:0] alu_enable,
     output reg [2:0] accumulator_enable, // BIT 2 is enable, BIT 1 is R/W_n and BIT 0 is BUS SELECT
     output reg [2:0] stack_pointer_register_enable, // 0 is light blue and 1 is dark blue.
@@ -74,8 +75,10 @@ always @(posedge clk or negedge rst_n) begin
         stack_pointer_register_enable <= `BUF_IDLE_THREE;
         index_register_X_enable <= `BUF_IDLE_THREE;
         index_register_Y_enable <= `BUF_IDLE_THREE;
+	memory_address_write <= 0;
     end else begin
         if(clk_enable) begin
+	memory_address_write <= 0;
         INSTRUCTION <= instruction;
         address_select <= 0;
         pc_enable <= 0;
@@ -93,7 +96,7 @@ always @(posedge clk or negedge rst_n) begin
         case(STATE)
         S_IDLE: begin
             STATE <= S_OPCODE_READ;
-            pc_enable <= 1;
+            pc_enable <= 3;
             OPCODE <= instruction;
             if(instruction[4:2] == `ADR_ZPG) begin
                 ADDRESSING <= `ADR_ZPG;
@@ -110,10 +113,11 @@ always @(posedge clk or negedge rst_n) begin
             // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
             if(INSTRUCTION == `OP_NOP) begin
                 STATE <= S_IDLE; // NOP is a no-operation, so we just stay idle.
+            pc_enable <= 3;
             end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
                 STATE <= S_ZPG_ABS_ADR_READ;
                 address_select <= 1;
-                pc_enable <= 1;
+                pc_enable <= 3;
                 MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
                 memory_address <= {8'h00, instruction};
             end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin
@@ -121,7 +125,7 @@ always @(posedge clk or negedge rst_n) begin
                 input_data_latch_enable <= `BUF_IDLE_TWO;
             end else if(INSTRUCTION[4:2] == `ADR_ABS) begin
                 STATE <= S_ABS_LB;
-                pc_enable <= 1;
+                pc_enable <= 3;
                 MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
             end else if(INSTRUCTION[4:2] == `ADR_A) begin
                 STATE <= S_ALU_FINAL;   // because this involves registers we can go straight to final
@@ -286,13 +290,22 @@ always @(posedge clk or negedge rst_n) begin
         S_ABS_LB: begin
             STATE <= S_ABS_HB;
             address_select <= 1;
-            pc_enable <= 1;
+            pc_enable <= 3;
             MEMORY_ADDRESS_INTERNAL <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
             memory_address <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
+	    if(OPCODE == 8'h4c) begin
+		memory_address_write <= 1;
+                address_select <= 0;
+		pc_enable <= `BUF_LOAD_TWO;
+	    end
         end
         S_ABS_HB: begin
-            STATE <= S_IDL_DATA_WRITE;
-            input_data_latch_enable <= `BUF_LOAD_TWO;
+	    if(OPCODE == 8'h4c) begin
+                STATE <= S_IDLE;
+            end else begin
+                input_data_latch_enable <= `BUF_LOAD_TWO;
+                STATE <= S_IDL_DATA_WRITE;
+	    end
         end
         default: begin
             STATE <= S_IDLE;
