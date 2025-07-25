@@ -147,7 +147,12 @@ always @(*) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `INC;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
+                input_data_latch_enable <= `BUF_STORE_TWO;
+                alu_enable <= `DEC;
+                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
         end 
+        
         // LOAD
         else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG) begin
             input_data_latch_enable = `BUF_STORE_TWO;
