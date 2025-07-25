@@ -25,7 +25,7 @@ Table of Supported Instructions:
 
 |Instruction Name                   | Instruction Format | Time Taken      | Flags Changed |
 |-----------------------------------|--------------------|-----------------|---------------|
-|                                 ARITHMETIC ZPG INSTRUCTIONS                              |
+|ARITHMETIC ZPG INSTRUCTIONS        |                    |                 |               |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ASL ZPG (Arithmatic Shift Left)    | 06 addr-lb         | 7               |  N Z C - - -  |
 |LSR ZPG (Logical Shift Right)      | 46 addr-lb         | 7               |  0 Z C - - -  |
