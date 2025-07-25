@@ -127,8 +127,7 @@ async def run_input_zpg_instruction(
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
-    await ClockCycles(dut.clk, 1)
-    await ClockCycles(dut.clk, 1)
+
 
 
 async def run_abs_instruction(
