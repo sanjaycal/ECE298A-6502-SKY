@@ -42,7 +42,7 @@ module tt_um_6502 (
   wire [2:0] stack_pointer_register_enable;
   wire [4:0] ALU_op;
   wire [2:0] accumulator_enable;
-  wire pc_enable;
+  wire [1:0] pc_enable;
   wire [1:0] input_data_latch_enable;
   wire rdy;
   wire rw;
@@ -69,6 +69,7 @@ module tt_um_6502 (
 
   reg [15:0] pc=0;
   wire [15:0] memory_address;
+  wire memory_address_write;
   reg [7:0] accumulator=0;
   reg [7:0] index_register_x=0;
   reg [7:0] index_register_y=0;
@@ -98,6 +99,7 @@ module tt_um_6502 (
     .processor_status_register_read(processor_status_register_read),
     .processor_status_register_write(processor_status_register_write),
     .memory_address                (memory_address),
+    .memory_address_write          (memory_address_write),
     .address_select                (address_select),
     .processor_status_register_rw  (processor_status_register_rw),
     .rw                            (rw),
@@ -128,12 +130,14 @@ module tt_um_6502 (
                 (accumulator_enable == BUF_STORE1_THREE)?accumulator:
 		(index_register_x_enable == BUF_STORE1_THREE)?index_register_x:
 		(index_register_y_enable == BUF_STORE1_THREE)?index_register_y:
+		(memory_address_write == 1)?memory_address[7:0]:
 		0;
   //putting data on the bus 2
   assign bus2 = (ALU_op == `TMX)?ALU_output:
                 (accumulator_enable == BUF_STORE2_THREE)?accumulator:
 		(index_register_x_enable == BUF_STORE2_THREE)?index_register_x:
 		(index_register_y_enable == BUF_STORE2_THREE)?index_register_y:
+		(memory_address_write == 1)?memory_address[15:8]:
 		0;
 
   always @(posedge clk or negedge rst_n) begin
@@ -169,6 +173,10 @@ module tt_um_6502 (
     if(index_register_y_enable == BUF_LOAD1_THREE) begin
       next_index_register_y <= bus1;
     end
+    if(pc_enable == BUF_LOAD_TWO) begin
+      pc[7:0] <= bus1;
+      pc[15:8] <= bus2;
+    end
     //reading data from the bus 2
     if(data_buffer_enable == BUF_LOAD_TWO) begin
       next_data_bus_buffer <= bus2;
@@ -193,12 +201,15 @@ module tt_um_6502 (
         pc <= 0;
 
       end else begin
+    	if(pc_enable == 3) begin
+          pc[7:0] <= pc[7:0] + 1;
+	  if(pc[7:0]==8'b11111111) begin
+	      pc[15:8] <= pc[15:8]+1;
+          end 
+        end
         processor_status_register <= next_processor_status_register;
         if(input_data_latch_enable == 1) begin
           input_data_latch <= uio_in;
-        end
-        if(pc_enable) begin
-          pc <= pc + 1;
         end
       end
     end else begin
