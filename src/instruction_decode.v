@@ -81,17 +81,17 @@ always @(*) begin
         if(INSTRUCTION == `OP_NOP) begin
             NEXT_STATE = S_IDLE; // NOP is a no-operation, so we just stay idle.
         end else if(INSTRUCTION == `OP_SEC) begin
-	    processor_status_register_value[7] = 1;
-	    processor_status_register_value[`CARRY_FLAG] = 1;
+	        processor_status_register_value[7] = 1;
+	        processor_status_register_value[`CARRY_FLAG] = 1;
             processor_status_register_write = `CARRY_FLAG;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_CLC) begin
-	    processor_status_register_value[7] = 1;
-	    processor_status_register_value[`CARRY_FLAG] = 0;
+	        processor_status_register_value[7] = 1;
+	        processor_status_register_value[`CARRY_FLAG] = 0;
             processor_status_register_write = `CARRY_FLAG;
         end else if(INSTRUCTION == `OP_CLV) begin
-	    processor_status_register_value[7] = 1;
-	    processor_status_register_value[`OVERFLOW_FLAG] = 0;
+	        processor_status_register_value[7] = 1;
+	        processor_status_register_value[`OVERFLOW_FLAG] = 0;
             processor_status_register_write = `OVERFLOW_FLAG;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
@@ -158,6 +158,11 @@ always @(*) begin
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `AND;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_ORA_ZPG) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            accumulator_enable = `BUF_STORE2_THREE;
+            alu_enable = `OR;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ZPG_X || OPCODE == `OP_CMP_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
@@ -198,6 +203,11 @@ always @(*) begin
             alu_enable = `TMX;
         end
         else if(OPCODE == `OP_AND_ZPG) begin
+            accumulator_enable = `BUF_LOAD2_THREE;
+            NEXT_STATE = S_IDLE;
+            alu_enable = `TMX;
+        end 
+        else if (OPCODE == `OP_ORA_ZPG) begin
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
