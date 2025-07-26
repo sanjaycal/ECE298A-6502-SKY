@@ -101,6 +101,6 @@ module alu (
     end
 
 
-    wire _unused = &{status_flags_in};
+    wire _unused = &{status_flags_in, result_cmp[6:0]};
 
 endmodule
