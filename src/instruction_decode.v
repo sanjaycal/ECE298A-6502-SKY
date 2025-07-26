@@ -22,7 +22,7 @@ module instruction_decode (
     output reg       rw, //1 for read, 0 for write
     output reg [1:0] data_buffer_enable, // 00 IDLE, 01 LOAD, 10 STORE
     output reg [1:0] input_data_latch_enable, // 00 IDLE, 01 LOAD, 10 STORE
-    output reg       pc_enable,
+    output reg [1:0]     pc_enable, // 11 for a secret operation :)
     output reg [4:0] alu_enable,
     output reg [2:0] accumulator_enable, // BIT 2 is enable, BIT 1 is R/W_n and BIT 0 is BUS SELECT
     output reg [2:0] stack_pointer_register_enable, // 0 is light blue and 1 is dark blue.
@@ -63,7 +63,7 @@ always @(*) begin
     rw = 1;
     data_buffer_enable = `BUF_IDLE_TWO;
     input_data_latch_enable = `BUF_IDLE_TWO;
-    pc_enable = 0;
+    pc_enable = 2'b00;
     accumulator_enable = `BUF_IDLE_THREE;
     stack_pointer_register_enable = `BUF_IDLE_THREE;
     index_register_X_enable = `BUF_IDLE_THREE;
@@ -73,7 +73,7 @@ always @(*) begin
         NEXT_STATE = S_OPCODE_READ;
     end
     S_OPCODE_READ: begin
-        pc_enable = 1;   // Increment Program Counter
+        pc_enable = 2'b11;   // Increment Program Counter
         // In this state, we just need to increment the PC and decide where to go next.
         // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
         if(INSTRUCTION == `OP_NOP) begin
@@ -92,7 +92,7 @@ always @(*) begin
     end
     S_ZPG_ABS_ADR_READ: begin
         address_select = 1;
-        pc_enable = 1;
+        pc_enable = 2'b11;
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
@@ -230,11 +230,11 @@ always @(*) begin
         end
     end
     S_ABS_LB: begin
-        pc_enable = 1;
+        pc_enable = 2'b11;
         NEXT_STATE = S_ABS_HB;
     end
     S_ABS_HB: begin
-        pc_enable = 1;
+        pc_enable = 2'b11;
         NEXT_STATE = S_IDL_DATA_WRITE;
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         address_select = 1;

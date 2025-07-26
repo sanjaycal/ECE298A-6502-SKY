@@ -60,7 +60,7 @@
 
     // MISC OPCODES
     `define OP_JSR          8'b00100000
-
+    `define OP_JMP_ABS      8'b01001100
     `define OP_NOP          8'b11101010
 
     // ADDRESSING

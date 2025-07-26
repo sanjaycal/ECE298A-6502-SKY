@@ -42,7 +42,7 @@ module tt_um_6502 (
   wire [2:0] stack_pointer_register_enable;
   wire [4:0] ALU_op;
   wire [2:0] accumulator_enable;
-  wire pc_enable;
+  wire [2:0] pc_enable;
   wire [1:0] input_data_latch_enable;
   wire rdy;
   wire rw;
@@ -197,7 +197,7 @@ module tt_um_6502 (
         if(input_data_latch_enable == 1) begin
           input_data_latch <= uio_in;
         end
-        if(pc_enable) begin
+        if(pc_enable == 2'b11) begin
           pc <= pc + 1;
         end
       end
