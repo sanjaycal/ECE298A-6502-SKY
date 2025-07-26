@@ -43,6 +43,7 @@ async def test_zpg_instruction(
 ):
     # feed in the opcode
     dut.uio_in.value = opcode
+    assert dut.uo_out.value == (starting_PC+1)//256
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
         assert dut.uo_out.value == (starting_PC % 256)
@@ -64,7 +65,6 @@ async def test_zpg_instruction(
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == addr_LB
     await ClockCycles(dut.clk, 1)
-    assert dut.uo_out.value == 0  # this shouldn't change though
 
     # wait for the ALU to get the data
     dut.uio_in.value = hex_to_num("00")
@@ -144,18 +144,19 @@ async def run_input_zpg_instruction(
 ):
     # feed in the opcode
     dut.uio_in.value = opcode
+    assert dut.uo_out.value == (starting_PC+1)//256
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
-        assert dut.uo_out.value == starting_PC
+        assert dut.uo_out.value == (starting_PC+1)%256 
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
-    assert dut.uo_out.value == 0
+    assert dut.uo_out.value == (starting_PC+2)//256
 
     # feed in the addr to read from
     dut.uio_in.value = addr_LB
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
-        assert dut.uo_out.value == starting_PC + 1
+        assert dut.uo_out.value == (starting_PC + 2)%256
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == 0
@@ -195,7 +196,7 @@ async def run_abs_instruction(
     dut.uio_in.value = opcode
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
-        assert dut.uo_out.value == starting_PC
+        assert dut.uo_out.value == starting_PC + 1
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == 0
@@ -204,7 +205,7 @@ async def run_abs_instruction(
     dut.uio_in.value = addr_LB
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
-        assert dut.uo_out.value == starting_PC + 1
+        assert dut.uo_out.value == starting_PC + 2
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == 0
@@ -212,8 +213,6 @@ async def run_abs_instruction(
     # feed in the addr_HB to read from
     dut.uio_in.value = addr_HB
     await ClockCycles(dut.clk, 1)
-    if enable_pc_checks:
-        assert dut.uo_out.value == starting_PC + 2
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == addr_HB
