@@ -406,7 +406,7 @@ async def test_ROR_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1):
+    for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
