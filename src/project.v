@@ -11,7 +11,7 @@
   //localparam BUF_IDLE_TWO      = 2'b00;
   localparam BUF_LOAD_TWO      = 2'b01; // Take from a BUS and keep
   localparam BUF_STORE_TWO     = 2'b10; // Put the register value on a BUS
-  
+  localparam PC_INC_ONE        = 2'b11;
   //localparam BUF_IDLE_THREE    = 3'b000;
   localparam BUF_LOAD1_THREE   = 3'b100; // Take from a BUS and keep
   localparam BUF_LOAD2_THREE   = 3'b101; // Take from a BUS and keep
@@ -42,7 +42,7 @@ module tt_um_6502 (
   wire [2:0] stack_pointer_register_enable;
   wire [4:0] ALU_op;
   wire [2:0] accumulator_enable;
-  wire [2:0] pc_enable;
+  wire [1:0] pc_enable;
   wire [1:0] input_data_latch_enable;
   wire rdy;
   wire rw;
@@ -197,8 +197,11 @@ module tt_um_6502 (
         if(input_data_latch_enable == 1) begin
           input_data_latch <= uio_in;
         end
-        if(pc_enable == 2'b11) begin
+        if(pc_enable == PC_INC_ONE) begin
           pc <= pc + 1;
+        end
+        else if(pc_enable == BUF_LOAD_TWO) begin
+          pc <= memory_address;
         end
       end
     end else begin

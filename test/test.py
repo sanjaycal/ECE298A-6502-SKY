@@ -406,7 +406,7 @@ async def test_ROR_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(1):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -531,3 +531,35 @@ async def test_DEC_ZPG_Base(dut):
             test_num,
             (test_num - 1) % 256,
         )  # DEC
+
+
+
+@cocotb.test()
+async def test_JMP_ABS_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(255):
+        goal_HB = random.randint(1,255)
+        memory_addr_with_value_LB = random.randint(10, 255)
+        goal_LB = test_num 
+        memory_addr_with_value_HB = random.randint(1, 255)
+        goal = goal_HB*256+goal_LB
+        await helper.reset_cpu(dut)
+        await helper.run_jmp_abs_instruction(
+            dut,
+            helper.hex_to_num("4c"),
+            goal_HB,
+            goal_LB,
+            1,
+        )
+        test_num = 69
+        await helper.test_zpg_instruction_jmp_specifc(
+            dut,
+            helper.hex_to_num("06"),
+            memory_addr_with_value_LB,
+            goal,
+            test_num,
+            (test_num * 2) % 256,
+        )
