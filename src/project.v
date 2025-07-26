@@ -58,7 +58,7 @@ module tt_um_6502 (
   wire processor_status_register_rw;
   wire [6:0] processor_status_register_read;
   wire [6:0] processor_status_register_write;
-  wire [7:0] processor_status_register_value=0;
+  wire [7:0] processor_status_register_value;
 
 
   wire [15:0] ab;
