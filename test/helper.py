@@ -46,20 +46,24 @@ async def test_zpg_instruction(
     assert dut.uo_out.value == (starting_PC)//256
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
+
         assert dut.uo_out.value == (starting_PC)%256 
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
     assert dut.uo_out.value == (starting_PC+1)//256
 
+
     # feed in the addr to read from
     dut.uio_in.value = addr_LB
     await ClockCycles(dut.clk, 1)
     if enable_pc_checks:
+
         assert dut.uo_out.value == (starting_PC + 1)%256
     assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
     await ClockCycles(dut.clk, 1)
 
     assert dut.uo_out.value == 0  # goal HB This is ZPG
+
 
     # feed in the data we want to operate on
     dut.uio_in.value = input_value
@@ -87,6 +91,57 @@ async def test_zpg_instruction(
     assert dut.uio_out.value % 2 == 0  # last bit should be 0 for write
     assert dut.uo_out.value == addr_LB  # check the mem addr we are writing to
     await ClockCycles(dut.clk, 1)
+
+
+async def test_zpg_instruction_jmp_specifc(
+    dut, opcode, addr_LB, starting_PC, input_value, output_value, enable_pc_checks=True
+):
+    # feed in the opcode
+    dut.uio_in.value = opcode
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC % 256)
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == starting_PC // 256
+
+    # feed in the addr to read from
+    dut.uio_in.value = addr_LB
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC + 1) % 256
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+    # assert dut.uo_out.value == (starting_PC + 1) // 256
+
+    # feed in the data we want to operate on
+    dut.uio_in.value = input_value
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == addr_LB
+    await ClockCycles(dut.clk, 1)
+    # assert dut.uo_out.value == 0  # this shouldn't change though
+
+    # wait for the ALU to get the data
+    dut.uio_in.value = hex_to_num("00")
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+    # wait for data bus buffer to get the data
+    dut.uio_in.value = hex_to_num("00")
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+    assert dut.uio_out.value == output_value  # check the value
+    assert dut.uio_oe.value == hex_to_num("ff")  # check if we are outputting
+    assert dut.uo_out.value == 0  # check the page we are writing to
+
+    await ClockCycles(dut.clk, 1)
+    assert dut.uio_out.value % 2 == 0  # last bit should be 0 for write
+    assert dut.uo_out.value == addr_LB  # check the mem addr we are writing to
+    await ClockCycles(dut.clk, 1)
+
 
 
 async def run_input_zpg_instruction(

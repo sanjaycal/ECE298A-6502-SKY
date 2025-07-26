@@ -44,6 +44,7 @@ localparam S_ALU_ADR_CALC_1 = 4'd8;
 localparam S_ALU_ADR_CALC_2 = 4'd9;
 localparam S_ABS_LB         = 4'd10;
 localparam S_ABS_HB         = 4'd11;
+localparam S_PC_LOAD        = 4'd12;
 
 //BUFFER OPERATIONS
 
@@ -75,7 +76,7 @@ always @(*) begin
         NEXT_STATE = S_OPCODE_READ;
     end
     S_OPCODE_READ: begin
-        pc_enable = 2'b11;   // Increment Program Counter
+        pc_enable = `PC_INC_ONE;   // Increment Program Counter
         // In this state, we just need to increment the PC and decide where to go next.
         // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
         if(INSTRUCTION == `OP_NOP) begin
@@ -125,7 +126,7 @@ always @(*) begin
     end
     S_ZPG_ABS_ADR_READ: begin
         address_select = 1;
-        pc_enable = 2'b11;
+        pc_enable = `PC_INC_ONE;
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
@@ -312,14 +313,24 @@ always @(*) begin
         end
     end
     S_ABS_LB: begin
-        pc_enable = 2'b11;
-        NEXT_STATE = S_ABS_HB;
+        pc_enable = `PC_INC_ONE;
+        if(OPCODE == `OP_JMP_ABS) begin
+            NEXT_STATE = S_PC_LOAD;
+        end
+        else begin
+            NEXT_STATE = S_ABS_HB;
+        end
     end
     S_ABS_HB: begin
-        pc_enable = 2'b11;
+        pc_enable = `PC_INC_ONE;
         NEXT_STATE = S_IDL_DATA_WRITE;
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         address_select = 1;
+    end
+    S_PC_LOAD: begin
+        pc_enable = `BUF_LOAD_TWO;
+        NEXT_STATE = S_IDLE;
+        memory_address = MEMORY_ADDRESS_INTERNAL;
     end
     default: NEXT_STATE = S_IDLE;
     endcase
@@ -348,7 +359,7 @@ always @(posedge clk or negedge rst_n) begin
             end
         end else if(NEXT_STATE == S_ABS_LB || NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
             MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
-        end else if(NEXT_STATE == S_ABS_HB) begin
+        end else if(NEXT_STATE == S_ABS_HB || NEXT_STATE == S_PC_LOAD) begin
             MEMORY_ADDRESS_INTERNAL <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
         end
     end

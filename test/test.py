@@ -601,11 +601,12 @@ async def test_JMP_ABS_Base(dut):
             1,
         )
         test_num = 69
-        await helper.test_zpg_instruction(
+
+        await helper.test_zpg_instruction_jmp_specifc(
             dut,
             helper.hex_to_num("06"),
             memory_addr_with_value_LB,
-            goal-1,
+            goal,
             test_num,
             (test_num * 2) % 256,
         )
@@ -833,7 +834,4 @@ async def test_TYA_Base(dut):
         await helper.test_zpg_instruction(
             dut, helper.hex_to_num("85"), memory_addr_with_value, 4, 0, test_num
         )#STX
-
-
-
 
