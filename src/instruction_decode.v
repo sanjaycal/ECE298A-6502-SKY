@@ -215,9 +215,9 @@ always @(*) begin
             alu_enable = `DEC;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `DEC;
-                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+                input_data_latch_enable = `BUF_STORE_TWO;
+                alu_enable = `DEC;
+                processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end 
         
         // LOAD
