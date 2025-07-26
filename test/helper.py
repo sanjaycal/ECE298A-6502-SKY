@@ -258,4 +258,20 @@ async def run_incXY_instruction(
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
 
+async def run_transfer_instruction(
+    dut,
+    opcode,
+    starting_PC
+):
+    # feed in the opcode
+    dut.uio_in.value = opcode
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == starting_PC
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == 0
+
+    #wait for the first state
+    dut.uio_in.value = 0
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
 

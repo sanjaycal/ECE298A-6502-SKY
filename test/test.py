@@ -465,7 +465,7 @@ async def test_LDY_ZPG_Base(dut):
             dut, helper.hex_to_num("a3"), memory_addr_with_value, 1, test_num
         )
         await helper.test_zpg_instruction(
-            dut, helper.hex_to_num("83"), memory_addr_with_value, 3, 0, test_num
+            dut, helper.hex_to_num("84"), memory_addr_with_value, 3, 0, test_num
         )
 
 
@@ -596,7 +596,7 @@ async def test_INY_Base(dut):
             dut, helper.hex_to_num("c8"), 3
         ) #INY
         await helper.test_zpg_instruction(
-            dut, helper.hex_to_num("83"), memory_addr_with_value, 4, 0, (test_num + 1)%256
+            dut, helper.hex_to_num("84"), memory_addr_with_value, 4, 0, (test_num + 1)%256
         ) #STY
 
 
@@ -634,7 +634,7 @@ async def test_DEY_Base(dut):
             dut, helper.hex_to_num("88"), 3
         ) #DEY
         await helper.test_zpg_instruction(
-            dut, helper.hex_to_num("83"), memory_addr_with_value, 4, 0, (test_num - 1)%256
+            dut, helper.hex_to_num("84"), memory_addr_with_value, 4, 0, (test_num - 1)%256
         ) #STY
 
 
@@ -711,5 +711,43 @@ async def test_ROR_A_ZPG_Base(dut):
         await helper.test_zpg_instruction(
             dut, helper.hex_to_num("85"), memory_addr_with_value, 4, 0, (test_num//2)%256 + (test_num%2)*128
         )#STA
+
+
+@cocotb.test()
+async def test_TAX_Base(dut):
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1, 256):
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_zpg_instruction(
+            dut, helper.hex_to_num("a5"), memory_addr_with_value, 1, test_num
+        )#LDA
+        await helper.run_transfer_instruction(
+            dut, helper.hex_to_num("aa"), 3
+        ) #TAX
+        await helper.test_zpg_instruction(
+            dut, helper.hex_to_num("86"), memory_addr_with_value, 4, 0, test_num
+        )#STX
+
+@cocotb.test()
+async def test_TAY_Base(dut):
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1, 256):
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_zpg_instruction(
+            dut, helper.hex_to_num("a5"), memory_addr_with_value, 1, test_num
+        )#LDA
+        await helper.run_transfer_instruction(
+            dut, helper.hex_to_num("a8"), 3
+        ) #TAY
+        await helper.test_zpg_instruction(
+            dut, helper.hex_to_num("84"), memory_addr_with_value, 4, 0, test_num
+        )#STY
+
 
 

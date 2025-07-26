@@ -95,6 +95,14 @@ always @(*) begin
 	    processor_status_register_value[`OVERFLOW_FLAG] = 0;
             processor_status_register_write = `OVERFLOW_FLAG;
             NEXT_STATE = S_IDLE;
+        end else if(INSTRUCTION == `OP_TAX) begin
+	    index_register_X_enable = `BUF_LOAD1_THREE;
+	    accumulator_enable = `BUF_STORE1_THREE;
+            NEXT_STATE = S_IDLE;
+        end else if(INSTRUCTION == `OP_TAY) begin
+	    index_register_Y_enable = `BUF_LOAD1_THREE;
+	    accumulator_enable = `BUF_STORE1_THREE;
+            NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION[4:2] == `ADR_A || INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
             NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
