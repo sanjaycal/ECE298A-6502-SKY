@@ -326,13 +326,14 @@ always @(*) begin
 end
 
 always @(posedge clk or negedge rst_n) begin
-    INSTRUCTION <= instruction;
     if(!rst_n) begin
         STATE <= S_IDLE;
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 0;
+    	INSTRUCTION <= 0;
     end else if(clk_enable) begin
+	INSTRUCTION <= instruction;
         STATE <= NEXT_STATE;
         if(NEXT_STATE == S_OPCODE_READ) begin
              OPCODE <= instruction;
