@@ -16,6 +16,7 @@ module instruction_decode (
     input  wire       nmi,
     input  wire [6:0] processor_status_register_read,
     output reg [6:0] processor_status_register_write,
+    output reg [7:0] processor_status_register_value,
     output reg [15:0] memory_address,  // better name for this
     output reg [1:0]    address_select, // 0 = PC, 1 = Memory Address (Remove?), 2 = ALU,
     output reg       processor_status_register_rw,
@@ -58,6 +59,7 @@ always @(*) begin
     NEXT_STATE = STATE;
     alu_enable = `NOP;
     processor_status_register_write = 7'b0;
+    processor_status_register_value = 8'b0;
     address_select = 2'b00;
     processor_status_register_rw = 1;
     rw = 1;
@@ -78,6 +80,10 @@ always @(*) begin
         // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
         if(INSTRUCTION == `OP_NOP) begin
             NEXT_STATE = S_IDLE; // NOP is a no-operation, so we just stay idle.
+        end else if(INSTRUCTION == `OP_SEC) begin
+	    processor_status_register_value[7] = 1;
+	    processor_status_register_value[`CARRY_FLAG] = 1;
+            NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin

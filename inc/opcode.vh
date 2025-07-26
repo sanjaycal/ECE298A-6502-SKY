@@ -61,6 +61,10 @@
     //Branch instructions
     `define OP_BEQ          8'b11110000
 
+    //Set instructions
+    `define OP_SEC          8'b00111000
+    `define OP_SED          8'b11111000
+
     //Compare instructions
     `define OP_CMP_ZPG      8'b11000101
     `define OP_CMP_ZPG_X    8'b11010101

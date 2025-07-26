@@ -58,6 +58,7 @@ module tt_um_6502 (
   wire processor_status_register_rw;
   wire [6:0] processor_status_register_read;
   wire [6:0] processor_status_register_write;
+  wire [7:0] processor_status_register_value=0;
 
 
   wire [15:0] ab;
@@ -97,6 +98,7 @@ module tt_um_6502 (
     .nmi                           (nmi),
     .processor_status_register_read(processor_status_register_read),
     .processor_status_register_write(processor_status_register_write),
+    .processor_status_register_value(processor_status_register_value),
     .memory_address                (memory_address),
     .address_select                (address_select),
     .processor_status_register_rw  (processor_status_register_rw),
@@ -185,6 +187,8 @@ module tt_um_6502 (
     //alu stuff
     if(ALU_op != `NOP && ALU_op != `TMX) begin
       next_processor_status_register <= ALU_flags_output & processor_status_register_write;
+    end else if (processor_status_register_value[7]==1) begin
+      next_processor_status_register <= processor_status_register_value[6:0] & processor_status_register_write;
     end
     if(clk_enable==0)begin
       if (rst_n == 0) begin
