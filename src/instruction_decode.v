@@ -325,7 +325,7 @@ always @(*) begin
     endcase
 end
 
-always @(posedge clk ) begin
+always @(posedge clk or negedge rst_n) begin
     INSTRUCTION <= instruction;
     if(!rst_n) begin
         STATE <= S_IDLE;
