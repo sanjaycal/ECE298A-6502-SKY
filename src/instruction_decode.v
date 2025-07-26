@@ -220,9 +220,9 @@ always @(*) begin
             alu_enable = `DEC;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
-                input_data_latch_enable <= `BUF_STORE_TWO;
-                alu_enable <= `DEC;
-                processor_status_register_write <= `ZERO_FLAG | `NEGATIVE_FLAG;
+                input_data_latch_enable = `BUF_STORE_TWO;
+                alu_enable = `DEC;
+                processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end 
         
         // LOAD
@@ -325,14 +325,15 @@ always @(*) begin
     endcase
 end
 
-always @(posedge clk ) begin
-    INSTRUCTION <= instruction;
+always @(posedge clk or negedge rst_n) begin
     if(!rst_n) begin
         STATE <= S_IDLE;
         OPCODE <= `OP_NOP;
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 0;
+    	INSTRUCTION <= 0;
     end else if(clk_enable) begin
+	INSTRUCTION <= instruction;
         STATE <= NEXT_STATE;
         if(NEXT_STATE == S_OPCODE_READ) begin
              OPCODE <= instruction;

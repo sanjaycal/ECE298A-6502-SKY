@@ -58,7 +58,7 @@ module tt_um_6502 (
   wire processor_status_register_rw;
   wire [6:0] processor_status_register_read;
   wire [6:0] processor_status_register_write;
-  wire [7:0] processor_status_register_value=0;
+  wire [7:0] processor_status_register_value;
 
 
   wire [15:0] ab;
@@ -160,7 +160,6 @@ module tt_um_6502 (
     next_index_register_x <= index_register_x;
     next_index_register_y <= index_register_y;
     next_data_bus_buffer <= data_bus_buffer;
-    next_processor_status_register <= processor_status_register;
     //reading data from the bus 1
     if(accumulator_enable == BUF_LOAD1_THREE) begin
        next_accumulator <= bus1;
@@ -189,6 +188,8 @@ module tt_um_6502 (
       next_processor_status_register <= ALU_flags_output & processor_status_register_write;
     end else if (processor_status_register_value[7]==1) begin
       next_processor_status_register <= processor_status_register_value[6:0] & processor_status_register_write;
+    end else begin
+      next_processor_status_register <= processor_status_register;
     end
     if(clk_enable==0)begin
       if (rst_n == 0) begin
@@ -228,7 +229,7 @@ module tt_um_6502 (
   assign nmi_in = 0;
   assign res_in = 0;
   assign processor_status_register_read = processor_status_register;
-  wire _unused = &{ena, 1'b0, dbe, stack_pointer_register_enable, ALU_flags_output, ui_in, processor_status_register, processor_status_register_rw};
+  wire _unused = &{ena, 1'b0, dbe, res, rdy, stack_pointer_register_enable, ui_in, processor_status_register_rw};
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uo_out = (clk_enable==0)?ab[15:8]:ab[7:0];
