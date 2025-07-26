@@ -9,8 +9,8 @@
     `define OP_LD_A_ZPG     8'b10100101
     `define OP_ST_A_ZPG     8'b10000101
 
-    `define OP_LD_Y_ZPG     8'b10100011
-    `define OP_ST_Y_ZPG     8'b10000100
+    `define OP_LD_Y_ZPG     8'ha4
+    `define OP_ST_Y_ZPG     8'h84
 
 
     //SHIFTING OPCODES
@@ -66,6 +66,8 @@
     //TRANSFER INSTRUCTIONS
     `define OP_TAX          8'haa
     `define OP_TAY          8'ha8
+    `define OP_TXA          8'h8a
+    `define OP_TYA          8'h98
 
     //Branch instructions
     `define OP_BEQ          8'b11110000

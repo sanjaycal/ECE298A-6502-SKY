@@ -103,9 +103,17 @@ always @(*) begin
 	    index_register_Y_enable = `BUF_LOAD1_THREE;
 	    accumulator_enable = `BUF_STORE1_THREE;
             NEXT_STATE = S_IDLE;
+        end else if(INSTRUCTION == `OP_TXA) begin
+	    index_register_X_enable = `BUF_STORE1_THREE;
+	    accumulator_enable = `BUF_LOAD1_THREE;
+            NEXT_STATE = S_IDLE;
+        end else if(INSTRUCTION == `OP_TYA) begin
+	    index_register_Y_enable = `BUF_STORE1_THREE;
+	    accumulator_enable = `BUF_LOAD1_THREE;
+            NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION[4:2] == `ADR_A || INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
             NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
-        end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
+        end else if(INSTRUCTION[4:2] == `ADR_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin
             NEXT_STATE = S_IDL_ADR_WRITE;
