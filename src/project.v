@@ -229,7 +229,7 @@ module tt_um_6502 (
   assign nmi_in = 0;
   assign res_in = 0;
   assign processor_status_register_read = processor_status_register;
-  wire _unused = &{ena, 1'b0, dbe, res, rdy, stack_pointer_register_enable, ALU_flags_output, ui_in, processor_status_register, processor_status_register_rw};
+  wire _unused = &{ena, 1'b0, dbe, res, rdy, stack_pointer_register_enable, ui_in, processor_status_register_rw};
 
   // All output pins must be assigned. If not used, assign to 0.
   assign uo_out = (clk_enable==0)?ab[15:8]:ab[7:0];
