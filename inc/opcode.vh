@@ -58,6 +58,9 @@
     `define OP_DEC_ABS      8'b11001110
     `define OP_DEC_ZPG_X    8'b11011110  
 
+    `define OP_INX          8'he8
+    `define OP_INY          8'hc8
+
     //Branch instructions
     `define OP_BEQ          8'b11110000
 

@@ -89,10 +89,14 @@ always @(*) begin
 	    processor_status_register_value[7] = 1;
 	    processor_status_register_value[`CARRY_FLAG] = 0;
             processor_status_register_write = `CARRY_FLAG;
+            NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_CLV) begin
 	    processor_status_register_value[7] = 1;
 	    processor_status_register_value[`OVERFLOW_FLAG] = 0;
             processor_status_register_write = `OVERFLOW_FLAG;
+            NEXT_STATE = S_IDLE;
+	end else if(INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY) begin
+	    NEXT_STATE = S_ALU_FINAL;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin
@@ -167,6 +171,14 @@ always @(*) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `INC;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_INX) begin
+	    index_register_X_enable = `BUF_STORE1_THREE;
+            alu_enable = `INC;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_INY) begin
+	    index_register_Y_enable = `BUF_STORE1_THREE;
+            alu_enable = `INC;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
                 input_data_latch_enable <= `BUF_STORE_TWO;
                 alu_enable <= `DEC;
@@ -217,6 +229,16 @@ always @(*) begin
             data_buffer_enable = `BUF_LOAD_TWO;
             NEXT_STATE = S_DBUF_OUTPUT;
         end
+	else if(OPCODE == `OP_INX) begin
+	    index_register_X_enable = `BUF_LOAD2_THREE;
+            alu_enable = `TMX;
+	    NEXT_STATE = S_IDLE;
+	end
+	else if(OPCODE == `OP_INY) begin
+	    index_register_Y_enable = `BUF_LOAD2_THREE;
+            alu_enable = `TMX;
+	    NEXT_STATE = S_IDLE;
+	end
         else if(ADDRESSING == `ADR_ZPG || ADDRESSING == `ADR_ZPG_X || ADDRESSING == `ADR_ABS) begin
             data_buffer_enable = `BUF_LOAD_TWO;
             NEXT_STATE = S_DBUF_OUTPUT;

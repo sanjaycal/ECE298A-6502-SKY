@@ -562,3 +562,41 @@ async def test_JMP_ABS_Base(dut):
             (test_num * 2) % 256,
         )
 
+@cocotb.test()
+async def test_INX_Base(dut):
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1, 256):
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_zpg_instruction(
+            dut, helper.hex_to_num("a6"), memory_addr_with_value, 1, test_num
+        ) #LDX
+        await helper.run_incXY_instruction(
+            dut, helper.hex_to_num("e8"), 3
+        ) #INX
+        await helper.test_zpg_instruction(
+            dut, helper.hex_to_num("86"), memory_addr_with_value, 4, 0, (test_num + 1)%256
+        ) #STX
+
+
+@cocotb.test()
+async def test_INY_Base(dut):
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1, 256):
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_zpg_instruction(
+            dut, helper.hex_to_num("a3"), memory_addr_with_value, 1, test_num
+        ) #LDX
+        await helper.run_incXY_instruction(
+            dut, helper.hex_to_num("c8"), 3
+        ) #INX
+        await helper.test_zpg_instruction(
+            dut, helper.hex_to_num("83"), memory_addr_with_value, 4, 0, (test_num + 1)%256
+        ) #STX
+
+
