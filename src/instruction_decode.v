@@ -22,7 +22,7 @@ module instruction_decode (
     output reg       rw, //1 for read, 0 for write
     output reg [1:0] data_buffer_enable, // 00 IDLE, 01 LOAD, 10 STORE
     output reg [1:0] input_data_latch_enable, // 00 IDLE, 01 LOAD, 10 STORE
-    output reg [1:0]     pc_enable, // 11 for a secret operation :)
+    output reg [2:0]     pc_enable, // 11 for a secret operation :)
     output reg [4:0] alu_enable,
     output reg [2:0] accumulator_enable, // BIT 2 is enable, BIT 1 is R/W_n and BIT 0 is BUS SELECT
     output reg [2:0] stack_pointer_register_enable, // 0 is light blue and 1 is dark blue.
@@ -143,6 +143,11 @@ always @(*) begin
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `AND;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ZPG_X || OPCODE == `OP_CMP_ABS) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            accumulator_enable = `BUF_STORE2_THREE;
+            alu_enable = `CMP;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG | `CARRY_FLAG;
         end else if(OPCODE == `OP_INC_ZPG || OPCODE == `OP_INC_ZPG_X || OPCODE == `OP_INC_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `INC;

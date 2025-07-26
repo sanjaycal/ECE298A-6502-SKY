@@ -58,6 +58,14 @@
     `define OP_DEC_ABS      8'b11001110
     `define OP_DEC_ZPG_X    8'b11011110  
 
+    //Branch instructions
+    `define OP_BEQ          8'b11110000
+
+    //Compare instructions
+    `define OP_CMP_ZPG      8'b11000101
+    `define OP_CMP_ZPG_X    8'b11010101
+    `define OP_CMP_ABS      8'b11001101
+
     // MISC OPCODES
     `define OP_JSR          8'b00100000
     `define OP_JMP_ABS      8'b01001100
