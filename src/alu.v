@@ -19,8 +19,11 @@ module alu (
     wire [7:0] result_rol = {inputA[6:0], inputA[7]};
     wire [7:0] result_ror = {inputA[0],inputA[7:1]};
     wire [7:0] result_and = inputA&inputB;
+    wire [7:0] result_or  = inputA|inputB;
+    wire [7:0] result_xor = inputA^inputB;
     wire [7:0] result_inc = inputA+1;
     wire [7:0] result_dec = inputA-1;
+    wire [7:0] result_cmp = inputB-inputA;
 
     wire [6:0] ALU_flags_output_internal = next_alu_flags;
 
@@ -58,6 +61,16 @@ module alu (
                 next_alu_flags[`ZERO_FLAG]     = (result_and == 8'b0);
                 next_alu_flags[`NEGATIVE_FLAG] = result_and[7];
             end
+            `OR: begin
+                next_alu_result = result_or;
+                next_alu_flags[`ZERO_FLAG]     = (result_or == 8'b0);
+                next_alu_flags[`NEGATIVE_FLAG] = result_or[7];
+            end
+            `XOR: begin
+                next_alu_result = result_xor;
+                next_alu_flags[`ZERO_FLAG]     = (result_xor == 8'b0);
+                next_alu_flags[`NEGATIVE_FLAG] = result_xor[7];       
+            end      
             `INC: begin
                 next_alu_result = result_inc;
                 next_alu_flags[`ZERO_FLAG]     = (result_inc == 8'b0);
@@ -67,6 +80,12 @@ module alu (
                 next_alu_result = result_dec;
                 next_alu_flags[`ZERO_FLAG]     = (result_dec == 8'b0);
                 next_alu_flags[`NEGATIVE_FLAG] = result_dec[7];
+            end
+            `CMP: begin
+                next_alu_result = inputA;
+                next_alu_flags[`ZERO_FLAG]     = (inputB-inputA)==0;
+                next_alu_flags[`NEGATIVE_FLAG] = result_cmp[7];
+                next_alu_flags[`CARRY_FLAG] = (inputA[7] ^ inputB[7]) & (inputA[7] ^ result_cmp[7]);
             end
             `FLG: begin
                 next_alu_result = inputA;
@@ -88,6 +107,6 @@ module alu (
     end
 
 
-    wire _unused = &{status_flags_in};
+    wire _unused = &{status_flags_in, result_cmp[6:0]};
 
 endmodule
