@@ -60,6 +60,8 @@
 
     `define OP_INX          8'he8
     `define OP_INY          8'hc8
+    `define OP_DEX          8'hca
+    `define OP_DEY          8'h88
 
     //Branch instructions
     `define OP_BEQ          8'b11110000

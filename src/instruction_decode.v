@@ -95,7 +95,7 @@ always @(*) begin
 	    processor_status_register_value[`OVERFLOW_FLAG] = 0;
             processor_status_register_write = `OVERFLOW_FLAG;
             NEXT_STATE = S_IDLE;
-	end else if(INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY) begin
+	end else if(INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
 	    NEXT_STATE = S_ALU_FINAL;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
@@ -179,6 +179,14 @@ always @(*) begin
 	    index_register_Y_enable = `BUF_STORE1_THREE;
             alu_enable = `INC;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_DEX) begin
+	    index_register_X_enable = `BUF_STORE1_THREE;
+            alu_enable = `DEC;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_DEY) begin
+	    index_register_Y_enable = `BUF_STORE1_THREE;
+            alu_enable = `DEC;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
                 input_data_latch_enable <= `BUF_STORE_TWO;
                 alu_enable <= `DEC;
@@ -229,12 +237,12 @@ always @(*) begin
             data_buffer_enable = `BUF_LOAD_TWO;
             NEXT_STATE = S_DBUF_OUTPUT;
         end
-	else if(OPCODE == `OP_INX) begin
+	else if(OPCODE == `OP_INX || OPCODE == `OP_DEX) begin
 	    index_register_X_enable = `BUF_LOAD2_THREE;
             alu_enable = `TMX;
 	    NEXT_STATE = S_IDLE;
 	end
-	else if(OPCODE == `OP_INY) begin
+	else if(OPCODE == `OP_INY || OPCODE == `OP_DEY) begin
 	    index_register_Y_enable = `BUF_LOAD2_THREE;
             alu_enable = `TMX;
 	    NEXT_STATE = S_IDLE;
