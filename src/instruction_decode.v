@@ -95,16 +95,14 @@ always @(*) begin
 	    processor_status_register_value[`OVERFLOW_FLAG] = 0;
             processor_status_register_write = `OVERFLOW_FLAG;
             NEXT_STATE = S_IDLE;
-	end else if(INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
-	    NEXT_STATE = S_ALU_FINAL;
+        end else if(INSTRUCTION[4:2] == `ADR_A || INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
+            NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin
             NEXT_STATE = S_IDL_ADR_WRITE;
         end else if(INSTRUCTION[4:2] == `ADR_ABS) begin
             NEXT_STATE = S_ABS_LB;
-        end else if(INSTRUCTION[4:2] == `ADR_A) begin
-            NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
         end else begin
             NEXT_STATE = S_IDLE; // Default case, should not happen.
         end  
@@ -138,7 +136,7 @@ always @(*) begin
             alu_enable  = `ASL;
             processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_ASL_A) begin
-            accumulator_enable = `BUF_STORE2_THREE;
+            accumulator_enable = `BUF_STORE1_THREE;
             alu_enable = `ASL;
             processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_LSR_ZPG || OPCODE == `OP_LSR_ZPG_X || OPCODE == `OP_LSR_ABS) begin
@@ -146,8 +144,16 @@ always @(*) begin
             alu_enable  = `LSR;
             processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_LSR_A ) begin
-            accumulator_enable = `BUF_STORE2_THREE;
+            accumulator_enable = `BUF_STORE1_THREE;
             alu_enable = `LSR;
+            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_ROL_A ) begin
+            accumulator_enable = `BUF_STORE1_THREE;
+            alu_enable = `ROL;
+            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_ROR_A ) begin
+            accumulator_enable = `BUF_STORE1_THREE;
+            alu_enable = `ROR;
             processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_ROL_ZPG || OPCODE == `OP_ROL_ZPG_X || OPCODE == `OP_ROL_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
@@ -253,8 +259,8 @@ always @(*) begin
             alu_enable = `TMX;
         end else if(ADDRESSING == `ADR_A) begin
             accumulator_enable = `BUF_LOAD2_THREE;
-            NEXT_STATE = S_OPCODE_READ;
             alu_enable = `TMX;
+	    NEXT_STATE = S_IDLE;
         end
     end 
     S_DBUF_OUTPUT: begin
