@@ -83,7 +83,16 @@ always @(*) begin
         end else if(INSTRUCTION == `OP_SEC) begin
 	    processor_status_register_value[7] = 1;
 	    processor_status_register_value[`CARRY_FLAG] = 1;
+            processor_status_register_write = `CARRY_FLAG;
             NEXT_STATE = S_IDLE;
+        end else if(INSTRUCTION == `OP_CLC) begin
+	    processor_status_register_value[7] = 1;
+	    processor_status_register_value[`CARRY_FLAG] = 0;
+            processor_status_register_write = `CARRY_FLAG;
+        end else if(INSTRUCTION == `OP_CLV) begin
+	    processor_status_register_value[7] = 1;
+	    processor_status_register_value[`OVERFLOW_FLAG] = 0;
+            processor_status_register_write = `OVERFLOW_FLAG;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG || INSTRUCTION == `OP_LD_Y_ZPG || INSTRUCTION == `OP_ST_Y_ZPG) begin
             NEXT_STATE = S_ZPG_ABS_ADR_READ;
         end else if(INSTRUCTION[4:2] == `ADR_ZPG_X) begin

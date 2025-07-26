@@ -63,6 +63,8 @@
 
     //Set instructions
     `define OP_SEC          8'b00111000
+    `define OP_CLC          8'b00011000
+    `define OP_CLV          8'b10111000
 
     //Compare instructions
     `define OP_CMP_ZPG      8'b11000101
