@@ -189,6 +189,11 @@ always @(*) begin
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `OR;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+        end else if(OPCODE == `OP_EOR_ZPG) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            accumulator_enable = `BUF_STORE2_THREE;
+            alu_enable = `XOR;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ZPG_X || OPCODE == `OP_CMP_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
@@ -244,16 +249,11 @@ always @(*) begin
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end
-        else if(OPCODE == `OP_AND_ZPG) begin
+        else if(OPCODE == `OP_AND_ZPG || OPCODE == `OP_ORA_ZPG || OPCODE == `OP_EOR_ZPG) begin
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end 
-        else if (OPCODE == `OP_ORA_ZPG) begin
-            accumulator_enable = `BUF_LOAD2_THREE;
-            NEXT_STATE = S_IDLE;
-            alu_enable = `TMX;
-        end
         else if(OPCODE == `OP_ST_X_ZPG) begin
             index_register_X_enable = `BUF_STORE2_THREE;
             data_buffer_enable = `BUF_LOAD_TWO;

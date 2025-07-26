@@ -20,6 +20,7 @@ module alu (
     wire [7:0] result_ror = {inputA[0],inputA[7:1]};
     wire [7:0] result_and = inputA&inputB;
     wire [7:0] result_or  = inputA|inputB;
+    wire [7:0] result_xor = inputA^inputB;
     wire [7:0] result_inc = inputA+1;
     wire [7:0] result_dec = inputA-1;
     wire [7:0] result_cmp = inputA;
@@ -65,6 +66,11 @@ module alu (
                 next_alu_flags[`ZERO_FLAG]     = (result_or == 8'b0);
                 next_alu_flags[`NEGATIVE_FLAG] = result_or[7];
             end
+            `XOR: begin
+                next_alu_result = result_xor;
+                next_alu_flags[`ZERO_FLAG]     = (result_xor == 8'b0);
+                next_alu_flags[`NEGATIVE_FLAG] = result_xor[7];       
+            end      
             `INC: begin
                 next_alu_result = result_inc;
                 next_alu_flags[`ZERO_FLAG]     = (result_inc == 8'b0);

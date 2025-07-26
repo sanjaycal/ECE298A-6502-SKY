@@ -52,6 +52,8 @@
 
     `define OP_ORA_ZPG      8'b00000101
 
+    `define OP_EOR_ZPG      8'b01000101
+
     `define OP_INC_ZPG      8'b11100110
     `define OP_INC_ABS      8'b11101110
     `define OP_INC_ZPG_X    8'b11110110
