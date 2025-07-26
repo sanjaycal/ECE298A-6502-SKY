@@ -160,7 +160,6 @@ module tt_um_6502 (
     next_index_register_x <= index_register_x;
     next_index_register_y <= index_register_y;
     next_data_bus_buffer <= data_bus_buffer;
-    next_processor_status_register <= processor_status_register;
     //reading data from the bus 1
     if(accumulator_enable == BUF_LOAD1_THREE) begin
        next_accumulator <= bus1;
@@ -189,6 +188,8 @@ module tt_um_6502 (
       next_processor_status_register <= ALU_flags_output & processor_status_register_write;
     end else if (processor_status_register_value[7]==1) begin
       next_processor_status_register <= processor_status_register_value[6:0] & processor_status_register_write;
+    end else begin
+      next_processor_status_register <= processor_status_register;
     end
     if(clk_enable==0)begin
       if (rst_n == 0) begin
