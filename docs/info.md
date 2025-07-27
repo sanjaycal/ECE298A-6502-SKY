@@ -29,10 +29,24 @@ Table of Supported Instructions:
 |-----------------------------------|--------------------|-----------------|---------------|
 |ASL ZPG (Arithmatic Shift Left)    | 06 addr-lb         | 7               |  N Z C - - -  |
 |LSR ZPG (Logical Shift Right)      | 46 addr-lb         | 7               |  0 Z C - - -  |
-|ROL ZPG (Roll Byte Left)           | 26 addr-lb         | 7               |  N Z C - - -  | 
-|ROR ZPG (Roll Byte Right)          | 46 addr-lb         | 7               |  N Z C - - -  | 
-|INC ZPG (Increment Byte)           | c6 addr-lb         | 7               |  N Z - - - -  | 
-|DEC ZPG (Decrement Byte)           | e6 addr-lb         | 7               |  N Z - - - -  | 
-|AND ZPG (AND Byte with Accumulator)| e6 addr-lb         | 7               |  N Z - - - -  | 
+|ROL ZPG (Roll Byte Left)           | 26 addr-lb         | 7               |  N Z C - - -  |
+|ROR ZPG (Roll Byte Right)          | 46 addr-lb         | 7               |  N Z C - - -  |
+|INC ZPG (Increment Byte)           | c6 addr-lb         | 7               |  N Z - - - -  |
+|DEC ZPG (Decrement Byte)           | e6 addr-lb         | 7               |  N Z - - - -  |
+|AND ZPG (AND Byte with Accumulator)| 35 addr-lb         | 6               |  N Z - - - -  |
+|ORA ZPG (OR Byte with Accumulator) | 05 addr-lb         | 6               |  N Z - - - -  |
+|EOR ZPG (XOR Byte with Accumulator)| 55 addr-lb         | 6               |  N Z - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|STORE ZPG INSTRUCTIONS             |                    |                 |               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|STY ZPG (Store Y)                  | 84 addr-lb         | 7               |  - - - - - -  |
+|STA ZPG (Store Accumulator)        | 85 addr-lb         | 7               |  - - - - - -  |
+|STX ZPG (Store X)                  | 86 addr-lb         | 7               |  - - - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|LOAD ZPG INSTRUCTIONS              |                    |                 |               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|LDY ZPG (Load Y)                   | a4 addr-lb         | 7               |  - - - - - -  |
+|LDA ZPG (Load Accumulator)         | a5 addr-lb         | 7               |  - - - - - -  |
+|LDX ZPG (Load X)                   | a6 addr-lb         | 7               |  - - - - - -  |
 
 
