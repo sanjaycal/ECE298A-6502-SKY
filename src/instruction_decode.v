@@ -97,21 +97,23 @@ always @(*) begin
             processor_status_register_write = `OVERFLOW_FLAG;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TAX) begin
-	    index_register_X_enable = `BUF_LOAD1_THREE;
-	    accumulator_enable = `BUF_STORE1_THREE;
+            index_register_X_enable = `BUF_LOAD1_THREE;
+            accumulator_enable = `BUF_STORE1_THREE;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TAY) begin
-	    index_register_Y_enable = `BUF_LOAD1_THREE;
-	    accumulator_enable = `BUF_STORE1_THREE;
+            index_register_Y_enable = `BUF_LOAD1_THREE;
+            accumulator_enable = `BUF_STORE1_THREE;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TXA) begin
-	    index_register_X_enable = `BUF_STORE1_THREE;
-	    accumulator_enable = `BUF_LOAD1_THREE;
+            index_register_X_enable = `BUF_STORE1_THREE;
+            accumulator_enable = `BUF_LOAD1_THREE;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TYA) begin
-	    index_register_Y_enable = `BUF_STORE1_THREE;
-	    accumulator_enable = `BUF_LOAD1_THREE;
+            index_register_Y_enable = `BUF_STORE1_THREE;
+            accumulator_enable = `BUF_LOAD1_THREE;
             NEXT_STATE = S_IDLE;
+        end else if (INSTRUCTION == `OP_LD_Y_IMM) begin
+            NEXT_STATE = S_IDL_DATA_WRITE;
         end else if(INSTRUCTION[4:2] == `ADR_A || INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
             NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
         end else if(INSTRUCTION[4:2] == `ADR_ZPG) begin
@@ -227,7 +229,7 @@ always @(*) begin
         end 
         
         // LOAD
-        else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG) begin
+        else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `FLG;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
@@ -240,7 +242,7 @@ always @(*) begin
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end
-        else if(OPCODE == `OP_LD_Y_ZPG) begin
+        else if(OPCODE == `OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_IMM) begin
             index_register_Y_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;

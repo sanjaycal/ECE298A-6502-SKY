@@ -11,7 +11,7 @@
 
     `define OP_LD_Y_ZPG     8'ha4
     `define OP_ST_Y_ZPG     8'h84
-
+    `define OP_LD_Y_IMM     8'b10100000
 
     //SHIFTING OPCODES
 
