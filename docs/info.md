@@ -45,8 +45,23 @@ Table of Supported Instructions:
 |-----------------------------------|--------------------|-----------------|---------------|
 |LOAD ZPG INSTRUCTIONS              |                    |                 |               |
 |-----------------------------------|--------------------|-----------------|---------------|
-|LDY ZPG (Load Y)                   | a4 addr-lb         | 7               |  - - - - - -  |
-|LDA ZPG (Load Accumulator)         | a5 addr-lb         | 7               |  - - - - - -  |
-|LDX ZPG (Load X)                   | a6 addr-lb         | 7               |  - - - - - -  |
+|LDY ZPG (Load Y)                   | a4 addr-lb         | 6               |  - - - - - -  |
+|LDA ZPG (Load Accumulator)         | a5 addr-lb         | 6               |  - - - - - -  |
+|LDX ZPG (Load X)                   | a6 addr-lb         | 6               |  - - - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|TRANSFER INSTRUCTIONS              |                    |                 |               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|TXA (Transfer from X to Acc)       | 8a addr-lb         | 2               |  - - - - - -  |
+|TYA (Transfer from Y to Acc)       | 98 addr-lb         | 2               |  - - - - - -  |
+|TAX (Transfer from Acc to X)       | aa addr-lb         | 2               |  - - - - - -  |
+|TAY (Transfer from Acc to Y)       | a8 addr-lb         | 2               |  - - - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|INC/DEC REGISTER INSTRUCTIONS      |                    |                 |               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|INX (Increment X)                  | e8 addr-lb         | 4               |  - - - - - -  |
+|INY (Increment Y)                  | c8 addr-lb         | 4               |  - - - - - -  |
+|DEX (Decrement X)                  | ca addr-lb         | 4               |  - - - - - -  |
+|DEY (Decrement Y)                  | 88 addr-lb         | 4               |  - - - - - -  |
+
 
 
