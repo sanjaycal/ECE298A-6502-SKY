@@ -23,7 +23,7 @@ module alu (
     wire [7:0] result_xor = inputA^inputB;
     wire [7:0] result_inc = inputA+1;
     wire [7:0] result_dec = inputA-1;
-    wire [8:0] result_add = inputA+inputB+status_flags_in[`CARRY_FLAG];
+    wire [7:0] result_add = inputA+inputB+status_flags_in[`CARRY_FLAG];
     wire [7:0] result_cmp = inputB-inputA;
 
     wire [6:0] ALU_flags_output_internal = next_alu_flags;

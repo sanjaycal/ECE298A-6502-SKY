@@ -16,7 +16,6 @@
     `define CMP 5'b01011
 
     `define FLG 5'b11101
-    `define ADD 5'b11110
     `define TMX 5'b11111
 
 
