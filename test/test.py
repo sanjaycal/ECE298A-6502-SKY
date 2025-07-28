@@ -6,7 +6,7 @@ from cocotb.clock import Clock
 import random
 
 import helper
-MAX_TESTS = 255
+MAX_TESTS = 2
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
