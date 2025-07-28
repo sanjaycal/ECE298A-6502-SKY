@@ -1,9 +1,9 @@
 # Tiny Tapeout project information
 project:
-  title:        "NES Emulator"      # Project title
+  title:        "Simplified 6502 Processor"      # Project title
   author:       "Sanjay Jayaram, Sri Charan Tadepalli, Dennis Chen"      # Your name
   discord:      "12344man, dechair3, mmmmmmman."      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  "An NES emulator"      # One line description of what your project does
+  description:  "An Simplified 6502 processor that does less than the original"      # One line description of what your project does
   language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
   clock_hz:     20000000       # Clock frequency in Hz (or 0 if not applicable)
 
@@ -23,14 +23,14 @@ project:
 # This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
 pinout:
   # Inputs
-  ui[0]: "rw pin"
-  ui[1]: "?"
-  ui[2]: "controllerDpadUP"
-  ui[3]: "controllerDpadLEFT"
-  ui[4]: "controllerDpadRIGHT"
-  ui[5]: "controllerDpadDOWN"
-  ui[6]: "controllerSTART"
-  ui[7]: "controllerSELECT"
+  ui[0]: ""
+  ui[1]: ""
+  ui[2]: ""
+  ui[3]: ""
+  ui[4]: ""
+  ui[5]: ""
+  ui[6]: ""
+  ui[7]: ""
 
   # Outputs
   uo[0]: "addr 0/8"
