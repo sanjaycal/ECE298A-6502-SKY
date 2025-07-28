@@ -576,6 +576,31 @@ async def test_AND_ZPG_Base(dut):
             test_num & acc_value,
         )  # STA
 
+@cocotb.test()
+async def test_AND_ABS_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(MAX_TEST_NUM):
+        memory_addr_with_value_LB = random.randint(10, 255)
+        memory_addr_with_value_HB = random.randint(10, 255)
+        acc_value = random.randint(0, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_abs_instruction(
+            dut, helper.hex_to_num("ad"), memory_addr_with_value_HB, memory_addr_with_value_LB, 1, acc_value
+        )  # LDA
+        await helper.run_input_abs_instruction(
+            dut, helper.hex_to_num("2d"), memory_addr_with_value_HB, memory_addr_with_value_LB, 4, test_num
+        )  # AND
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("85"),
+            memory_addr_with_value_LB,
+            7,
+            0,
+            test_num & acc_value,
+        )  # STA
 
 @cocotb.test()
 async def test_ORA_ZPG_Base(dut):
