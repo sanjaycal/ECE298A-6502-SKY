@@ -192,7 +192,7 @@ always @(*) begin
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `OR;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
-        end else if(OPCODE == `OP_EOR_ZPG) begin
+        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `XOR;
@@ -267,7 +267,7 @@ always @(*) begin
         else if(
             OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ABS || 
             OPCODE == `OP_ORA_ZPG || OPCODE == `OP_ORA_ABS ||
-            OPCODE == `OP_EOR_ZPG || 
+            OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS ||
             OPCODE == `OP_ADC_ZPG || 
             OPCODE == `OP_SBC_ZPG
             ) begin
