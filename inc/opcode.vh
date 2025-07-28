@@ -91,6 +91,7 @@
 
     //Branch instructions
     `define OP_BEQ          8'b11110000
+    `define OP_BCS          8'b10110000
 
     //Set instructions
     `define OP_SEC          8'b00111000
@@ -108,6 +109,8 @@
     `define OP_NOP          8'b11101010
 
     // ADDRESSING
+    `define ADR_REL_CHECK   5'b10000
+    `define ADR_REL         3'b111
     `define ADR_ZPG         3'b001
     `define ADR_ZPG_X       3'b101
     `define ADR_ABS         3'b011
