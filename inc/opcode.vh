@@ -4,18 +4,22 @@
     //LOAD/STORE OPCODES
 
     `define OP_LD_X_ZPG     8'b10100110
+    `define OP_LD_X_IMM     8'b10100010
     `define OP_ST_X_ZPG     8'b10000110
 
     `define OP_LD_A_ZPG     8'b10100101
+    `define OP_LD_A_IMM     8'ha9
     `define OP_ST_A_ZPG     8'b10000101
 
     `define OP_LD_Y_ZPG     8'ha4
+    `define OP_LD_Y_IMM     8'b10100000
     `define OP_ST_Y_ZPG     8'h84
 
     `define OP_LD_Y_ABS     8'b10101100
     
     `define OP_LD_A_ABS     8'had
     `define OP_ST_A_ABS     8'h8d
+
 
     //SHIFTING OPCODES
 

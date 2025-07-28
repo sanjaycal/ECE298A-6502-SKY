@@ -44,6 +44,7 @@ localparam S_ALU_ADR_CALC_1 = 4'd8;
 localparam S_ALU_ADR_CALC_2 = 4'd9;
 localparam S_ABS_LB         = 4'd10;
 localparam S_ABS_HB         = 4'd11;
+localparam S_PC_LOAD        = 4'd12;
 
 //BUFFER OPERATIONS
 
@@ -75,7 +76,7 @@ always @(*) begin
         NEXT_STATE = S_OPCODE_READ;
     end
     S_OPCODE_READ: begin
-        pc_enable = 2'b11;   // Increment Program Counter
+        pc_enable = `PC_INC_ONE;   // Increment Program Counter
         // In this state, we just need to increment the PC and decide where to go next.
         // The actual loading of OPCODE and ADDRESSING will happen in the clocked block below.
         if(INSTRUCTION == `OP_NOP) begin
@@ -96,21 +97,23 @@ always @(*) begin
             processor_status_register_write = `OVERFLOW_FLAG;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TAX) begin
-	    index_register_X_enable = `BUF_LOAD1_THREE;
-	    accumulator_enable = `BUF_STORE1_THREE;
+            index_register_X_enable = `BUF_LOAD1_THREE;
+            accumulator_enable = `BUF_STORE1_THREE;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TAY) begin
-	    index_register_Y_enable = `BUF_LOAD1_THREE;
-	    accumulator_enable = `BUF_STORE1_THREE;
+            index_register_Y_enable = `BUF_LOAD1_THREE;
+            accumulator_enable = `BUF_STORE1_THREE;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TXA) begin
-	    index_register_X_enable = `BUF_STORE1_THREE;
-	    accumulator_enable = `BUF_LOAD1_THREE;
+            index_register_X_enable = `BUF_STORE1_THREE;
+            accumulator_enable = `BUF_LOAD1_THREE;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TYA) begin
-	    index_register_Y_enable = `BUF_STORE1_THREE;
-	    accumulator_enable = `BUF_LOAD1_THREE;
+            index_register_Y_enable = `BUF_STORE1_THREE;
+            accumulator_enable = `BUF_LOAD1_THREE;
             NEXT_STATE = S_IDLE;
+        end else if (INSTRUCTION == `OP_LD_Y_IMM || INSTRUCTION == `OP_LD_X_IMM || INSTRUCTION == `OP_LD_A_IMM) begin
+            NEXT_STATE = S_IDL_DATA_WRITE;
         end else if(INSTRUCTION[4:2] == `ADR_A || INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
             NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
         end else if(INSTRUCTION[4:2] == `ADR_ZPG) begin
@@ -125,7 +128,7 @@ always @(*) begin
     end
     S_ZPG_ABS_ADR_READ: begin
         address_select = 1;
-        pc_enable = 2'b11;
+        pc_enable = `PC_INC_ONE;
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         NEXT_STATE = S_IDL_DATA_WRITE;
     end
@@ -231,8 +234,12 @@ always @(*) begin
         end 
         
         // LOAD
+<<<<<<< HEAD
         else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG || 
             OPCODE == `OP_LD_A_ABS || OPCODE == `OP_LD_Y_ABS ) begin
+=======
+        else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM) begin
+>>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `FLG;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
@@ -240,17 +247,25 @@ always @(*) begin
         NEXT_STATE = S_ALU_TMX;
     end
     S_ALU_TMX: begin
-        if(OPCODE == `OP_LD_X_ZPG) begin
+        if(OPCODE == `OP_LD_X_ZPG || OPCODE == `OP_LD_X_IMM) begin
             index_register_X_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end
+<<<<<<< HEAD
         else if(OPCODE == `OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_ABS) begin
+=======
+        else if(OPCODE == `OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_IMM) begin
+>>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
             index_register_Y_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end
+<<<<<<< HEAD
         else if(OPCODE == `OP_LD_A_ZPG || OPCODE == `OP_LD_A_ABS) begin
+=======
+        else if(OPCODE == `OP_LD_A_ZPG || OPCODE == `OP_LD_A_IMM) begin
+>>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
@@ -322,14 +337,29 @@ always @(*) begin
         end
     end
     S_ABS_LB: begin
-        pc_enable = 2'b11;
-        NEXT_STATE = S_ABS_HB;
+        pc_enable = `PC_INC_ONE;
+        if(OPCODE == `OP_JMP_ABS) begin
+            NEXT_STATE = S_PC_LOAD;
+        end
+        else begin
+            NEXT_STATE = S_ABS_HB;
+        end
     end
     S_ABS_HB: begin
+<<<<<<< HEAD
         pc_enable = 2'b11;
+=======
+        pc_enable = `PC_INC_ONE;
+        NEXT_STATE = S_IDL_DATA_WRITE;
+>>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         address_select = 1;
         NEXT_STATE = S_IDL_DATA_WRITE;
+    end
+    S_PC_LOAD: begin
+        pc_enable = `BUF_LOAD_TWO;
+        NEXT_STATE = S_IDLE;
+        memory_address = MEMORY_ADDRESS_INTERNAL;
     end
     default: NEXT_STATE = S_IDLE;
     endcase
@@ -358,7 +388,7 @@ always @(posedge clk or negedge rst_n) begin
             end
         end else if(NEXT_STATE == S_ABS_LB || NEXT_STATE == S_ZPG_ABS_ADR_READ) begin
             MEMORY_ADDRESS_INTERNAL <= {8'h00, instruction};
-        end else if(NEXT_STATE == S_ABS_HB) begin
+        end else if(NEXT_STATE == S_ABS_HB || NEXT_STATE == S_PC_LOAD) begin
             MEMORY_ADDRESS_INTERNAL <= {instruction, MEMORY_ADDRESS_INTERNAL[7:0]};
         end
     end
