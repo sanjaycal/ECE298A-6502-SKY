@@ -1137,7 +1137,6 @@ async def test_JMP_ABS_Base(dut):
         goal_HB = random.randint(1, 255)
         memory_addr_with_value_LB = random.randint(10, 255)
         goal_LB = test_num
-        memory_addr_with_value_HB = random.randint(1, 255)
         goal = goal_HB * 256 + goal_LB
         await helper.reset_cpu(dut)
         await helper.run_jmp_abs_instruction(
