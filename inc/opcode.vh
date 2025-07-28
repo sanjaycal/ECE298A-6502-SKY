@@ -63,6 +63,7 @@
     `define OP_EOR_ABS      8'h4d
 
     `define OP_ADC_ZPG      8'b01100101
+    `define OP_ADC_ABS      8'h6d
 
     `define OP_SBC_ZPG      8'he5
 
