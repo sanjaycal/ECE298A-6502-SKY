@@ -14,7 +14,7 @@ async def test_ASL_ZPG_Clear(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
 
@@ -43,7 +43,7 @@ async def test_ASL_ZPG_Base(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.test_zpg_instruction(
@@ -63,7 +63,7 @@ async def test_LSR_ZPG_Clear(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
 
@@ -91,7 +91,7 @@ async def test_LSR_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.test_zpg_instruction(
@@ -111,7 +111,7 @@ async def test_ROL_ZPG_Loop(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
 
@@ -142,7 +142,7 @@ async def test_ROL_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.test_zpg_instruction(
@@ -162,7 +162,7 @@ async def test_ROR_ZPG_Loop(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
 
@@ -193,7 +193,7 @@ async def test_ROR_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.test_zpg_instruction(
@@ -213,7 +213,7 @@ async def test_ASL_ABS_Clear(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -243,7 +243,7 @@ async def test_ASL_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -265,7 +265,7 @@ async def test_LSR_ABS_Clear(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -295,7 +295,7 @@ async def test_LSR_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -317,7 +317,7 @@ async def test_ROL_ABS_Loop(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -350,7 +350,7 @@ async def test_ROL_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -372,7 +372,7 @@ async def test_ROR_ABS_Loop(dut):
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -405,7 +405,7 @@ async def test_ROR_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(1, 255)
         await helper.reset_cpu(dut)
@@ -425,7 +425,7 @@ async def test_LDX_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -435,13 +435,39 @@ async def test_LDX_ZPG_Base(dut):
             dut, helper.hex_to_num("86"), memory_addr_with_value, 3, 0, test_num
         )
 
+@cocotb.test()
+async def test_LDX_IMM_Base(dut):
+
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TESTS):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        await helper.test_imm_instruction(
+            dut, 
+            helper.hex_to_num("a2"),
+            1,                        
+            test_num                  
+        )
+
+        await helper.test_zpg_instruction(
+            dut, 
+            helper.hex_to_num("86"),
+            memory_addr_for_verify,
+            2,                        
+            0,                        
+            test_num                  
+        )
 
 @cocotb.test()
 async def test_LDA_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -451,13 +477,40 @@ async def test_LDA_ZPG_Base(dut):
             dut, helper.hex_to_num("85"), memory_addr_with_value, 3, 0, test_num
         )
 
+@cocotb.test()
+async def test_LDA_IMM_Base(dut):
+
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TESTS):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        await helper.test_imm_instruction(
+            dut, 
+            helper.hex_to_num("a9"),
+            1,                        
+            test_num                  
+        )
+
+        await helper.test_zpg_instruction(
+            dut, 
+            helper.hex_to_num("85"),
+            memory_addr_for_verify,
+            2,                        
+            0,                        
+            test_num                  
+        )
+
 
 @cocotb.test()
 async def test_LDY_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -473,7 +526,7 @@ async def test_LDY_IMM_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,256):
+    for test_num in range(1,MAX_TESTS):
         memory_addr_for_verify = random.randint(10, 255)
         
         await helper.reset_cpu(dut)
@@ -500,7 +553,7 @@ async def test_AND_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         acc_value = random.randint(0, 255)
         await helper.reset_cpu(dut)
@@ -525,7 +578,7 @@ async def test_ORA_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         acc_value = random.randint(0, 255)
         await helper.reset_cpu(dut)
@@ -550,7 +603,7 @@ async def test_EOR_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         acc_value = random.randint(0, 255)
         await helper.reset_cpu(dut)
@@ -575,7 +628,7 @@ async def test_INC_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.test_zpg_instruction(
@@ -594,7 +647,7 @@ async def test_DEC_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(256):
+    for test_num in range(MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.test_zpg_instruction(
@@ -612,7 +665,7 @@ async def test_JMP_ABS_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(255):
+    for test_num in range(MAX_TESTS):
         goal_HB = random.randint(1,255)
         memory_addr_with_value_LB = random.randint(10, 255)
         goal_LB = test_num 
@@ -642,7 +695,7 @@ async def test_INX_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -661,7 +714,7 @@ async def test_INY_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -680,7 +733,7 @@ async def test_DEX_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -699,7 +752,7 @@ async def test_DEY_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -718,7 +771,7 @@ async def test_ASL_A_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -736,7 +789,7 @@ async def test_LSR_A_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -755,7 +808,7 @@ async def test_ROL_A_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -774,7 +827,7 @@ async def test_ROR_A_ZPG_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -793,7 +846,7 @@ async def test_TAX_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -811,7 +864,7 @@ async def test_TAY_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -830,7 +883,7 @@ async def test_TXA_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
@@ -848,7 +901,7 @@ async def test_TYA_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, 256):
+    for test_num in range(1, MAX_TESTS):
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
