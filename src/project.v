@@ -42,7 +42,7 @@ module tt_um_6502 (
   wire [2:0] stack_pointer_register_enable;
   wire [4:0] ALU_op;
   wire [2:0] accumulator_enable;
-  wire [2:0] pc_enable;
+  wire [1:0] pc_enable;
   wire [1:0] input_data_latch_enable;
   wire rdy;
   wire rw;
@@ -205,7 +205,7 @@ module tt_um_6502 (
         if(pc_enable == PC_INC_ONE) begin
           pc <= pc + 1;
         end
-        else if(pc_enable == BUF_LOAD1_THREE) begin
+        else if(pc_enable == BUF_LOAD_TWO) begin
           pc <= memory_address;
         end
       end
