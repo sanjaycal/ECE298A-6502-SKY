@@ -80,10 +80,10 @@ In this mode, the instruction operates directly on the Accumulator. Like Implied
 
 *   **Example:** `ASL A` (Arithmetic Shift Left on Accumulator)
 *   **Instruction Format:** `0A`
-*   **CPU Cycles:** 6
+*   **CPU Cycles:** 4
 *   **Cycle-by-Cycle Breakdown:**
     *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `0A` is read. The PC is incremented.
-    *   **Cycle 4 (Execute):** The value in the accumulator is sent to the ALU, which is given the `ASL` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
+    *   **Cycle 2 (Execute):** The value in the accumulator is sent to the ALU, which is given the `ASL` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
     *   **Cycle 3 (Transfer Result):** The output from the ALU is written to `bus2` and the Accumulator is told to read from `bus2`
     *   **Cycle 4 (Hold):** The accumulator reads from `bus2` with the final value
 
@@ -93,16 +93,25 @@ In this mode, the instruction operates directly on the Accumulator. Like Implied
 
 The operand for the instruction is the literal value contained in the byte immediately following the opcode.
 
-*   **Example:** `LDA #$44` (Load Accumulator with the value `$44`)
+*   **Example (Load):** `LDA #44` (Load Accumulator with the value `$44`)
 *   **Instruction Format:** `A9 44`
 *   **CPU Cycles:** 5
 *   **Cycle-by-Cycle Breakdown:**
-    *   **Cycle 1 (Fetch Opcode):** The opcode (`$A9`) is fetched from the address pointed to by the PC. The PC is incremented.
-    *   **Cycle 2 (Fetch Operand):** The PC is placed on the address bus again to fetch the operand (`$44`). The value is read into the `Input Data Latch`. The PC is incremented.
-    *   **Cycle 3 (Prep Load):** The value from the `Input Data Latch` is placed on `Bus 1` and passed through the ALU (using the `FLG` op) to set the Negative (N) and Zero (Z) flags.
-    *   **Cycle 4 (Transfer Result):** The ALU output is placed on `Bus 2`.
-    *   **Cycle 5 (Writeback):** The Accumulator is enabled to load the value from `Bus 2`.
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `A9` is read. The PC is incremented.
+    *   **Cycle 2 (Read from Memory):** The PC is placed on the address bus. The data at that location is read into the `Input Data Latch`. The PC is Incremented
+    *   **Cycle 3 (Transfer Result):** The data from the latch is written to `bus1` and the Accumulator is told to read from `bus1`
+    *   **Cycle 4 (Hold):** The accumulator reads from `bus1` with the final value
+    *   **Cycle 5 (None):** The cpu does nothing here due to the fixed machine state path
 
+*   **Example (Read-Modify-Write to Accumulator):** `ORA #44` (OR Accumulator with the value `$44`)
+*   **Instruction Format:** `09 44`
+*   **CPU Cycles:** 5
+*   **Cycle-by-Cycle Breakdown:**
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `09` is read. The PC is incremented.
+    *   **Cycle 2 (Read from Memory):** The PC is placed on the address bus. The data at that location is read into the `Input Data Latch`. The PC is Incremented
+    *   **Cycle 3 (Execute):** The data from the latch and the value in the Accumulator is sent to the ALU, which is given the `AND` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
+    *   **Cycle 3 (Transfer Result):** The output from the ALU is written to `bus2` and the Accumulator is told to read from `bus2`
+    *   **Cycle 4 (Hold):** The accumulator reads from `bus2` with the final value
 ---
 
 #### 4. Zero-Page Addressing
