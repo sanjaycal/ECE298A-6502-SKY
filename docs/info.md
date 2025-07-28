@@ -178,9 +178,9 @@ Table of Supported Instructions:
 |ROR ZPG (Roll Byte Right)          | 46 addr-lb         | 7               |  N Z C - - -  |
 |INC ZPG (Increment Byte)           | c6 addr-lb         | 7               |  N Z - - - -  |
 |DEC ZPG (Decrement Byte)           | e6 addr-lb         | 7               |  N Z - - - -  |
-|AND ZPG (AND Byte with Accumulator)| 35 addr-lb         | 6               |  N Z - - - -  |
-|ORA ZPG (OR Byte with Accumulator) | 05 addr-lb         | 6               |  N Z - - - -  |
-|EOR ZPG (XOR Byte with Accumulator)| 55 addr-lb         | 6               |  N Z - - - -  |
+|AND ZPG (AND Byte with Acc)        | 35 addr-lb         | 6               |  N Z - - - -  |
+|ORA ZPG (OR Byte with Acc)         | 05 addr-lb         | 6               |  N Z - - - -  |
+|EOR ZPG (XOR Byte with Acc)        | 55 addr-lb         | 6               |  N Z - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |STORE ZPG INSTRUCTIONS                                                                    |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -208,7 +208,7 @@ Table of Supported Instructions:
 |DEX (Decrement X)                  | ca addr-lb         | 4               |  - - - - - -  |
 |DEY (Decrement Y)                  | 88 addr-lb         | 4               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|ARITHMETIC ACCUMULATOR INSTRUCTIONS                                                       |
+|ARITHMETIC ACC INSTRUCTIONS                                                               |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ASL A (Arithmatic Shift Left Acc)  | 0a                 | 4               |  N Z C - - -  |
 |LSR A (Logical Shift Right Acc)    | 4a                 | 4               |  N Z C - - -  |
