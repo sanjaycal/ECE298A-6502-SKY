@@ -12,7 +12,8 @@
     `define XOR 5'b00111
     `define INC 5'b01000
     `define DEC 5'b01001
-    `define CMP 5'b01010
+    `define ADD 5'b01010
+    `define CMP 5'b01011
 
     `define FLG 5'b11101
     `define ADD 5'b11110
