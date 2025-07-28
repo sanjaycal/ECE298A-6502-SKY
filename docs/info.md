@@ -170,7 +170,7 @@ Table of Supported Instructions:
 
 |Instruction Name                   | Instruction Format | Time Taken      | Flags Changed |
 |-----------------------------------|--------------------|-----------------|---------------|
-|ARITHMETIC ZPG INSTRUCTIONS        |                    |                 |               |
+|ARITHMETIC ZPG INSTRUCTIONS                                                               |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ASL ZPG (Arithmatic Shift Left)    | 06 addr-lb         | 7               |  N Z C - - -  |
 |LSR ZPG (Logical Shift Right)      | 46 addr-lb         | 7               |  0 Z C - - -  |
@@ -182,40 +182,40 @@ Table of Supported Instructions:
 |ORA ZPG (OR Byte with Accumulator) | 05 addr-lb         | 6               |  N Z - - - -  |
 |EOR ZPG (XOR Byte with Accumulator)| 55 addr-lb         | 6               |  N Z - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|STORE ZPG INSTRUCTIONS             |                    |                 |               |
+|STORE ZPG INSTRUCTIONS                                                                    |
 |-----------------------------------|--------------------|-----------------|---------------|
 |STY ZPG (Store Y)                  | 84 addr-lb         | 7               |  - - - - - -  |
 |STA ZPG (Store Accumulator)        | 85 addr-lb         | 7               |  - - - - - -  |
 |STX ZPG (Store X)                  | 86 addr-lb         | 7               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|LOAD ZPG INSTRUCTIONS              |                    |                 |               |
+|LOAD ZPG INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
 |LDY ZPG (Load Y)                   | a4 addr-lb         | 6               |  - - - - - -  |
 |LDA ZPG (Load Accumulator)         | a5 addr-lb         | 6               |  - - - - - -  |
 |LDX ZPG (Load X)                   | a6 addr-lb         | 6               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|TRANSFER INSTRUCTIONS              |                    |                 |               |
+|TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TXA (Transfer from X to Acc)       | 8a addr-lb         | 2               |  - - - - - -  |
 |TYA (Transfer from Y to Acc)       | 98 addr-lb         | 2               |  - - - - - -  |
 |TAX (Transfer from Acc to X)       | aa addr-lb         | 2               |  - - - - - -  |
 |TAY (Transfer from Acc to Y)       | a8 addr-lb         | 2               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|INC/DEC REGISTER INSTRUCTIONS      |                    |                 |               |
+|INC/DEC REGISTER INSTRUCTIONS                                                             |
 |-----------------------------------|--------------------|-----------------|---------------|
 |INX (Increment X)                  | e8 addr-lb         | 4               |  - - - - - -  |
 |INY (Increment Y)                  | c8 addr-lb         | 4               |  - - - - - -  |
 |DEX (Decrement X)                  | ca addr-lb         | 4               |  - - - - - -  |
 |DEY (Decrement Y)                  | 88 addr-lb         | 4               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|ARITHMETIC ACCUMULATOR INSTRUCTIONS|                    |                 |               |
+|ARITHMETIC ACCUMULATOR INSTRUCTIONS                                                       |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ASL A (Arithmatic Shift Left Acc)  | 0a                 | 4               |  N Z C - - -  |
 |LSR A (Logical Shift Right Acc)    | 4a                 | 4               |  N Z C - - -  |
 |ROL A (Roll Byte Left Acc)         | 2a                 | 4               |  N Z C - - -  |
 |ROR A (Roll Byte Right Acc)        | 6a                 | 4               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|OTHER INSTRUCTIONS                 |                    |                 |               |
+|OTHER INSTRUCTIONS                                                                        |
 |-----------------------------------|--------------------|-----------------|---------------|
 |NOP (No Op)                        | ea                 | 2               |  - - - - - -  |
 
