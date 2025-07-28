@@ -274,11 +274,11 @@ always @(*) begin
             alu_enable = `TMX;
         end
         else if(
-            OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ABS || OPCODE == `OP_AND_IMM
-            OPCODE == `OP_ORA_ZPG || OPCODE == `OP_ORA_ABS || OPCODE == `OP_ORA_IMM
-            OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS || OPCODE == `OP_EOR_IMM
-            OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_ABS || OPCODE == `OP_ADC_IMM
-            OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS
+            OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ABS || OPCODE == `OP_AND_IMM ||
+            OPCODE == `OP_ORA_ZPG || OPCODE == `OP_ORA_ABS || OPCODE == `OP_ORA_IMM ||
+            OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS || OPCODE == `OP_EOR_IMM ||
+            OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_ABS || OPCODE == `OP_ADC_IMM ||
+            OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS 
             ) begin
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
