@@ -55,14 +55,18 @@
 
     `define OP_AND_ZPG      8'b00100101
     `define OP_AND_ABS      8'b00101110
+    `define OP_AND_IMM      8'h29
     `define OP_AND_ZPG_X    8'b00110101
 
     `define OP_ORA_ZPG      8'b00000101
+    `define OP_ORA_IMM      8'h09
     `define OP_ORA_ABS      8'h0d
 
     `define OP_EOR_ZPG      8'b01000101
+    `define OP_EOR_IMM      8'h49
 
     `define OP_ADC_ZPG      8'b01100101
+    `define OP_ADC_IMM      8'h69
 
     `define OP_SBC_ZPG      8'he5
 
