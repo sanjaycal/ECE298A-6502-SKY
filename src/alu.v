@@ -23,6 +23,8 @@ module alu (
     wire [7:0] result_xor = inputA^inputB;
     wire [7:0] result_inc = inputA+1;
     wire [7:0] result_dec = inputA-1;
+    wire [8:0] result_add = inputA+inputB+status_flags_in[`CARRY_FLAG];
+    wire [8:0] result_sub = inputA-inputB-status_flags_in[`CARRY_FLAG];
     wire [7:0] result_cmp = inputB-inputA;
 
     wire [6:0] ALU_flags_output_internal = next_alu_flags;
@@ -80,6 +82,18 @@ module alu (
                 next_alu_result = result_dec;
                 next_alu_flags[`ZERO_FLAG]     = (result_dec == 8'b0);
                 next_alu_flags[`NEGATIVE_FLAG] = result_dec[7];
+            end
+            `ADD: begin
+                next_alu_result = result_add[7:0];
+                next_alu_flags[`ZERO_FLAG]     = (result_add == 8'b0);
+                next_alu_flags[`NEGATIVE_FLAG] = result_add[7];
+                next_alu_flags[`CARRY_FLAG] = result_add[8];
+            end
+            `SUB: begin
+                next_alu_result = result_sub[7:0];
+                next_alu_flags[`ZERO_FLAG]     = (result_sub == 8'b0);
+                next_alu_flags[`NEGATIVE_FLAG] = result_sub[7];
+                next_alu_flags[`CARRY_FLAG] = result_sub[8];                
             end
             `CMP: begin
                 next_alu_result = inputA;

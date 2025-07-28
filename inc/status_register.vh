@@ -10,7 +10,5 @@
     `define BRK_FLAG                4
     `define OVERFLOW_FLAG           5
     `define NEGATIVE_FLAG           6
-
-
-
+    
 `endif

@@ -12,10 +12,11 @@
     `define XOR 5'b00111
     `define INC 5'b01000
     `define DEC 5'b01001
-    `define CMP 5'b01010
+    `define ADD 5'b01010
+    `define SUB 5'b01011
+    `define CMP 5'b01100
 
     `define FLG 5'b11101
-    `define ADD 5'b11110
     `define TMX 5'b11111
 
 
