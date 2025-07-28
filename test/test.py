@@ -468,7 +468,7 @@ async def test_LDX_IMM_Base(dut):
         await helper.test_imm_instruction(dut, helper.hex_to_num("a2"), 1, test_num)
 
         await helper.test_zpg_instruction(
-            dut, helper.hex_to_num("86"), memory_addr_for_verify, 2, 0, test_num
+            dut, helper.hex_to_num("86"), memory_addr_for_verify, 3, 0, test_num
         )
 
 
@@ -517,7 +517,7 @@ async def test_LDA_IMM_Base(dut):
         await helper.test_imm_instruction(dut, helper.hex_to_num("a9"), 1, test_num)
 
         await helper.test_zpg_instruction(
-            dut, helper.hex_to_num("85"), memory_addr_for_verify, 2, 0, test_num
+            dut, helper.hex_to_num("85"), memory_addr_for_verify, 3, 0, test_num
         )
 
 
@@ -579,7 +579,7 @@ async def test_LDY_IMM_Base(dut):
         await helper.test_imm_instruction(dut, helper.hex_to_num("a0"), 1, test_num)
 
         await helper.test_zpg_instruction(
-            dut, helper.hex_to_num("84"), memory_addr_for_verify, 2, 0, test_num
+            dut, helper.hex_to_num("84"), memory_addr_for_verify, 3, 0, test_num
         )
 
 
@@ -692,6 +692,41 @@ async def test_ORA_ABS_Base(dut):
             helper.hex_to_num("85"),
             memory_addr_with_value_LB,
             7,
+            0,
+            test_num | acc_value,
+        )  # STA
+
+
+@cocotb.test()
+async def test_ORA_IMM_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(256):
+        memory_addr_with_value_LB = random.randint(10, 255)
+        memory_addr_with_value_HB = random.randint(10, 255)
+        acc_value = random.randint(0, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_abs_instruction(
+            dut,
+            helper.hex_to_num("ad"),
+            memory_addr_with_value_HB,
+            memory_addr_with_value_LB,
+            1,
+            acc_value,
+        )  # LDA
+        await helper.run_input_imm_instruction(
+            dut,
+            helper.hex_to_num("09"),
+            4,
+            test_num,
+        )  # OR
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("85"),
+            memory_addr_with_value_LB,
+            6,
             0,
             test_num | acc_value,
         )  # STA
@@ -937,6 +972,38 @@ async def test_JMP_ABS_Base(dut):
             helper.hex_to_num("06"),
             memory_addr_with_value_LB,
             goal,
+            test_num,
+            (test_num * 2) % 256,
+        )
+
+@cocotb.test()
+async def test_BCS_REL_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TESTS - 4):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        await helper.test_impl_instruction(
+            dut, 
+            helper.hex_to_num("38"), # Set Carry 
+            1,                                       
+        )
+
+        await helper.test_branch_instruction(
+            dut,
+            helper.hex_to_num("b0"),
+            2,
+            test_num
+        )
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("06"),
+            memory_addr_for_verify,
+            3 + test_num,
             test_num,
             (test_num * 2) % 256,
         )

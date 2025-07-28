@@ -9,14 +9,14 @@
 
 
   //localparam BUF_IDLE_TWO      = 2'b00;
-  localparam BUF_LOAD_TWO      = 2'b01; // Take from a BUS and keep
-  localparam BUF_STORE_TWO     = 2'b10; // Put the register value on a BUS
-  localparam PC_INC_ONE        = 2'b11;
-  //localparam BUF_IDLE_THREE    = 3'b000;
-  localparam BUF_LOAD1_THREE   = 3'b100; // Take from a BUS and keep
-  localparam BUF_LOAD2_THREE   = 3'b101; // Take from a BUS and keep
-  localparam BUF_STORE1_THREE  = 3'b110; // Put the register value on a BUS
-  localparam BUF_STORE2_THREE  = 3'b111; // Put the register value on a BUS
+  // localparam BUF_LOAD_TWO      = 2'b01; // Take from a BUS and keep
+  // localparam BUF_STORE_TWO     = 2'b10; // Put the register value on a BUS
+  // localparam PC_INC_ONE        = 3'b111;
+  // //localparam BUF_IDLE_THREE    = 3'b000;
+  // localparam BUF_LOAD1_THREE   = 3'b100; // Take from a BUS and keep
+  // localparam BUF_LOAD2_THREE   = 3'b101; // Take from a BUS and keep
+  // localparam BUF_STORE1_THREE  = 3'b110; // Put the register value on a BUS
+  // localparam BUF_STORE2_THREE  = 3'b111; // Put the register value on a BUS
 
 
 `include "../src/instruction_decode.v"
@@ -42,7 +42,7 @@ module tt_um_6502 (
   wire [2:0] stack_pointer_register_enable;
   wire [4:0] ALU_op;
   wire [2:0] accumulator_enable;
-  wire [1:0] pc_enable;
+  wire [2:0] pc_enable;
   wire [1:0] input_data_latch_enable;
   wire rdy;
   wire rw;
@@ -126,16 +126,16 @@ module tt_um_6502 (
   interrupt_logic interruptLogic(clk, res_in, irq_in, nmi_in, res, irq, nmi);
 
   //putting data on the bus 1
-  assign bus1 = (input_data_latch_enable == BUF_STORE_TWO)?input_data_latch:
-                (accumulator_enable == BUF_STORE1_THREE)?accumulator:
-		(index_register_x_enable == BUF_STORE1_THREE)?index_register_x:
-		(index_register_y_enable == BUF_STORE1_THREE)?index_register_y:
+  assign bus1 = (input_data_latch_enable == `BUF_STORE_TWO)?input_data_latch:
+                (accumulator_enable == `BUF_STORE1_THREE)?accumulator:
+		(index_register_x_enable == `BUF_STORE1_THREE)?index_register_x:
+		(index_register_y_enable == `BUF_STORE1_THREE)?index_register_y:
 		0;
   //putting data on the bus 2
   assign bus2 = (ALU_op == `TMX)?ALU_output:
-                (accumulator_enable == BUF_STORE2_THREE)?accumulator:
-		(index_register_x_enable == BUF_STORE2_THREE)?index_register_x:
-		(index_register_y_enable == BUF_STORE2_THREE)?index_register_y:
+                (accumulator_enable == `BUF_STORE2_THREE)?accumulator:
+		(index_register_x_enable == `BUF_STORE2_THREE)?index_register_x:
+		(index_register_y_enable == `BUF_STORE2_THREE)?index_register_y:
 		0;
 
   always @(posedge clk or negedge rst_n) begin
@@ -161,33 +161,33 @@ module tt_um_6502 (
     next_index_register_y <= index_register_y;
     next_data_bus_buffer <= data_bus_buffer;
     //reading data from the bus 1
-    if(accumulator_enable == BUF_LOAD1_THREE) begin
+    if(accumulator_enable == `BUF_LOAD1_THREE) begin
        next_accumulator <= bus1;
     end
-    if(index_register_x_enable == BUF_LOAD1_THREE) begin
+    if(index_register_x_enable == `BUF_LOAD1_THREE) begin
       next_index_register_x <= bus1;
     end
-    if(index_register_y_enable == BUF_LOAD1_THREE) begin
+    if(index_register_y_enable == `BUF_LOAD1_THREE) begin
       next_index_register_y <= bus1;
     end
     //reading data from the bus 2
-    if(data_buffer_enable == BUF_LOAD_TWO) begin
+    if(data_buffer_enable == `BUF_LOAD_TWO) begin
       next_data_bus_buffer <= bus2;
     end
-    if(accumulator_enable == BUF_LOAD2_THREE) begin
+    if(accumulator_enable == `BUF_LOAD2_THREE) begin
        next_accumulator <= bus2;
     end
-    if(index_register_x_enable == BUF_LOAD2_THREE) begin
+    if(index_register_x_enable == `BUF_LOAD2_THREE) begin
       next_index_register_x <= bus2;
     end
-    if(index_register_y_enable == BUF_LOAD2_THREE) begin
+    if(index_register_y_enable == `BUF_LOAD2_THREE) begin
       next_index_register_y <= bus2;
     end
     //alu stuff
     if(ALU_op != `NOP && ALU_op != `TMX) begin
-      next_processor_status_register <= ALU_flags_output & processor_status_register_write;
+      next_processor_status_register <= (ALU_flags_output & processor_status_register_write) | (processor_status_register & ~processor_status_register_write);
     end else if (processor_status_register_value[7]==1) begin
-      next_processor_status_register <= processor_status_register_value[6:0] & processor_status_register_write;
+      next_processor_status_register <= (processor_status_register_value[6:0] & processor_status_register_write) | (processor_status_register & ~processor_status_register_write);
     end else begin
       next_processor_status_register <= processor_status_register;
     end
@@ -202,11 +202,14 @@ module tt_um_6502 (
         if(input_data_latch_enable == 1) begin
           input_data_latch <= uio_in;
         end
-        if(pc_enable == PC_INC_ONE) begin
+        if(pc_enable == `PC_INC_ONE) begin
           pc <= pc + 1;
         end
-        else if(pc_enable == BUF_LOAD_TWO) begin
+        else if(pc_enable == `BUF_LOAD1_THREE) begin
           pc <= memory_address;
+        end
+        else if(pc_enable == `PC_TAKE_BRANCH) begin
+          pc <= pc + $signed(bus1);
         end
       end
     end else begin

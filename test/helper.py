@@ -168,6 +168,80 @@ async def test_imm_instruction(
     await ClockCycles(dut.clk, 1)
 
 
+async def test_impl_instruction(
+    dut, opcode, starting_PC, enable_pc_checks=True
+):
+    dut.uio_in.value = opcode
+    assert dut.uo_out.value == (starting_PC)//256
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC)%256 
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == (starting_PC+1)//256
+
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC + 1) % 256
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+    
+    
+async def run_input_imm_instruction(
+    dut, opcode, starting_PC, immediate_value, enable_pc_checks=True
+):
+    dut.uio_in.value = opcode
+    assert dut.uo_out.value == (starting_PC) // 256
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC) % 256
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == (starting_PC + 1) // 256
+
+    dut.uio_in.value = immediate_value
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC + 1) % 256
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+async def test_branch_instruction(
+    dut, opcode, starting_PC, offset, enable_pc_checks=True
+):
+    dut.uio_in.value = opcode
+    assert dut.uo_out.value == (starting_PC)//256
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC)%256 
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+    assert dut.uo_out.value == (starting_PC+1)//256
+
+    dut.uio_in.value = offset
+    await ClockCycles(dut.clk, 1)
+    if enable_pc_checks:
+        assert dut.uo_out.value == (starting_PC + 1) % 256
+    assert dut.uio_out.value % 2 == 1  # last bit should be 1 for read
+    await ClockCycles(dut.clk, 1)
+
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+    await ClockCycles(dut.clk, 1)
+    await ClockCycles(dut.clk, 1)
+
+
+
 async def run_input_zpg_instruction(
     dut, opcode, addr_LB, starting_PC, input_value, enable_pc_checks=True
 ):

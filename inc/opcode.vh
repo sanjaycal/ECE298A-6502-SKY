@@ -60,15 +60,20 @@
 
     `define OP_AND_ZPG      8'b00100101
     `define OP_AND_ABS      8'h2d
+    `define OP_AND_IMM      8'h29
+    `define OP_AND_ZPG_X    8'b00110101
 
     `define OP_ORA_ZPG      8'b00000101
+    `define OP_ORA_IMM      8'h09
     `define OP_ORA_ABS      8'h0d
 
     `define OP_EOR_ZPG      8'b01000101
     `define OP_EOR_ABS      8'h4d
+    `define OP_EOR_IMM      8'h49
 
     `define OP_ADC_ZPG      8'b01100101
     `define OP_ADC_ABS      8'h6d
+    `define OP_ADC_IMM      8'h69
 
     `define OP_SBC_ZPG      8'he5
     `define OP_SBC_ABS      8'hed
@@ -94,6 +99,7 @@
 
     //Branch instructions
     `define OP_BEQ          8'b11110000
+    `define OP_BCS          8'b10110000
 
     //Set instructions
     `define OP_SEC          8'b00111000
@@ -111,6 +117,8 @@
     `define OP_NOP          8'b11101010
 
     // ADDRESSING
+    `define ADR_REL_CHECK   5'b10000
+    `define ADR_REL         3'b111
     `define ADR_ZPG         3'b001
     `define ADR_ZPG_X       3'b101
     `define ADR_ABS         3'b011
