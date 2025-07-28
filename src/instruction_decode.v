@@ -85,17 +85,17 @@ always @(*) begin
         end else if(INSTRUCTION == `OP_SEC) begin
 	        processor_status_register_value[7] = 1;
 	        processor_status_register_value[`CARRY_FLAG] = 1;
-            processor_status_register_write = `CARRY_FLAG;
+            processor_status_register_write[`CARRY_FLAG] = 1;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_CLC) begin
 	        processor_status_register_value[7] = 1;
 	        processor_status_register_value[`CARRY_FLAG] = 0;
-            processor_status_register_write = `CARRY_FLAG;
+            processor_status_register_write[`CARRY_FLAG] = 1;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_CLV) begin
 	        processor_status_register_value[7] = 1;
 	        processor_status_register_value[`OVERFLOW_FLAG] = 0;
-            processor_status_register_write = `OVERFLOW_FLAG;
+            processor_status_register_write[`OVERFLOW_FLAG] = 1;
             NEXT_STATE = S_IDLE;
         end else if(INSTRUCTION == `OP_TAX) begin
             index_register_X_enable = `BUF_LOAD1_THREE;
@@ -338,7 +338,7 @@ always @(*) begin
         memory_address = MEMORY_ADDRESS_INTERNAL;
     end
     S_BRANCH_CHECK: begin
-        if(instruction == `OP_BCS && processor_status_register_read[`CARRY_FLAG] == 1) begin
+        if(OPCODE == `OP_BCS && processor_status_register_read[`CARRY_FLAG] == 1) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             pc_enable = `PC_TAKE_BRANCH;
         end

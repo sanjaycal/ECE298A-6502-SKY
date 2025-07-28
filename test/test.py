@@ -6,7 +6,7 @@ from cocotb.clock import Clock
 import random
 
 import helper
-MAX_TESTS = 2
+MAX_TESTS = 255
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
@@ -690,6 +690,38 @@ async def test_JMP_ABS_Base(dut):
             helper.hex_to_num("06"),
             memory_addr_with_value_LB,
             goal,
+            test_num,
+            (test_num * 2) % 256,
+        )
+
+@cocotb.test()
+async def test_BCS_REL_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TESTS - 4):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        await helper.test_impl_instruction(
+            dut, 
+            helper.hex_to_num("38"), # Set Carry 
+            1,                                       
+        )
+
+        await helper.test_branch_instruction(
+            dut,
+            helper.hex_to_num("b0"),
+            2,
+            test_num
+        )
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("06"),
+            memory_addr_for_verify,
+            3 + test_num,
             test_num,
             (test_num * 2) % 256,
         )

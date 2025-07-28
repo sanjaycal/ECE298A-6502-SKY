@@ -185,9 +185,9 @@ module tt_um_6502 (
     end
     //alu stuff
     if(ALU_op != `NOP && ALU_op != `TMX) begin
-      next_processor_status_register <= ALU_flags_output & processor_status_register_write;
+      next_processor_status_register <= (ALU_flags_output & processor_status_register_write) | (processor_status_register & ~processor_status_register_write);
     end else if (processor_status_register_value[7]==1) begin
-      next_processor_status_register <= processor_status_register_value[6:0] & processor_status_register_write;
+      next_processor_status_register <= (processor_status_register_value[6:0] & processor_status_register_write) | (processor_status_register & ~processor_status_register_write);
     end else begin
       next_processor_status_register <= processor_status_register;
     end
