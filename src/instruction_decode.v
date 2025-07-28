@@ -365,7 +365,11 @@ always @(*) begin
         if(OPCODE == `OP_BCS && processor_status_register_read[`CARRY_FLAG] == 1) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             pc_enable = `PC_TAKE_BRANCH;
+        end else if(OPCODE == `OP_BCC && processor_status_register_read[`CARRY_FLAG] == 0) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            pc_enable = `PC_TAKE_BRANCH;
         end
+
         NEXT_STATE = S_IDLE;
     end
     default: NEXT_STATE = S_IDLE;
