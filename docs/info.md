@@ -11,6 +11,8 @@ You can also include images in this folder and reference them in the markdown. E
 
 This is a 6502 that has a cpu clock frequency of half the input clock due to IO restrictions
 
+![block diagram](6502BlockDiagram.png)
+
 ## How to test
 
 run a fake memory maybe????

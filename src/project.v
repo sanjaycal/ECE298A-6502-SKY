@@ -93,7 +93,7 @@ module tt_um_6502 (
     .instruction                   (instruction_register),
     .clk                           (clk),
     .clk_enable                    (clk_enable),
-    .rst_n                           (rst_n),
+    .rst_n                         (rst_n),
     .irq                           (irq),
     .nmi                           (nmi),
     .processor_status_register_read(processor_status_register_read),
