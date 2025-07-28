@@ -13,7 +13,8 @@
     `define INC 5'b01000
     `define DEC 5'b01001
     `define ADD 5'b01010
-    `define CMP 5'b01011
+    `define SUB 5'b01011
+    `define CMP 5'b01100
 
     `define FLG 5'b11101
     `define TMX 5'b11111

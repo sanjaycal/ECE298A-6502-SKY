@@ -64,6 +64,8 @@
 
     `define OP_ADC_ZPG      8'b01100101
 
+    `define OP_SBC_ZPG      8'he5
+
     `define OP_INC_ZPG      8'b11100110
     `define OP_INC_ABS      8'b11101110
     `define OP_INC_ZPG_X    8'b11110110
