@@ -1,25 +1,30 @@
 `ifndef OPCODES
     `define OPCODES 1
 
-    //LOAD/STORE OPCODES
+    //LOAD OPCODES
 
     `define OP_LD_X_ZPG     8'b10100110
     `define OP_LD_X_IMM     8'b10100010
-    `define OP_ST_X_ZPG     8'b10000110
+    `define OP_LD_X_ABS     8'hae
 
     `define OP_LD_A_ZPG     8'b10100101
     `define OP_LD_A_IMM     8'ha9
-    `define OP_ST_A_ZPG     8'b10000101
+    `define OP_LD_A_ABS     8'had
 
     `define OP_LD_Y_ZPG     8'ha4
     `define OP_LD_Y_IMM     8'b10100000
-    `define OP_ST_Y_ZPG     8'h84
-
     `define OP_LD_Y_ABS     8'b10101100
+
+    //STORE OPCODES
+
+    `define OP_ST_X_ZPG     8'b10000110
+    `define OP_ST_X_ABS     8'h8e
     
-    `define OP_LD_A_ABS     8'had
+    `define OP_ST_A_ZPG     8'b10000101
     `define OP_ST_A_ABS     8'h8d
 
+    `define OP_ST_Y_ZPG     8'h84
+    `define OP_ST_Y_ABS     8'h8c
 
     //SHIFTING OPCODES
 
@@ -54,7 +59,7 @@
     `define OP_ROR_ZPG_X    8'b01110110
 
     `define OP_AND_ZPG      8'b00100101
-    `define OP_AND_ABS      8'b00101110
+    `define OP_AND_ABS      8'h2d
     `define OP_AND_IMM      8'h29
     `define OP_AND_ZPG_X    8'b00110101
 
@@ -63,19 +68,22 @@
     `define OP_ORA_ABS      8'h0d
 
     `define OP_EOR_ZPG      8'b01000101
+    `define OP_EOR_ABS      8'h4d
     `define OP_EOR_IMM      8'h49
 
     `define OP_ADC_ZPG      8'b01100101
+    `define OP_ADC_ABS      8'h6d
     `define OP_ADC_IMM      8'h69
 
     `define OP_SBC_ZPG      8'he5
+    `define OP_SBC_ABS      8'hed
 
     `define OP_INC_ZPG      8'b11100110
-    `define OP_INC_ABS      8'b11101110
+    `define OP_INC_ABS      8'hee
     `define OP_INC_ZPG_X    8'b11110110
 
     `define OP_DEC_ZPG      8'b11000110
-    `define OP_DEC_ABS      8'b11001110
+    `define OP_DEC_ABS      8'hce
     `define OP_DEC_ZPG_X    8'b11011110  
 
     `define OP_INX          8'he8

@@ -189,7 +189,7 @@ always @(*) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `ROR;
             processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
-        end else if(OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_IMM || OPCODE == `OP_AND_ABS) begin
+        end else if(OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ABS || OPCODE == `OP_AND_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `AND;
@@ -199,17 +199,17 @@ always @(*) begin
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `OR;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
-        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ZPG) begin
+        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `XOR;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
-        end else if(OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_IMM) begin
+        end else if(OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_ABS || OPCODE == `OP_ADC_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `ADD;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
-        end else if(OPCODE == `OP_SBC_ZPG) begin
+        end else if(OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `SUB;
@@ -246,9 +246,11 @@ always @(*) begin
         end 
         
         // LOAD
-        else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG || 
-                OPCODE == `OP_LD_Y_ABS || OPCODE == `OP_LD_A_ABS || 
-                OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM) begin
+        else if(
+                OPCODE == `OP_LD_X_ZPG || OPCODE == `OP_LD_A_ZPG || OPCODE == `OP_LD_Y_ZPG || 
+                OPCODE == `OP_LD_X_ABS || OPCODE == `OP_LD_A_ABS || OPCODE == `OP_LD_Y_ABS ||
+                OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM || OPCODE == `OP_LD_Y_IMM
+            ) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `FLG;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
@@ -256,7 +258,7 @@ always @(*) begin
         NEXT_STATE = S_ALU_TMX;
     end
     S_ALU_TMX: begin
-        if(OPCODE == `OP_LD_X_ZPG || OPCODE == `OP_LD_X_IMM) begin
+        if(OPCODE == `OP_LD_X_ZPG || OPCODE == `OP_LD_X_ABS || OPCODE == `OP_LD_X_IMM) begin
             index_register_X_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
@@ -272,33 +274,28 @@ always @(*) begin
             alu_enable = `TMX;
         end
         else if(
-            OPCODE == `OP_AND_ZPG || 
-            OPCODE == `OP_ORA_ZPG || 
-            OPCODE == `OP_ORA_ABS ||
-            OPCODE == `OP_EOR_ZPG || 
-            OPCODE == `OP_ADC_ZPG || 
-            OPCODE == `OP_SBC_ZPG ||
-            OPCODE == `OP_AND_IMM || 
-            OPCODE == `OP_ORA_IMM || 
-            OPCODE == `OP_EOR_IMM || 
-            OPCODE == `OP_ADC_IMM 
-        ) begin
+            OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ABS || OPCODE == `OP_AND_IMM ||
+            OPCODE == `OP_ORA_ZPG || OPCODE == `OP_ORA_ABS || OPCODE == `OP_ORA_IMM ||
+            OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS || OPCODE == `OP_EOR_IMM ||
+            OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_ABS || OPCODE == `OP_ADC_IMM ||
+            OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS 
+            ) begin
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end 
-        else if(OPCODE == `OP_ST_X_ZPG) begin
+        else if(OPCODE == `OP_ST_X_ZPG || OPCODE == `OP_ST_X_ABS) begin
             index_register_X_enable = `BUF_STORE2_THREE;
-            data_buffer_enable = `BUF_LOAD_TWO;
-            NEXT_STATE = S_DBUF_OUTPUT;
-        end
-        else if(OPCODE == `OP_ST_Y_ZPG) begin
-            index_register_Y_enable = `BUF_STORE2_THREE;
             data_buffer_enable = `BUF_LOAD_TWO;
             NEXT_STATE = S_DBUF_OUTPUT;
         end
         else if(OPCODE == `OP_ST_A_ZPG || OPCODE == `OP_ST_A_ABS) begin
             accumulator_enable = `BUF_STORE2_THREE;
+            data_buffer_enable = `BUF_LOAD_TWO;
+            NEXT_STATE = S_DBUF_OUTPUT;
+        end
+        else if(OPCODE == `OP_ST_Y_ZPG || OPCODE == `OP_ST_Y_ABS) begin
+            index_register_Y_enable = `BUF_STORE2_THREE;
             data_buffer_enable = `BUF_LOAD_TWO;
             NEXT_STATE = S_DBUF_OUTPUT;
         end
