@@ -23,7 +23,7 @@ module instruction_decode (
     output reg       rw, //1 for read, 0 for write
     output reg [1:0] data_buffer_enable, // 00 IDLE, 01 LOAD, 10 STORE
     output reg [1:0] input_data_latch_enable, // 00 IDLE, 01 LOAD, 10 STORE
-    output reg [1:0]     pc_enable, // 11 for a secret operation :)
+    output reg [2:0]     pc_enable, // 11 for a secret operation :)
     output reg [4:0] alu_enable,
     output reg [2:0] accumulator_enable, // BIT 2 is enable, BIT 1 is R/W_n and BIT 0 is BUS SELECT
     output reg [2:0] stack_pointer_register_enable, // 0 is light blue and 1 is dark blue.
@@ -66,7 +66,7 @@ always @(*) begin
     rw = 1;
     data_buffer_enable = `BUF_IDLE_TWO;
     input_data_latch_enable = `BUF_IDLE_TWO;
-    pc_enable = 2'b00;
+    pc_enable = 3'b000;
     accumulator_enable = `BUF_IDLE_THREE;
     stack_pointer_register_enable = `BUF_IDLE_THREE;
     index_register_X_enable = `BUF_IDLE_THREE;
@@ -330,7 +330,7 @@ always @(*) begin
         address_select = 1;
     end
     S_PC_LOAD: begin
-        pc_enable = `BUF_LOAD_TWO;
+        pc_enable = `BUF_LOAD1_THREE;
         NEXT_STATE = S_IDLE;
         memory_address = MEMORY_ADDRESS_INTERNAL;
     end

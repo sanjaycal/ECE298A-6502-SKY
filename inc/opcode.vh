@@ -79,6 +79,7 @@
 
     //Branch instructions
     `define OP_BEQ          8'b11110000
+    `define OP_BCS          8'hb0
 
     //Set instructions
     `define OP_SEC          8'b00111000
