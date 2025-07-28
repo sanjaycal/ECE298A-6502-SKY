@@ -62,6 +62,19 @@ Table of Supported Instructions:
 |INY (Increment Y)                  | c8 addr-lb         | 4               |  - - - - - -  |
 |DEX (Decrement X)                  | ca addr-lb         | 4               |  - - - - - -  |
 |DEY (Decrement Y)                  | 88 addr-lb         | 4               |  - - - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|ARITHMETIC ACCUMULATOR INSTRUCTIONS|                    |                 |               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|ASL A (Arithmatic Shift Left Acc)  | 0a                 | 4               |  N Z C - - -  |
+|LSR A (Logical Shift Right Acc)    | 4a                 | 4               |  N Z C - - -  |
+|ROL A (Roll Byte Left Acc)         | 2a                 | 4               |  N Z C - - -  |
+|ROR A (Roll Byte Right Acc)        | 6a                 | 4               |  N Z C - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|OTHER INSTRUCTIONS                 |                    |                 |               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|NOP (No Op)                        | ea                 | 2               |  - - - - - -  |
+
+
 
 
 
