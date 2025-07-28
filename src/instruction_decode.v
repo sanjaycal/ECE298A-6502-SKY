@@ -234,12 +234,9 @@ always @(*) begin
         end 
         
         // LOAD
-<<<<<<< HEAD
         else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG || 
-            OPCODE == `OP_LD_A_ABS || OPCODE == `OP_LD_Y_ABS ) begin
-=======
-        else if(OPCODE == `OP_LD_X_ZPG || OPCODE==`OP_LD_A_ZPG || OPCODE==`OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM) begin
->>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
+                OPCODE == `OP_LD_Y_ABS || OPCODE == `OP_LD_A_ABS ||
+                OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `FLG;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
@@ -252,20 +249,12 @@ always @(*) begin
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end
-<<<<<<< HEAD
-        else if(OPCODE == `OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_ABS) begin
-=======
-        else if(OPCODE == `OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_IMM) begin
->>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
+        else if(OPCODE == `OP_LD_Y_ZPG || OPCODE == `OP_LD_Y_ABS || OPCODE == `OP_LD_Y_IMM) begin
             index_register_Y_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end
-<<<<<<< HEAD
-        else if(OPCODE == `OP_LD_A_ZPG || OPCODE == `OP_LD_A_ABS) begin
-=======
-        else if(OPCODE == `OP_LD_A_ZPG || OPCODE == `OP_LD_A_IMM) begin
->>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
+        else if(OPCODE == `OP_LD_A_ZPG || OPCODE == `OP_LD_A_ABS || OPCODE == `OP_LD_A_IMM ) begin
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
@@ -346,12 +335,7 @@ always @(*) begin
         end
     end
     S_ABS_HB: begin
-<<<<<<< HEAD
-        pc_enable = 2'b11;
-=======
         pc_enable = `PC_INC_ONE;
-        NEXT_STATE = S_IDL_DATA_WRITE;
->>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
         memory_address = MEMORY_ADDRESS_INTERNAL; // Puts the memory address read in adh/adl
         address_select = 1;
         NEXT_STATE = S_IDL_DATA_WRITE;

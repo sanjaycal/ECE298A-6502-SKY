@@ -165,9 +165,7 @@ async def test_imm_instruction(
 
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
-
-
-
+    
 
 async def run_input_zpg_instruction(
     dut, opcode, addr_LB, starting_PC, input_value, enable_pc_checks=True
@@ -210,12 +208,7 @@ async def run_input_zpg_instruction(
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
 
-<<<<<<< HEAD
 async def test_abs_instruction(
-=======
-
-async def run_abs_instruction(
->>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
     dut,
     opcode,
     addr_HB,
@@ -279,7 +272,6 @@ async def run_abs_instruction(
     await ClockCycles(dut.clk, 1)
 
 
-<<<<<<< HEAD
 async def run_input_abs_instruction(
     dut,
     opcode,
@@ -333,8 +325,6 @@ async def run_input_abs_instruction(
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
 
-=======
->>>>>>> 7ee44f0c93dae44c81cd0b35b1cc9278ad202772
 async def run_jmp_abs_instruction(
     dut,
     opcode,
