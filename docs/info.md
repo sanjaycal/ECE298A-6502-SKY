@@ -57,7 +57,7 @@ This is a deliberate design choice to manage the physical pin limitations of the
 
 The processor supports a variety of addressing modes to provide flexibility in accessing data. The specific mode for an instruction is implicitly defined by its opcode.
 
-In the descriptions below, a "CPU Cycle" refers to a complete state transition in the processor's core logic. Due to the I/O multiplexing scheme, each CPU Cycle takes two ticks of the main input `clk`. The cycle-by-cycle analysis is derived directly from the state machine in the `instruction_decode.v` module.
+In the descriptions below, a "CPU Cycle" refers to a complete state transition in the processor's core logic. Due to the I/O multiplexing scheme, each CPU Cycle takes two cycles of the main input `clk`. 
 
 ---
 
@@ -69,8 +69,8 @@ These are the simplest modes. The instruction operates directly on a register or
 *   **Instruction Format:** `8A`
 *   **CPU Cycles:** 2
 *   **Cycle-by-Cycle Breakdown:**
-    *   **Cycle 1 (Fetch Opcode):** The Program Counter (PC) is placed on the address bus. The opcode (`$8A`) is read from the data bus into the instruction register. The PC is incremented.
-    *   **Cycle 2 (Execute):** The instruction decoder asserts control lines to place the value of the Accumulator onto internal `Bus 1`. Simultaneously, it enables the Index Register X to load its new value from `Bus 1`, completing the transfer.
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `8A` is read. The PC is incremented.
+    *   **Cycle 2 (Execute):** The value in the Accumulator is placed into X using `bus1` as the intermediary
 
 ---
 
@@ -80,12 +80,12 @@ In this mode, the instruction operates directly on the Accumulator. Like Implied
 
 *   **Example:** `ASL A` (Arithmetic Shift Left on Accumulator)
 *   **Instruction Format:** `0A`
-*   **CPU Cycles:** 4
+*   **CPU Cycles:** 6
 *   **Cycle-by-Cycle Breakdown:**
-    *   **Cycle 1 (Fetch Opcode):** The PC is placed on the address bus to fetch the opcode (`$0A`). The PC is incremented.
-    *   **Cycle 2 (Execute):** The decoder places the Accumulator's value onto internal `Bus 1`, which is routed to the ALU's Input A. The ALU is commanded to perform the `ASL` operation. The result is calculated and status flags (N, Z, C) are updated.
-    *   **Cycle 3 (Transfer Result):** The ALU output containing the shifted value is placed on internal `Bus 2`.
-    *   **Cycle 4 (Writeback):** The decoder enables the Accumulator to load the new value from `Bus 2`.
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `0A` is read. The PC is incremented.
+    *   **Cycle 4 (Execute):** The value in the accumulator is sent to the ALU, which is given the `ASL` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
+    *   **Cycle 3 (Transfer Result):** The output from the ALU is written to `bus2` and the Accumulator is told to read from `bus2`
+    *   **Cycle 4 (Hold):** The accumulator reads from `bus2` with the final value
 
 ---
 
@@ -111,40 +111,53 @@ This mode provides faster memory access by using a single byte to specify an add
 
 *   **Example (Load):** `LDA $44` (Load Accumulator from address `$0044`)
 *   **Instruction Format:** `A5 44`
-*   **CPU Cycles:** 5
+*   **CPU Cycles:** 4
 *   **Cycle-by-Cycle Breakdown:**
     *   **Cycle 1 (Fetch Opcode):** Fetches the opcode (`$A5`). PC is incremented.
     *   **Cycle 2 (Fetch ZP Address):** Fetches the operand (`$44`), which is the low byte of the effective address. PC is incremented.
     *   **Cycle 3 (Read from Memory):** The full address (`$0044`) is placed on the address bus. The data at that location is read into the `Input Data Latch`.
-    *   **Cycle 4 (Prep Load):** The value from the `Input Data Latch` is passed through the ALU to set the N and Z flags.
-    *   **Cycle 5 (Writeback):** The value is loaded from the internal bus into the Accumulator.
+    *   **Cycle 4 (Writeback):** The value is loaded from the Input Data Latch into the Accumulator.
 
-*   **Example (Read-Modify-Write):** `ASL $44` (Arithmetic Shift Left on the byte at address `$0044`)
-*   **Instruction Format:** `06 44`
+*   **Example (Read-Modify-Write To Accumulator):** `AND $44` (AND the Accumulator and the byte at address `$0044` and write to the Accumulator)
+*   **Instruction Format:** `25 44`
 *   **CPU Cycles:** 6
 *   **Cycle-by-Cycle Breakdown:**
-    *   **Cycles 1-3:** Same as `LDA $44` (Fetch Opcode, Fetch ZP Address, Read Data into `Input Data Latch`).
-    *   **Cycle 4 (Execute):** The data from the latch is sent to the ALU, which performs the `ASL` operation. The result is calculated and flags are updated.
-    *   **Cycle 5 (Transfer to Buffer):** The modified value from the ALU output is loaded into the `Data Bus Buffer` in preparation for writing.
-    *   **Cycle 6 (Writeback to Memory):** The address (`$0044`) is placed on the address bus, and the `Data Bus Buffer` content is written to memory.
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `25` is read. The PC is incremented.
+    *   **Cycle 2 (Fetch ZP Address):** Fetches the operand (`$44`), which is the low byte of the effective address. PC is incremented.
+    *   **Cycle 3 (Read from Memory):** The full address (`$0044`) is placed on the address bus. The data at that location is read into the `Input Data Latch`.
+    *   **Cycle 4 (Execute):** The data from the latch and the value in the Accumulator is sent to the ALU, which is given the `AND` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
+    *   **Cycle 5 (Transfer Result):** The output from the ALU is written to `bus2` and the Accumulator is told to read from `bus2`
+    *   **Cycle 6 (Hold):** The accumulator reads from `bus2` with the final value
 
+*   **Example (Read-Modify-Write To Memory):** `ASL $44` (Arithmetic Shift Left on the byte at address `$0044`)
+*   **Instruction Format:** `06 44`
+*   **CPU Cycles:** 7
+*   **Cycle-by-Cycle Breakdown:**
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `0A` is read. The PC is incremented.
+    *   **Cycle 2 (Fetch ZP Address):** Fetches the operand (`$44`), which is the low byte of the effective address. PC is incremented.
+    *   **Cycle 3 (Read from Memory):** The full address (`$0044`) is placed on the address bus. The data at that location is read into the `Input Data Latch`.
+    *   **Cycle 4 (Execute):** The data from the latch is sent to the ALU, which is given the `ASL` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
+    *   **Cycle 5 (Transfer to Buffer):** The output value from the ALU is loaded into the `Data Bus Buffer` 
+    *   **Cycle 6 (Writeback to Memory):** The HB of the address (`$00`) is placed on the address bus, and the `Data Bus Buffer` content is written to the IO Bus.
+    *   **Cycle 7 (Write Address LB to address bus):** The LB of the address (`$44`) is placed on the address bus, and the IO Bus content is written to memory(this step is mostly off chip)
 ---
 
 #### 5. Absolute Addressing
 
 This mode uses a full 16-bit address to access any location in the 64KB memory space. The address follows the opcode as two bytes in little-endian format (low byte first).
 
-*   **Example (Store):** `STA $1234` (Store Accumulator at address `$1234`)
+*   **Example (Read-Write-Modify to Memory):** `STA $1234` (Store Accumulator at address `$1234`)
 *   **Instruction Format:** `8D 34 12`
 *   **CPU Cycles:** 7
 *   **Cycle-by-Cycle Breakdown:**
-    *   **Cycle 1 (Fetch Opcode):** Fetches the opcode (`$8D`). PC is incremented.
-    *   **Cycle 2 (Fetch Address Low Byte):** Fetches the low byte of the address (`$34`). PC is incremented.
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `8D` is read. The PC is incremented.
+    *   **Cycle 2 (Fetch Address Low Byte):** Fetches the low byte of the address (`$34`) and writes it to an internal buffer. PC is incremented.
     *   **Cycle 3 (Fetch Address High Byte):** Fetches the high byte of the address (`$12`). The full address `$1234` is now assembled. PC is incremented.
     *   **Cycle 4 (Read from Memory):** The hardware reads from the target address (`$1234`). For a store instruction, this read is superfluous but occurs due to the fixed state machine path.
-    *   **Cycle 5 (ALU Idle):** The ALU performs no meaningful operation for a store instruction.
-    *   **Cycle 6 (Transfer to Buffer):** The value in the Accumulator is placed on an internal bus and loaded into the `Data Bus Buffer`.
-    *   **Cycle 7 (Writeback to Memory):** The address (`$1234`) is placed on the address bus, and the value from the `Data Bus Buffer` is written to memory.
+    *   **Cycle 5 (Execute):** The ALU performs no meaningful operation for a store instruction.
+    *   **Cycle 6 (Transfer to Buffer):** The value in the Accumulator is placed on `bus2` and loaded into the `Data Bus Buffer`.
+    *   **Cycle 7 (Writeback to Memory):** The HB of the address (`$12`) is placed on the address bus, and the `Data Bus Buffer` content is written to the IO Bus.
+    *   **Cycle 8 (Write Address LB to address bus):** The LB of the address (`$34`) is placed on the address bus, and the IO Bus content is written to memory(this step is mostly off chip)
 
 
 ## How to test
