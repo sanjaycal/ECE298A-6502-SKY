@@ -10,6 +10,7 @@ import helper
 MAX_TESTS = 31  # for the fuzz tests
 MAX_TEST_NUM = 255  # for the instruction specific tests
 
+
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
@@ -1070,7 +1071,6 @@ async def test_SBC_IMM_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
@@ -1096,7 +1096,7 @@ async def test_SBC_IMM_Base(dut):
             memory_addr_with_value_LB,
             6,
             0,
-            (test_num - acc_value)%256,
+            (test_num - acc_value) % 256,
         )  # STA ZPG
 
 
@@ -1199,7 +1199,7 @@ async def test_BCS_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1, MAX_TESTS - 4):
+    for test_num in range(1, MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
 
         await helper.reset_cpu(dut)
