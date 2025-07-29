@@ -216,8 +216,8 @@ Table of Supported Instructions:
 |AND ZPG (AND Byte with Acc)        | 35 addr-lb         | 6               |  N Z - - - -  |
 |ORA ZPG (OR Byte with Acc)         | 05 addr-lb         | 6               |  N Z - - - -  |
 |EOR ZPG (XOR Byte with Acc)        | 55 addr-lb         | 6               |  N Z - - - -  |
-|ADC ZPG (Add Byte with Acc)        | 65 addr-lb         | 6               |  N Z C - - V  |
-|SBC ZPG (Subtract Byte with Acc)   | e5 addr-lb         | 6               |  N Z C - - V  |
+|ADC ZPG (Add Byte with Acc)        | 65 addr-lb         | 6               |  N Z C - - -  |
+|SBC ZPG (Subtract Byte with Acc)   | e5 addr-lb         | 6               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |STORE ZPG INSTRUCTIONS                                                                    |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -230,6 +230,12 @@ Table of Supported Instructions:
 |LDY ZPG (Load Y)                   | a4 addr-lb         | 6               |  - - - - - -  |
 |LDA ZPG (Load Accumulator)         | a5 addr-lb         | 6               |  - - - - - -  |
 |LDX ZPG (Load X)                   | a6 addr-lb         | 6               |  - - - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|COMPARE ZPG INSTRUCTIONS                                                                  |
+|-----------------------------------|--------------------|-----------------|---------------|
+|CMP ZPG (Compare with Accumulator) | c5 addr-lb         | 6               |  N Z C - - -  |
+|CMP ABS (Load Accumulator)         | a5 addr-lb         | 6               |  N Z C - - -  |
+|CMP IMM (Load X)                   | a6 addr-lb         | 6               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
