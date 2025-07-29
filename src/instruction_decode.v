@@ -251,7 +251,9 @@ always @(*) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             index_register_X_enable = `BUF_STORE2_THREE;
             alu_enable = `CMP;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            NEXT_PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ABS || OPCODE == `OP_CMP_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
@@ -263,7 +265,9 @@ always @(*) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             index_register_Y_enable = `BUF_STORE2_THREE;
             alu_enable = `CMP;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            NEXT_PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_INC_ZPG || OPCODE == `OP_INC_ZPG_X || OPCODE == `OP_INC_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `INC;

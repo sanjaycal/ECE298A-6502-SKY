@@ -10,7 +10,6 @@ import helper
 MAX_TESTS = 31  # for the fuzz tests
 MAX_TEST_NUM = 255  # for the instruction specific tests
 
-"""
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
@@ -901,7 +900,6 @@ async def test_EOR_IMM_Base(dut):
             0,
             test_num ^ acc_value,
         )  # STA
-"""
 
 @cocotb.test()
 async def test_CPX_ZPG_Base(dut):
@@ -1326,7 +1324,6 @@ async def test_CPY_IMM_Base(dut):
         )  # STY ZPG
 
 
-"""
 @cocotb.test()
 async def test_ADC_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
@@ -2122,4 +2119,3 @@ async def test_all_load_transfer_store_fuzz(dut):
                 dut, helper.hex_to_num("85"), 250, pc, 0, register_state[2]
             )  # STA
             pc += 2
-"""
