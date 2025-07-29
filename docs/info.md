@@ -155,9 +155,21 @@ This mode provides faster memory access by using a single byte to specify an add
 
 This mode uses a full 16-bit address to access any location in the 64KB memory space. The address follows the opcode as two bytes in little-endian format (low byte first).
 
+*   **Example (Read-Modify-Write To Accumulator):** `EOR $1234` (XOR the Accumulator and the byte at address `$1234` and write to the Accumulator)
+*   **Instruction Format:** `4d 44`
+*   **CPU Cycles:** 7
+*   **Cycle-by-Cycle Breakdown:**
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `25` is read. The PC is incremented.
+    *   **Cycle 2 (Fetch Address Low Byte):** Fetches the low byte of the address (`$34`) and writes it to an internal buffer. PC is incremented.
+    *   **Cycle 3 (Fetch Address High Byte):** Fetches the high byte of the address (`$12`). The full address `$1234` is now assembled. PC is incremented.
+    *   **Cycle 3 (Read from Memory):** The full address (`$0044`) is placed on the address bus. The data at that location is read into the `Input Data Latch`.
+    *   **Cycle 4 (Execute):** The data from the latch and the value in the Accumulator is sent to the ALU, which is given the `AND` Opcode and performs the Left Shift operation. The result is calculated and flags are updated.
+    *   **Cycle 5 (Transfer Result):** The output from the ALU is written to `bus2` and the Accumulator is told to read from `bus2`
+    *   **Cycle 6 (Hold):** The accumulator reads from `bus2` with the final value
+
 *   **Example (Read-Write-Modify to Memory):** `STA $1234` (Store Accumulator at address `$1234`)
 *   **Instruction Format:** `8D 34 12`
-*   **CPU Cycles:** 7
+*   **CPU Cycles:** 8
 *   **Cycle-by-Cycle Breakdown:**
     *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `8D` is read. The PC is incremented.
     *   **Cycle 2 (Fetch Address Low Byte):** Fetches the low byte of the address (`$34`) and writes it to an internal buffer. PC is incremented.
