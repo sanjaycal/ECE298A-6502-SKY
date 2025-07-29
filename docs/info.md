@@ -201,13 +201,42 @@ This mode uses a full 16-bit address to access any location in the 64KB memory s
 
 ## How to test
 
-### Method 1: Prescriptive Testing
+Verifying a processor design like this 6502 requires a robust testing strategy. The following sections describe two detailed approaches for ensuring its correctness, each with its own strengths.
 
-This method of testing is what our cocotb tests do, where they test timing as well as behaviour of the program.
+#### Cycle-Accurate Testbench Emulation
 
-In this form of testing, there is no defined memory, but it is emulated with expected values for the specific addresses that are used, so that a full memory table doesnt have to be spun up to run a test.
+This approach uses a testbench that acts as an intelligent and perfect memory system. Instead of simulating a passive RAM block, the testbench actively interacts with the CPU on a cycle-by-cycle basis. It precisely controls the data fed to the processor and meticulously verifies the signals coming out of it at every stage of an instruction's execution.
 
-### Method 2: Descriptive testing
+This methodology provides extremely granular control and visibility, allowing for the verification of both the logical outcome of an instruction and its exact timing. A typical test for a single instruction follows these steps:
+
+1.  **Initiate Instruction:** The testbench begins by placing the instruction's opcode onto the `uio_in` pins at the exact moment the CPU is ready to fetch it.
+2.  **Monitor Address Bus:** The processor outputs the 16-bit address of the memory location it intends to access (e.g., the address held in the Program Counter). This address is multiplexed onto the 8-bit `uo_out` port over two clock cycles (High Byte, then Low Byte). The testbench reads both bytes, reassembles the full address, and asserts that it is correct for the current step in the operation.
+3.  **Emulate Memory Read:** When the CPU needs to fetch an operand, such as an address byte or an immediate value, the testbench waits for the correct address to appear on `uo_out` and for the `rw` signal to indicate a read operation. It then immediately places the required data onto the `uio_in` pins, perfectly emulating a memory device responding to a read request.
+4.  **Verify Memory Write:** If an instruction results in a memory write (like `STA` or a read-modify-write instruction such as `ASL`), the testbench verifies several key signals to confirm the write is correct:
+    *   The correct destination address is present on the `uo_out` port.
+    *   The correct data value is being driven by the CPU onto the `uio_out` pins.
+    *   The I/O direction pin, `uio_oe`, is asserted high to enable the output driver.
+    *   The `rw` (read/write) signal is driven low to indicate a write cycle.
+5.  **Check Final State:** Once the instruction is complete, the testbench runs subsequent instructions to read the contents of the affected register (Accumulator, X, or Y) or memory location. This allows verification that the instruction had the intended final effect on the processor's state.
+
+This is the method that our instruction specific cocotb tests follow.
+
+#### System-Level Program Execution
+
+An alternative testing philosophy involves a more traditional, system-level simulation. In this scenario, the CPU is tested as one component within a larger, simulated system that more closely resembles a real-world computer. This approach is less focused on the individual cycles of an instruction and more on the processor's ability to execute a sequence of instructions correctly.
+
+The process for this type of test would be:
+
+1.  **Instantiate a Full System:** The test setup would include the CPU Verilog model alongside a Verilog model of a RAM block and any other necessary peripherals.
+2.  **Pre-load Program:** Before the simulation begins, a complete program—a binary sequence of machine code—is loaded into the simulated RAM model.
+3.  **Free-Run Execution:** The CPU is reset and then allowed to run freely. It will begin fetching instructions from the simulated RAM, starting from the reset vector address, and execute the program autonomously without direct cycle-by-cycle intervention from the testbench.
+4.  **Verify Final State:** After a predetermined number of clock cycles or upon reaching a `NOP` or halt instruction, the simulation is paused. The testbench then reads the final state of the CPU's internal registers and specific, relevant memory locations within the simulated RAM. This final state is compared against a known-good result to determine if the program executed successfully.
+
+This method excels at verifying the processor's capability to run larger, more complex software, but provides less direct insight into the low-level timing and signal behavior of individual instructions.
+
+This is the method that our fuzzing cocotb tests follow.
+
+Examples of these testing methods can be found in our test.py file, any function that include the word `fuzz` in their name follow method 2 and every other test follows method 1
 
 ## Errata
 
