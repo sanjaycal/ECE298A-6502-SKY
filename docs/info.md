@@ -17,9 +17,9 @@ space was not as advanced and explored; for instance, modern CPUs do not use mul
 
 Thus, we decided to make some educated guesses and edits to 'improve' the design for our use cases, and make things easier.
 Finally, our code freeze occured before we could add any ADDR X type instructions (incrementing for arrays), 
-which were deemed non-essential as they could be implemented via software(through program editing).
+which were deemed non-essential as they could be implemented via software (through program editing).
 
-Overall though, we do intend for our 6502 to remain relatively authentic.
+Overall though, our intention is for our 6502 to remain relatively authentic.
 
 ## How it works
 This project implements a custom 8-bit microprocessor inspired by the 6502 architecture. The design is built around a central Arithmetic Logic Unit (ALU), a collection of registers, and a microcoded instruction decoder that executes a subset of the 6502 instruction set.
