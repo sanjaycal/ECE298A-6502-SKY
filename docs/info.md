@@ -130,7 +130,23 @@ The operand for the instruction is the literal value contained in the byte immed
     *   **Cycle 4 (Hold):** The accumulator reads from `bus2` with the final value
 ---
 
-### 4. Zero-Page Addressing
+### 3. Relative Addressing
+
+Like the previous addressing mode, the operand for the instruction is the literal value contained in the byte immediately following the opcode. The operand is an unsigned number who's value is added to the program counter if the branch condition is true.
+
+*   **Example (Load):** `BNE #44` (Increment program counter by `$44` if the zero flag is not set)
+*   **Instruction Format:** `D0 44`
+*   **CPU Cycles:** 4
+*   **Cycle-by-Cycle Breakdown:**
+    *   **Cycle 1 (Fetch Opcode):** The PC is placed onto the address bus, and `D0` is read. The PC is incremented.
+    *   **Cycle 2 (Read from Memory):** The PC is placed on the address bus. The data at that location is read into the `Input Data Latch`. The PC is Incremented
+    *   **Cycle 3 (Increment Program Counter):** The data from the latch is written to `bus1` and the program counter increments by the value in `bus1` if the instruction decode block indicates the condition is met 
+    *   **Cycle 4 (None):** The cpu does nothing here due to the fixed machine state path
+
+
+---
+
+### 5. Zero-Page Addressing
 
 This mode provides faster memory access by using a single byte to specify an address within the first 256 bytes of memory (Page 0, addresses `$0000` to `$00FF`).
 
@@ -167,7 +183,7 @@ This mode provides faster memory access by using a single byte to specify an add
     *   **Cycle 7 (Write Address LB to address bus):** The LB of the address (`$44`) is placed on the address bus, and the IO Bus content is written to memory(this step is mostly off chip)
 ---
 
-### 5. Absolute Addressing
+### 6. Absolute Addressing
 
 This mode uses a full 16-bit address to access any location in the 64KB memory space. The address follows the opcode as two bytes in little-endian format (low byte first).
 
