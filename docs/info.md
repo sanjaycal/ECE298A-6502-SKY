@@ -7,6 +7,20 @@ You can also include images in this folder and reference them in the markdown. E
 512 kb in size, and the combined size of all images must be less than 1 MB.
 -->
 
+## Foreword
+The 6502 resources we found compiled online did not reflect the hardware as much as expected
+most likely due to the fact that the provided information was for developers using the 6502 and
+not the actual design manual itself. 
+
+We also found that the 6502 was made with some strange practices in mind - at the time, microprocessor design 
+space was not as advanced and explored; for instance, modern CPUs do not use multi-phase clock signals.
+
+Thus, we decided to make some educated guesses and edits to 'improve' the design for our use cases, and make things easier.
+Finally, our code freeze occured before we could add any ADDR X type instructions (incrementing for arrays), 
+which were deemed non-essential as they could be implemented via software.
+
+Overall though, we do intend for our 6502 to remain relatively authentic.
+
 ## How it works
 This project implements a custom 8-bit microprocessor inspired by the 6502 architecture. The design is built around a central Arithmetic Logic Unit (ALU), a collection of registers, and a microcoded instruction decoder that executes a subset of the 6502 instruction set.
 
