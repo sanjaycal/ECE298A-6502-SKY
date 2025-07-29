@@ -166,7 +166,7 @@ async def test_imm_instruction(
 
     await ClockCycles(dut.clk, 1)
     await ClockCycles(dut.clk, 1)
-
+    
 
 async def test_impl_instruction(
     dut, opcode, starting_PC, enable_pc_checks=True

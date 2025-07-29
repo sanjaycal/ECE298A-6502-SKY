@@ -10,7 +10,6 @@ import helper
 MAX_TESTS = 31  # for the fuzz tests
 MAX_TEST_NUM = 255  # for the instruction specific tests
 
-
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
@@ -744,10 +743,10 @@ async def test_EOR_ZPG_Base(dut):
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
             dut, helper.hex_to_num("a5"), memory_addr_with_value, 1, acc_value
-        )  # LDA
+        )  # LDA ZPG
         await helper.run_input_zpg_instruction(
             dut, helper.hex_to_num("45"), memory_addr_with_value, 3, test_num
-        )  # EOR
+        )  # EOR ZPG
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("85"),
@@ -755,7 +754,7 @@ async def test_EOR_ZPG_Base(dut):
             5,
             0,
             test_num ^ acc_value,
-        )  # STA
+        )  # STA ZPG
 
 @cocotb.test()
 async def test_EOR_ABS_Base(dut):
@@ -885,6 +884,42 @@ async def test_SBC_ABS_Base(dut):
             0,
             (test_num - acc_value)%256,
         )  # STA ZPG
+
+@cocotb.test()
+async def test_SBC_IMM_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+
+    for test_num in range(256):
+        memory_addr_with_value_LB = random.randint(10, 255)
+        memory_addr_with_value_HB = random.randint(10, 255)
+        acc_value = random.randint(0, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_abs_instruction(
+            dut,
+            helper.hex_to_num("ad"),
+            memory_addr_with_value_HB,
+            memory_addr_with_value_LB,
+            1,
+            acc_value,
+        )  # LDA ABS
+        await helper.run_input_imm_instruction(
+            dut,
+            helper.hex_to_num("e9"),
+            4,
+            test_num,
+        )  # SBC IMM
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("85"),
+            memory_addr_with_value_LB,
+            6,
+            0,
+            (test_num - acc_value)%256,
+        )  # STA ZPG
+
 
 @cocotb.test()
 async def test_INC_ZPG_Base(dut):
