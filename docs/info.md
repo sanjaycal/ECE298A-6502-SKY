@@ -28,6 +28,8 @@ This project implements a custom 8-bit microprocessor inspired by the 6502 archi
 
 #### Core Architecture
 
+![block diagram](6502BlockDiagram.png)
+
 The processor's operation is coordinated by several key functional blocks:
 
 *   **Instruction Decode:** This is the control center of the CPU. It's a complex finite state machine that reads an instruction from the data bus, interprets its opcode and addressing mode, and generates the internal control signals required to execute it over a series of clock cycles.
@@ -56,7 +58,9 @@ The processor operates on a classic **Fetch-Decode-Execute** cycle controlled by
     *   Capturing the ALU output and flags.
     *   Storing the result back into a register (A, X, or Y) or writing it to a memory location.
 
-#### Clocking and I/O
+### IO Pattern/Clock pattern
+
+![clock diagram](clock_diagram.png)
 
 A unique characteristic of this design is its clocking scheme. The internal CPU logic runs at **half the frequency of the external `clk` input**.
 
@@ -65,7 +69,7 @@ This is a deliberate design choice to manage the physical pin limitations of the
 *   **Address Bus:** The 16-bit address bus (`ab`) is too wide for the available output pins. It is therefore multiplexed and output via the 8-bit `uo_out` port over two consecutive clock cycles.
 *   **Data Bus:** The 8-bit bidirectional data bus is handled by the `uio_in`, `uio_out`, and `uio_oe` pins, with the `rw` signal controlling the direction of data flow.
 
-![block diagram](6502BlockDiagram.png)
+*  **External Memory:** We make the assumption that as soon as the full address has been put to the `uo_out` port, the external memory can return with the value, or finish a write transaction **By the start of the next clock cycle**
 
 ### Addressing Modes
 
@@ -197,7 +201,13 @@ This mode uses a full 16-bit address to access any location in the 64KB memory s
 
 ## How to test
 
-run a fake memory maybe????
+### Method 1: Prescriptive Testing
+
+This method of testing is what our cocotb tests do, where they test timing as well as behaviour of the program.
+
+In this form of testing, there is no defined memory, but it is emulated with expected values for the specific addresses that are used, so that a full memory table doesnt have to be spun up to run a test.
+
+### Method 2: Descriptive testing
 
 ## Errata
 
