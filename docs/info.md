@@ -250,6 +250,13 @@ Table of Supported Instructions:
 |LDA ABS (Load Accumulator)         | ad addr-lb         | 7               |  - - - - - -  |
 |LDX ABS (Load X)                   | ae addr-lb         | 7               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
+|ARITHMETIC IMM INSTRUCTIONS                                                               |
+|-----------------------------------|--------------------|-----------------|---------------|
+|ASL IMM (Arithmatic Shift Left)    | 09 addr-lb         | 5               |  N Z C - - -  |
+|LSR IMM (Logical Shift Right)      | 49 addr-lb         | 5               |  0 Z C - - -  |
+|ROL IMM (Roll Byte Left)           | 29 addr-lb         | 5               |  N Z C - - -  |
+|ROR IMM (Roll Byte Right)          | 49 addr-lb         | 5               |  N Z C - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
 |INC/DEC REGISTER INSTRUCTIONS                                                             |
 |-----------------------------------|--------------------|-----------------|---------------|
 |INX (Increment X)                  | e8 addr-lb         | 4               |  - - - - - -  |
