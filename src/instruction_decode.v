@@ -117,7 +117,9 @@ always @(*) begin
             NEXT_STATE = S_IDLE;
         end else if (INSTRUCTION == `OP_LD_Y_IMM || INSTRUCTION == `OP_LD_X_IMM || INSTRUCTION == `OP_LD_A_IMM 
                      || INSTRUCTION == `OP_ORA_IMM || INSTRUCTION == `OP_AND_IMM || INSTRUCTION == `OP_EOR_IMM 
-                     || INSTRUCTION == `OP_ADC_IMM || INSTRUCTION[4:0] == `ADR_REL_CHECK) begin
+                     || INSTRUCTION == `OP_ADC_IMM || INSTRUCTION == `OP_SBC_IMM || INSTRUCTION == `OP_CMP_IMM ||
+                     INSTRUCTION[4:0] == `ADR_REL_CHECK
+                     ) begin
             NEXT_STATE = S_IDL_DATA_WRITE;
         end else if(INSTRUCTION[4:2] == `ADR_A || INSTRUCTION == `OP_INX || INSTRUCTION == `OP_INY || INSTRUCTION==`OP_DEX || INSTRUCTION ==`OP_DEY) begin
             NEXT_STATE = S_ALU_FINAL;   // because this involves registers we can go straight to final
@@ -139,8 +141,12 @@ always @(*) begin
     end
     S_IDL_DATA_WRITE: begin
         input_data_latch_enable = `BUF_LOAD_TWO;
-        if (OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM || OPCODE == `OP_ORA_IMM || OPCODE == `OP_AND_IMM || OPCODE == `OP_EOR_IMM || OPCODE == `OP_ADC_IMM) begin
-            pc_enable = `PC_INC_ONE;
+        if (OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM ||
+           OPCODE == `OP_ORA_IMM || OPCODE == `OP_AND_IMM || OPCODE == `OP_EOR_IMM || 
+           OPCODE == `OP_ADC_IMM || OPCODE == `OP_SBC_IMM || OPCODE == `OP_CMP_IMM
+           ) begin
+
+           pc_enable = `PC_INC_ONE;
         end
         if(ADDRESSING == `ADR_REL) begin
             NEXT_STATE = S_BRANCH_CHECK;
@@ -220,7 +226,7 @@ always @(*) begin
             alu_enable = `OR;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
-        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS) begin
+        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS  || OPCODE == `OP_EOR_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `XOR;
@@ -232,13 +238,13 @@ always @(*) begin
             alu_enable = `ADD;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
-        end else if(OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS) begin
+        end else if(OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS || OPCODE == `OP_SBC_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `SUB;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
-        end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ZPG_X || OPCODE == `OP_CMP_ABS) begin
+        end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ABS || OPCODE == `OP_CMP_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `CMP;
@@ -313,12 +319,15 @@ always @(*) begin
             OPCODE == `OP_ORA_ZPG || OPCODE == `OP_ORA_ABS || OPCODE == `OP_ORA_IMM ||
             OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS || OPCODE == `OP_EOR_IMM ||
             OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_ABS || OPCODE == `OP_ADC_IMM ||
-            OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS 
+            OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS || OPCODE == `OP_SBC_IMM 
             ) begin
             accumulator_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end 
+        else if (OPCODE == `OP_CMP_IMM) begin
+            NEXT_STATE = S_IDLE;
+        end
         else if(OPCODE == `OP_ST_X_ZPG || OPCODE == `OP_ST_X_ABS) begin
             index_register_X_enable = `BUF_STORE2_THREE;
             data_buffer_enable = `BUF_LOAD_TWO;
@@ -370,7 +379,7 @@ always @(*) begin
         NEXT_STATE = S_ALU_ADR_CALC_2;
     end
     S_ALU_ADR_CALC_2: begin
-        alu_enable = `TMX;
+        alu_enable = `TMX;      
         if((OPCODE & `OP_ALU_MASK) == `OP_ALU_SHIFT_ZPG_X) begin
             address_select = 2'd2;
             NEXT_STATE = S_IDL_DATA_WRITE;
