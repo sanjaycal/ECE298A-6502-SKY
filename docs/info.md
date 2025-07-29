@@ -234,8 +234,8 @@ Table of Supported Instructions:
 |COMPARE ZPG INSTRUCTIONS                                                                  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |CMP ZPG (Compare ZPG with Acc)     | c5 addr-lb         | 6               |  N Z C - - -  |
-|CMP ABS (Compare ABS with Acc)     | a5 addr-lb         | 6               |  N Z C - - -  |
-|CMP IMM (Compare IMM with Acc)     | c9 imm             | 6               |  N Z C - - -  |
+|CMP ABS (Compare ABS with Acc)     | cd addr-lb addr-hb | 7               |  N Z C - - -  |
+|CMP IMM (Compare IMM with Acc)     | c9 imm             | 5               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
