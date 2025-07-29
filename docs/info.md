@@ -24,11 +24,9 @@ Overall though, our intention is for our 6502 to remain relatively authentic.
 ## How it works
 This project implements a custom 8-bit microprocessor inspired by the 6502 architecture. The design is built around a central Arithmetic Logic Unit (ALU), a collection of registers, and a microcoded instruction decoder that executes a subset of the 6502 instruction set.
 
-### Overview
-
-#### Core Architecture
-
 ![block diagram](6502BlockDiagram.png)
+
+### Core Architecture
 
 The processor's operation is coordinated by several key functional blocks:
 
@@ -45,7 +43,7 @@ The processor's operation is coordinated by several key functional blocks:
     *   **Input Data Latch:** Temporarily holds data read from the main data bus, typically an instruction operand or address byte.
     *   **Data Bus Buffer:** Temporarily holds data from an internal register before it is written out to the main data bus.
 
-#### Operational Cycle
+### Operational Cycle
 
 The processor operates on a classic **Fetch-Decode-Execute** cycle controlled by the instruction decoder's state machine:
 
@@ -58,7 +56,7 @@ The processor operates on a classic **Fetch-Decode-Execute** cycle controlled by
     *   Capturing the ALU output and flags.
     *   Storing the result back into a register (A, X, or Y) or writing it to a memory location.
 
-### IO Pattern/Clock pattern
+## IO Pattern/Clock pattern
 
 ![clock diagram](clock_diagram.png)
 
@@ -71,7 +69,7 @@ This is a deliberate design choice to manage the physical pin limitations of the
 
 *  **External Memory:** We make the assumption that as soon as the full address has been put to the `uo_out` port, the external memory can return with the value, or finish a write transaction **By the start of the next clock cycle**
 
-### Addressing Modes
+## Addressing Modes
 
 The processor supports a variety of addressing modes to provide flexibility in accessing data. The specific mode for an instruction is implicitly defined by its opcode.
 
@@ -79,7 +77,7 @@ In the descriptions below, a "CPU Cycle" refers to a complete state transition i
 
 ---
 
-#### 1. Implied and Register Addressing
+### 1. Implied and Register Addressing
 
 These are the simplest modes. The instruction operates directly on a register or has no operand, so the instruction itself is a single byte.
 
@@ -92,7 +90,7 @@ These are the simplest modes. The instruction operates directly on a register or
 
 ---
 
-#### 2. Accumulator Addressing
+### 2. Accumulator Addressing
 
 In this mode, the instruction operates directly on the Accumulator. Like Implied addressing, it is a single-byte instruction. It is primarily used for shift and rotate operations.
 
@@ -107,7 +105,7 @@ In this mode, the instruction operates directly on the Accumulator. Like Implied
 
 ---
 
-#### 3. Immediate Addressing
+### 3. Immediate Addressing
 
 The operand for the instruction is the literal value contained in the byte immediately following the opcode.
 
@@ -132,7 +130,7 @@ The operand for the instruction is the literal value contained in the byte immed
     *   **Cycle 4 (Hold):** The accumulator reads from `bus2` with the final value
 ---
 
-#### 4. Zero-Page Addressing
+### 4. Zero-Page Addressing
 
 This mode provides faster memory access by using a single byte to specify an address within the first 256 bytes of memory (Page 0, addresses `$0000` to `$00FF`).
 
@@ -169,7 +167,7 @@ This mode provides faster memory access by using a single byte to specify an add
     *   **Cycle 7 (Write Address LB to address bus):** The LB of the address (`$44`) is placed on the address bus, and the IO Bus content is written to memory(this step is mostly off chip)
 ---
 
-#### 5. Absolute Addressing
+### 5. Absolute Addressing
 
 This mode uses a full 16-bit address to access any location in the 64KB memory space. The address follows the opcode as two bytes in little-endian format (low byte first).
 
@@ -203,7 +201,7 @@ This mode uses a full 16-bit address to access any location in the 64KB memory s
 
 Verifying a processor design like this 6502 requires a robust testing strategy. The following sections describe two detailed approaches for ensuring its correctness, each with its own strengths.
 
-#### Cycle-Accurate Testbench Emulation
+### Cycle-Accurate Testbench Emulation
 
 This approach uses a testbench that acts as an intelligent and perfect memory system. Instead of simulating a passive RAM block, the testbench actively interacts with the CPU on a cycle-by-cycle basis. It precisely controls the data fed to the processor and meticulously verifies the signals coming out of it at every stage of an instruction's execution.
 
@@ -221,7 +219,7 @@ This methodology provides extremely granular control and visibility, allowing fo
 
 This is the method that our instruction specific cocotb tests follow.
 
-#### System-Level Program Execution
+### System-Level Program Execution
 
 An alternative testing philosophy involves a more traditional, system-level simulation. In this scenario, the CPU is tested as one component within a larger, simulated system that more closely resembles a real-world computer. This approach is less focused on the individual cycles of an instruction and more on the processor's ability to execute a sequence of instructions correctly.
 
