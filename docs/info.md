@@ -236,6 +236,52 @@ This is the method that our fuzzing cocotb tests follow.
 
 Examples of these testing methods can be found in our test.py file, any function that include the word `fuzz` in their name follow method 2 and every other test follows method 1
 
+## Programming Guide
+
+This guide provides the essential information needed to write assembly-level programs for this 6502-inspired processor. Adhering to these guidelines is critical for ensuring your code runs correctly.
+
+### Startup and Initialization
+
+On power-up or after a reset, the processor's internal state is initialized as follows:
+
+*   **Program Counter (PC):** The PC is set to `$0000`. The processor will immediately attempt to fetch its first instruction from this memory address.
+
+*   **Mandatory NOP Instruction:** For proper initialization and predictable execution, the first instruction at memory address `$0000` **must** be a `NOP` (`$EA`). The processor uses this initial two-cycle instruction to correctly align its internal state machine. Your program's main logic should begin at address `$0001`.
+
+### Known Hardware Limitations
+
+*   **Page Boundary Bug:** There is a known limitation in this hardware implementation that prevents reliable memory access to the **final byte of any memory page**. Programmers must ensure that no instruction opcodes, operands, or data addresses are placed at a memory location ending in `$FF` (e.g., `$00FF`, `$01FF`, `$C3FF`, etc.). Accessing these specific addresses will lead to unpredictable behavior and program failure.
+
+### Example Program: Load and Store
+
+Here is a simple program that demonstrates the basic principles. This program loads the immediate value `$42` into the Accumulator (A) and then stores it at memory location `$0210`.
+
+```assembly
+; Program Start
+; The processor begins execution at $0000 after reset.
+
+$0000: EA          ; 1. Mandatory NOP for initialization. The PC is now $0001.
+
+; --- Main program logic begins here ---
+
+$0001: A9 42       ; 2. LDA #$42 - Load the immediate value $42 into the Accumulator.
+                   ;    - Opcode A9 is at $0001.
+                   ;    - Operand 42 is at $0002.
+                   ;    - After this, PC is $0003.
+
+$0003: 8D 10 02    ; 3. STA $0210 - Store the contents of the Accumulator ($42)
+                   ;    at address $0210.
+                   ;    - Opcode 8D is at $0003.
+                   ;    - Address Low Byte (10) is at $0004.
+                   ;    - Address High Byte (02) is at $0005.
+                   ;    - After this, PC is $0006.
+
+$0006: EA          ; 4. NOP - Halt execution by entering an infinite NOP loop.
+$0007: EA          ; ...
+```
+
+This program correctly follows all guidelines: it starts with a `NOP` at `$0000` and avoids placing any code or data at an `xxFF` address.
+
 ## Errata
 
 Table of Supported Instructions:
