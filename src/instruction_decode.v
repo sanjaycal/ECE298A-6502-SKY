@@ -326,6 +326,7 @@ always @(*) begin
             alu_enable = `TMX;
         end 
         else if (OPCODE == `OP_CMP_IMM) begin
+            alu_enable = `TMX;
             NEXT_STATE = S_IDLE;
         end
         else if(OPCODE == `OP_ST_X_ZPG || OPCODE == `OP_ST_X_ABS) begin
