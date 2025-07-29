@@ -233,50 +233,50 @@ Table of Supported Instructions:
 |-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
-|TXA (Transfer from X to Acc)       | 8a addr-lb         | 2               |  - - - - - -  |
-|TYA (Transfer from Y to Acc)       | 98 addr-lb         | 2               |  - - - - - -  |
-|TAX (Transfer from Acc to X)       | aa addr-lb         | 2               |  - - - - - -  |
-|TAY (Transfer from Acc to Y)       | a8 addr-lb         | 2               |  - - - - - -  |
+|TXA (Transfer from X to Acc)       | 8a                 | 2               |  - - - - - -  |
+|TYA (Transfer from Y to Acc)       | 98                 | 2               |  - - - - - -  |
+|TAX (Transfer from Acc to X)       | aa                 | 2               |  - - - - - -  |
+|TAY (Transfer from Acc to Y)       | a8                 | 2               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ARITHMETIC ABS INSTRUCTIONS                                                               |
 |-----------------------------------|--------------------|-----------------|---------------|
-|ASL ABS (Arithmatic Shift Left)    | 0e addr-lb         | 8               |  N Z C - - -  |
-|LSR ABS (Logical Shift Right)      | 4e addr-lb         | 8               |  0 Z C - - -  |
-|ROL ABS (Roll Byte Left)           | 2e addr-lb         | 8               |  N Z C - - -  |
-|ROR ABS (Roll Byte Right)          | 4e addr-lb         | 8               |  N Z C - - -  |
-|INC ABS (Increment Byte)           | ce addr-lb         | 8               |  N Z - - - -  |
-|DEC ABS (Decrement Byte)           | ee addr-lb         | 8               |  N Z - - - -  |
-|AND ABS (AND Byte with Acc)        | 3d addr-lb         | 7               |  N Z - - - -  |
-|ORA ABS (OR Byte with Acc)         | 0d addr-lb         | 7               |  N Z - - - -  |
-|EOR ABS (XOR Byte with Acc)        | 5d addr-lb         | 7               |  N Z - - - -  |
-|ADC ABS (Add Byte with Acc)        | 6d addr-lb         | 7               |  N Z C - - V  |
-|SBC ABS (Subtract Byte with Acc)   | ed addr-lb         | 7               |  N Z C - - V  |
+|ASL ABS (Arithmatic Shift Left)    | 0e addr-lb addr-hb | 8               |  N Z C - - -  |
+|LSR ABS (Logical Shift Right)      | 4e addr-lb addr-hb | 8               |  0 Z C - - -  |
+|ROL ABS (Roll Byte Left)           | 2e addr-lb addr-hb | 8               |  N Z C - - -  |
+|ROR ABS (Roll Byte Right)          | 4e addr-lb addr-hb | 8               |  N Z C - - -  |
+|INC ABS (Increment Byte)           | ce addr-lb addr-hb | 8               |  N Z - - - -  |
+|DEC ABS (Decrement Byte)           | ee addr-lb addr-hb | 8               |  N Z - - - -  |
+|AND ABS (AND Byte with Acc)        | 3d addr-lb addr-hb | 7               |  N Z - - - -  |
+|ORA ABS (OR Byte with Acc)         | 0d addr-lb addr-hb | 7               |  N Z - - - -  |
+|EOR ABS (XOR Byte with Acc)        | 5d addr-lb addr-hb | 7               |  N Z - - - -  |
+|ADC ABS (Add Byte with Acc)        | 6d addr-lb addr-hb | 7               |  N Z C - - V  |
+|SBC ABS (Subtract Byte with Acc)   | ed addr-lb addr-hb | 7               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |STORE ABS INSTRUCTIONS                                                                    |
 |-----------------------------------|--------------------|-----------------|---------------|
-|STY ABS (Store Y)                  | 8c addr-lb         | 8               |  - - - - - -  |
-|STA ABS (Store Accumulator)        | 8d addr-lb         | 8               |  - - - - - -  |
-|STX ABS (Store X)                  | 8e addr-lb         | 8               |  - - - - - -  |
+|STY ABS (Store Y)                  | 8c addr-lb addr-hb | 8               |  - - - - - -  |
+|STA ABS (Store Accumulator)        | 8d addr-lb addr-hb | 8               |  - - - - - -  |
+|STX ABS (Store X)                  | 8e addr-lb addr-hb | 8               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |LOAD ABS INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
-|LDY ABS (Load Y)                   | ac addr-lb         | 7               |  - - - - - -  |
-|LDA ABS (Load Accumulator)         | ad addr-lb         | 7               |  - - - - - -  |
-|LDX ABS (Load X)                   | ae addr-lb         | 7               |  - - - - - -  |
+|LDY ABS (Load Y)                   | ac addr-lb addr-hb | 7               |  - - - - - -  |
+|LDA ABS (Load Accumulator)         | ad addr-lb addr-hb | 7               |  - - - - - -  |
+|LDX ABS (Load X)                   | ae addr-lb addr-hb | 7               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ARITHMETIC IMM INSTRUCTIONS                                                               |
 |-----------------------------------|--------------------|-----------------|---------------|
-|ASL IMM (Arithmatic Shift Left)    | 09 addr-lb         | 5               |  N Z C - - -  |
-|LSR IMM (Logical Shift Right)      | 49 addr-lb         | 5               |  0 Z C - - -  |
-|ROL IMM (Roll Byte Left)           | 29 addr-lb         | 5               |  N Z C - - -  |
-|ROR IMM (Roll Byte Right)          | 49 addr-lb         | 5               |  N Z C - - -  |
+|ASL IMM (Arithmatic Shift Left)    | 09 imm             | 5               |  N Z C - - -  |
+|LSR IMM (Logical Shift Right)      | 49 imm             | 5               |  0 Z C - - -  |
+|ROL IMM (Roll Byte Left)           | 29 imm             | 5               |  N Z C - - -  |
+|ROR IMM (Roll Byte Right)          | 49 imm             | 5               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |INC/DEC REGISTER INSTRUCTIONS                                                             |
 |-----------------------------------|--------------------|-----------------|---------------|
-|INX (Increment X)                  | e8 addr-lb         | 4               |  - - - - - -  |
-|INY (Increment Y)                  | c8 addr-lb         | 4               |  - - - - - -  |
-|DEX (Decrement X)                  | ca addr-lb         | 4               |  - - - - - -  |
-|DEY (Decrement Y)                  | 88 addr-lb         | 4               |  - - - - - -  |
+|INX (Increment X)                  | e8                 | 4               |  - - - - - -  |
+|INY (Increment Y)                  | c8                 | 4               |  - - - - - -  |
+|DEX (Decrement X)                  | ca                 | 4               |  - - - - - -  |
+|DEY (Decrement Y)                  | 88                 | 4               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |ARITHMETIC ACC INSTRUCTIONS                                                               |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -289,6 +289,7 @@ Table of Supported Instructions:
 |OTHER INSTRUCTIONS                                                                        |
 |-----------------------------------|--------------------|-----------------|---------------|
 |NOP (No Op)                        | ea                 | 2               |  - - - - - -  |
+|JMP ABS (Jump)                     | 4c addr-lb addr-hb | 4               |  - - - - - -  |
 
 
 
