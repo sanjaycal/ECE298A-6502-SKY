@@ -17,7 +17,7 @@ space was not as advanced and explored; for instance, modern CPUs do not use mul
 
 Thus, we decided to make some educated guesses and edits to 'improve' the design for our use cases, and make things easier.
 Finally, our code freeze occured before we could add any ADDR X type instructions (incrementing for arrays), 
-which were deemed non-essential as they could be implemented via software.
+which were deemed non-essential as they could be implemented via software(through program editing).
 
 Overall though, we do intend for our 6502 to remain relatively authentic.
 
@@ -284,6 +284,7 @@ Table of Supported Instructions:
 |LSR A (Logical Shift Right Acc)    | 4a                 | 4               |  N Z C - - -  |
 |ROL A (Roll Byte Left Acc)         | 2a                 | 4               |  N Z C - - -  |
 |ROR A (Roll Byte Right Acc)        | 6a                 | 4               |  N Z C - - -  |
+|SBC A (Subtract Byte with Acc)     | ea                 | 4               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |OTHER INSTRUCTIONS                                                                        |
 |-----------------------------------|--------------------|-----------------|---------------|
