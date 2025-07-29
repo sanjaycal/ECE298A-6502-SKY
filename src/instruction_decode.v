@@ -115,9 +115,11 @@ always @(*) begin
             index_register_Y_enable = `BUF_STORE1_THREE;
             accumulator_enable = `BUF_LOAD1_THREE;
             NEXT_STATE = S_IDLE;
-        end else if (INSTRUCTION == `OP_LD_Y_IMM || INSTRUCTION == `OP_LD_X_IMM || INSTRUCTION == `OP_LD_A_IMM 
-                     || INSTRUCTION == `OP_ORA_IMM || INSTRUCTION == `OP_AND_IMM || INSTRUCTION == `OP_EOR_IMM 
-                     || INSTRUCTION == `OP_ADC_IMM || INSTRUCTION == `OP_SBC_IMM || INSTRUCTION == `OP_CMP_IMM ||
+        end else if (
+                     INSTRUCTION == `OP_LD_Y_IMM || INSTRUCTION == `OP_LD_X_IMM || INSTRUCTION == `OP_LD_A_IMM ||
+                     INSTRUCTION == `OP_ORA_IMM || INSTRUCTION == `OP_AND_IMM || INSTRUCTION == `OP_EOR_IMM ||
+                     INSTRUCTION == `OP_ADC_IMM || INSTRUCTION == `OP_SBC_IMM || 
+                     INSTRUCTION == `OP_CPX_IMM || INSTRUCTION == `OP_CMP_IMM || OPCODE == `OP_CPY_IMM ||
                      INSTRUCTION[4:0] == `ADR_REL_CHECK
                      ) begin
             NEXT_STATE = S_IDL_DATA_WRITE;
@@ -143,7 +145,8 @@ always @(*) begin
         input_data_latch_enable = `BUF_LOAD_TWO;
         if (OPCODE == `OP_LD_Y_IMM || OPCODE == `OP_LD_X_IMM || OPCODE == `OP_LD_A_IMM ||
            OPCODE == `OP_ORA_IMM || OPCODE == `OP_AND_IMM || OPCODE == `OP_EOR_IMM || 
-           OPCODE == `OP_ADC_IMM || OPCODE == `OP_SBC_IMM || OPCODE == `OP_CMP_IMM
+           OPCODE == `OP_ADC_IMM || OPCODE == `OP_SBC_IMM || 
+           OPCODE == `OP_CPX_IMM || OPCODE == `OP_CMP_IMM || OPCODE == `OP_CPY_IMM
            ) begin
 
            pc_enable = `PC_INC_ONE;
@@ -244,6 +247,11 @@ always @(*) begin
             alu_enable = `SUB;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
+        end else if(OPCODE == `OP_CPX_ZPG || OPCODE == `OP_CPX_ABS || OPCODE == `OP_CPX_IMM) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            index_register_X_enable = `BUF_STORE2_THREE;
+            alu_enable = `CMP;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ABS || OPCODE == `OP_CMP_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
@@ -251,18 +259,23 @@ always @(*) begin
             NEXT_PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
+        end else if(OPCODE == `OP_CPY_ZPG || OPCODE == `OP_CPY_ABS || OPCODE == `OP_CPY_IMM) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            index_register_Y_enable = `BUF_STORE2_THREE;
+            alu_enable = `CMP;
+            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
         end else if(OPCODE == `OP_INC_ZPG || OPCODE == `OP_INC_ZPG_X || OPCODE == `OP_INC_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `INC;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_INX) begin
-	    index_register_X_enable = `BUF_STORE1_THREE;
+	        index_register_X_enable = `BUF_STORE1_THREE;
             alu_enable = `INC;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_INY) begin
-	    index_register_Y_enable = `BUF_STORE1_THREE;
+	        index_register_Y_enable = `BUF_STORE1_THREE;
             alu_enable = `INC;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
@@ -272,7 +285,7 @@ always @(*) begin
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_DEY) begin
-	    index_register_Y_enable = `BUF_STORE1_THREE;
+	        index_register_Y_enable = `BUF_STORE1_THREE;
             alu_enable = `DEC;
             NEXT_PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
             NEXT_PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
@@ -325,7 +338,11 @@ always @(*) begin
             NEXT_STATE = S_IDLE;
             alu_enable = `TMX;
         end 
-        else if (OPCODE == `OP_CMP_IMM) begin
+        else if (
+                OPCODE == `OP_CPX_ZPG || OPCODE == `OP_CPX_ABS || OPCODE == `OP_CPX_IMM ||
+                OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ABS || OPCODE == `OP_CMP_IMM ||
+                OPCODE == `OP_CPY_ZPG || OPCODE == `OP_CPY_ABS || OPCODE == `OP_CPY_IMM
+                ) begin
             alu_enable = `TMX;
             NEXT_STATE = S_IDLE;
         end
@@ -346,7 +363,7 @@ always @(*) begin
         end
 	else if(OPCODE == `OP_INX || OPCODE == `OP_DEX) begin
 	    index_register_X_enable = `BUF_LOAD2_THREE;
-            alu_enable = `TMX;
+        alu_enable = `TMX;
 	    NEXT_STATE = S_IDLE;
 	end
 	else if(OPCODE == `OP_INY || OPCODE == `OP_DEY) begin
