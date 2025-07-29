@@ -268,25 +268,24 @@ Here is a simple program that demonstrates the basic principles. This program lo
 ; Program Start
 ; The processor begins execution at $0000 after reset.
 
-$0000: EA          ; 1. Mandatory NOP for initialization. The PC is now $0001.
+$0000: EA          ; 1. Mandatory NOP for initialization.
+                   ;    The PC is now $0001.
 
 ; --- Main program logic begins here, stored contiguously ---
 
-$0001: A9 42       ; 2. LDA #$42 - Load the immediate value $42 into the Accumulator.
+$0001: A9 42       ; 2. LDA #$42 - Load the immediate value $42 
+                   ;               into the Accumulator.
                    ;    - Opcode A9 is at $0001.
                    ;    - Operand 42 is at $0002.
                    ;    - After this, PC is $0003.
 
-$0003: 8D 10 02    ; 3. STA $0210 - Store the contents of the Accumulator ($42)
+$0003: 8D 10 02    ; 3. STA $0210 - Store the contents of 
+                   ;                the Accumulator ($42)
                    ;    at address $0210.
                    ;    - Opcode 8D is at $0003.
                    ;    - Address Low Byte (10) is at $0004.
                    ;    - Address High Byte (02) is at $0005.
                    ;    - After this, PC is $0006.
-
-$0006: EA          ; 4. NOP - The next instruction starts immediately at $0006.
-                   ;    Used here to halt execution by entering an infinite NOP loop.
-$0007: EA          ; ...
 ```
 
 This program correctly follows all guidelines: it starts with a `NOP` at `$0000`, the machine code is laid out sequentially without gaps, and it avoids placing any code or data at an `xxFF` address.
