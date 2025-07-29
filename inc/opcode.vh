@@ -111,6 +111,7 @@
     `define OP_CMP_ZPG      8'b11000101
     `define OP_CMP_ZPG_X    8'b11010101
     `define OP_CMP_ABS      8'b11001101
+    `define OP_CMP_IMM      8'hc9
 
     // MISC OPCODES
     `define OP_JSR          8'b00100000

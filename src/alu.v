@@ -99,7 +99,7 @@ module alu (
                 next_alu_result = inputA;
                 next_alu_flags[`ZERO_FLAG]     = (inputB-inputA)==0;
                 next_alu_flags[`NEGATIVE_FLAG] = result_cmp[7];
-                next_alu_flags[`CARRY_FLAG] = (inputA[7] ^ inputB[7]) & (inputA[7] ^ result_cmp[7]);
+                next_alu_flags[`CARRY_FLAG] = (inputB >= inputA);
             end
             `FLG: begin
                 next_alu_result = inputA;

@@ -903,6 +903,52 @@ async def test_EOR_IMM_Base(dut):
 
 
 @cocotb.test()
+async def test_CMP_IMM_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(256):
+        memory_addr_with_value_LB = random.randint(10, 255)
+        memory_addr_with_value_HB = random.randint(10, 255)
+
+        # just make sure it always branches
+        acc_value = random.randint(50, 255)
+        imm_value = random.randint(10,49)
+        branch_amount = random.randint(1,50)
+        
+        await helper.reset_cpu(dut)
+        await helper.run_input_abs_instruction(
+            dut,
+            helper.hex_to_num("ad"),
+            memory_addr_with_value_HB,
+            memory_addr_with_value_LB,
+            1,
+            acc_value,
+        )  # LDA ABS
+        await helper.run_input_imm_instruction(
+            dut,
+            helper.hex_to_num("c9"),
+            4,
+            imm_value,
+        )  # CMP IMM
+        await helper.test_branch_instruction(
+            dut,
+            helper.hex_to_num("b0"),
+            6,
+            branch_amount,
+        )  # BCS REL
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("85"),
+            memory_addr_with_value_LB,
+            7+branch_amount,
+            0,
+            acc_value,
+        )  # STA
+
+
+@cocotb.test()
 async def test_ADC_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 50, units="ns")
