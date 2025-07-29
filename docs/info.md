@@ -203,6 +203,7 @@ Table of Supported Instructions:
 |ORA ZPG (OR Byte with Acc)         | 05 addr-lb         | 6               |  N Z - - - -  |
 |EOR ZPG (XOR Byte with Acc)        | 55 addr-lb         | 6               |  N Z - - - -  |
 |ADC ZPG (Add Byte with Acc)        | 65 addr-lb         | 6               |  N Z C - - V  |
+|SBC ZPG (Subtract Byte with Acc)   | e5 addr-lb         | 6               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |STORE ZPG INSTRUCTIONS                                                                    |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -235,6 +236,7 @@ Table of Supported Instructions:
 |ORA ABS (OR Byte with Acc)         | 0d addr-lb         | 7               |  N Z - - - -  |
 |EOR ABS (XOR Byte with Acc)        | 5d addr-lb         | 7               |  N Z - - - -  |
 |ADC ABS (Add Byte with Acc)        | 6d addr-lb         | 7               |  N Z C - - V  |
+|SBC ABS (Subtract Byte with Acc)   | ed addr-lb         | 7               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |STORE ABS INSTRUCTIONS                                                                    |
 |-----------------------------------|--------------------|-----------------|---------------|
