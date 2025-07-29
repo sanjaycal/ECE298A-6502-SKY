@@ -36,7 +36,7 @@ The processor's operation is coordinated by several key functional blocks:
     *   **Accumulator (A):** An 8-bit register used for most arithmetic and logical operations.
     *   **Index Registers (X and Y):** Two 8-bit registers commonly used for indexed addressing modes and as general-purpose counters or temporary storage.
     *   **Processor Status Register (P):** Contains a set of flags (e.g., Carry, Zero, Negative) that reflect the result of the most recent ALU operation.
-*   **Arithmetic Logic Unit (ALU):** The computational core of the processor. It performs all arithmetic (add, increment, decrement) and logical (AND, OR, XOR, shift, rotate) operations. It takes inputs from the internal buses and updates the Processor Status Register flags based on the outcome of its calculation.
+*   **Arithmetic Logic Unit (ALU):** The computational core of the processor. It performs all arithmetic (add, increment, decrement), logical (AND, OR, XOR, shift, rotate), and comparison (CPX, CMP, CPY) operations. It takes inputs from the internal buses and updates the Processor Status Register flags based on the outcome of its calculation.
 *   **Internal Buses (Bus 1 & Bus 2):** Two internal 8-bit buses that serve as the data highways connecting the registers and ALU, allowing for the transfer of operands and results within the CPU.
 *   **I/O Buffers:**
     *   **Address Bus (AB):** An internal 16-bit bus that holds the address for memory operations. Its value is selected from either the PC, a calculated memory address, or the ALU output.
