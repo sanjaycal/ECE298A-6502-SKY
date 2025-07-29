@@ -233,9 +233,9 @@ Table of Supported Instructions:
 |-----------------------------------|--------------------|-----------------|---------------|
 |COMPARE ZPG INSTRUCTIONS                                                                  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|CMP ZPG (Compare with Accumulator) | c5 addr-lb         | 6               |  N Z C - - -  |
-|CMP ABS (Load Accumulator)         | a5 addr-lb         | 6               |  N Z C - - -  |
-|CMP IMM (Load X)                   | a6 addr-lb         | 6               |  N Z C - - -  |
+|CMP ZPG (Compare ZPG with Acc)     | c5 addr-lb         | 6               |  N Z C - - -  |
+|CMP ABS (Compare ABS with Acc)     | a5 addr-lb         | 6               |  N Z C - - -  |
+|CMP IMM (Compare IMM with Acc)     | c9 imm             | 6               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
