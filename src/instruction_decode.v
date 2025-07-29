@@ -55,7 +55,7 @@ reg [15:0] MEMORY_ADDRESS_INTERNAL  = 16'b0;
 reg [2:0] ADDRESSING=0;
 reg [7:0] OPCODE=0;
 reg [7:0] INSTRUCTION=0;
-
+reg [6:0] PROCESS_STATUS_WRITE = 0;
 always @(*) begin
     memory_address = 16'b0;
     NEXT_STATE = STATE;
@@ -155,94 +155,124 @@ always @(*) begin
         end   
     end
     S_ALU_FINAL: begin
-        processor_status_register_rw = 0;
+
         //SHIFTING
         if(OPCODE == `OP_ASL_ZPG || OPCODE ==  `OP_ASL_ZPG_X || OPCODE == `OP_ASL_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable  = `ASL;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            // processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ASL_A) begin
             accumulator_enable = `BUF_STORE1_THREE;
             alu_enable = `ASL;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_LSR_ZPG || OPCODE == `OP_LSR_ZPG_X || OPCODE == `OP_LSR_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable  = `LSR;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_LSR_A ) begin
             accumulator_enable = `BUF_STORE1_THREE;
             alu_enable = `LSR;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ROL_A ) begin
             accumulator_enable = `BUF_STORE1_THREE;
             alu_enable = `ROL;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ROR_A ) begin
             accumulator_enable = `BUF_STORE1_THREE;
             alu_enable = `ROR;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ROL_ZPG || OPCODE == `OP_ROL_ZPG_X || OPCODE == `OP_ROL_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `ROL;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ROR_ZPG || OPCODE == `OP_ROR_ZPG_X || OPCODE == `OP_ROR_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `ROR;
-            processor_status_register_write = `CARRY_FLAG | `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_AND_ZPG || OPCODE == `OP_AND_ABS || OPCODE == `OP_AND_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `AND;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ORA_ZPG || OPCODE == `OP_ORA_ABS || OPCODE == `OP_ORA_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `OR;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `XOR;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_ADC_ZPG || OPCODE == `OP_ADC_ABS || OPCODE == `OP_ADC_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `ADD;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_SBC_ZPG || OPCODE == `OP_SBC_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `SUB;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_CMP_ZPG || OPCODE == `OP_CMP_ZPG_X || OPCODE == `OP_CMP_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `CMP;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG | `CARRY_FLAG;
+            PROCESS_STATUS_WRITE[`CARRY_FLAG] = 1;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_INC_ZPG || OPCODE == `OP_INC_ZPG_X || OPCODE == `OP_INC_ABS) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `INC;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_INX) begin
 	    index_register_X_enable = `BUF_STORE1_THREE;
             alu_enable = `INC;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_INY) begin
 	    index_register_Y_enable = `BUF_STORE1_THREE;
             alu_enable = `INC;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_DEX) begin
 	    index_register_X_enable = `BUF_STORE1_THREE;
             alu_enable = `DEC;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_DEY) begin
 	    index_register_Y_enable = `BUF_STORE1_THREE;
             alu_enable = `DEC;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end else if(OPCODE == `OP_DEC_ZPG || OPCODE == `OP_DEC_ZPG_X || OPCODE == `OP_DEC_ABS) begin
                 input_data_latch_enable = `BUF_STORE_TWO;
                 alu_enable = `DEC;
-                processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+                PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+                PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end 
         
         // LOAD
@@ -253,11 +283,14 @@ always @(*) begin
             ) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             alu_enable = `FLG;
-            processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
+            PROCESS_STATUS_WRITE[`ZERO_FLAG]  = 1;
+            PROCESS_STATUS_WRITE[`NEGATIVE_FLAG] = 1;
         end
         NEXT_STATE = S_ALU_TMX;
     end
     S_ALU_TMX: begin
+        processor_status_register_rw = 0;
+        processor_status_register_write = PROCESS_STATUS_WRITE;
         if(OPCODE == `OP_LD_X_ZPG || OPCODE == `OP_LD_X_ABS || OPCODE == `OP_LD_X_IMM) begin
             index_register_X_enable = `BUF_LOAD2_THREE;
             NEXT_STATE = S_IDLE;
@@ -374,8 +407,13 @@ always @(*) begin
         end else if(OPCODE == `OP_BNE && processor_status_register_read[`ZERO_FLAG] == 0) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             pc_enable = `PC_TAKE_BRANCH;
+        end else if(OPCODE == `OP_BPL && processor_status_register_read[`NEGATIVE_FLAG] == 0) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            pc_enable = `PC_TAKE_BRANCH;
+        end else if(OPCODE == `OP_BMI && processor_status_register_read[`NEGATIVE_FLAG] == 1) begin
+            input_data_latch_enable = `BUF_STORE_TWO;
+            pc_enable = `PC_TAKE_BRANCH;
         end
-
         NEXT_STATE = S_IDLE;
     end
     default: NEXT_STATE = S_IDLE;
@@ -389,10 +427,12 @@ always @(posedge clk or negedge rst_n) begin
         ADDRESSING <= 3'b000;
         MEMORY_ADDRESS_INTERNAL <= 0;
     	INSTRUCTION <= 0;
+        PROCESS_STATUS_WRITE <= 7'b0;
     end else if(clk_enable) begin
 	INSTRUCTION <= instruction;
         STATE <= NEXT_STATE;
         if(NEXT_STATE == S_OPCODE_READ) begin
+            PROCESS_STATUS_WRITE <= 7'b0;
              OPCODE <= instruction;
             if(instruction[4:0] == `ADR_REL_CHECK) begin
                 ADDRESSING <= `ADR_REL;

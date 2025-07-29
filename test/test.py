@@ -982,7 +982,7 @@ async def test_BCS_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TESTS - 4):
+    for test_num in range(1,MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
         
         await helper.reset_cpu(dut)
@@ -1014,7 +1014,7 @@ async def test_BCC_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TESTS - 4):
+    for test_num in range(1,MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
         
         await helper.reset_cpu(dut)
@@ -1050,7 +1050,7 @@ async def test_BEQ_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TESTS - 4):
+    for test_num in range(1,MAX_TEST_NUM - 5):
         memory_addr_for_verify = random.randint(10, 255)
         
         await helper.reset_cpu(dut)
@@ -1082,7 +1082,7 @@ async def test_BNE_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TESTS - 4):
+    for test_num in range(1,MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
         
         await helper.reset_cpu(dut)
@@ -1101,6 +1101,69 @@ async def test_BNE_REL_Base(dut):
             test_num,
             (test_num * 2) % 256,
         )
+
+@cocotb.test()
+async def test_BPL_REL_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TEST_NUM - 4):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        await helper.test_branch_instruction(
+            dut,
+            helper.hex_to_num("10"),
+            1,
+            test_num
+        )
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("06"),
+            memory_addr_for_verify,
+            2 + test_num,
+            test_num,
+            (test_num * 2) % 256,
+        )
+
+
+@cocotb.test()
+async def test_BMI_REL_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TEST_NUM - 4):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_zpg_instruction(
+            dut, helper.hex_to_num("a5"), memory_addr_with_value,1 , 255
+        )  # LDA
+        test_num = 10
+        await helper.test_branch_instruction(
+            dut,
+            helper.hex_to_num("30"),
+        3,
+            test_num
+        )
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("06"),
+            memory_addr_for_verify,
+            4 + test_num,
+            test_num,
+            (test_num * 2) % 256,
+        )
+
+
+
+
 
 @cocotb.test()
 async def test_INX_Base(dut):
