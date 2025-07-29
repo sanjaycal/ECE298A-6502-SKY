@@ -233,9 +233,15 @@ Table of Supported Instructions:
 |-----------------------------------|--------------------|-----------------|---------------|
 |COMPARE ZPG INSTRUCTIONS                                                                  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|CMP ZPG (Compare ZPG with Acc)     | c5 addr-lb         | 6               |  N Z C - - -  |
-|CMP ABS (Compare ABS with Acc)     | cd addr-lb addr-hb | 7               |  N Z C - - -  |
-|CMP IMM (Compare IMM with Acc)     | c9 imm             | 5               |  N Z C - - -  |
+|CPX ZPG (Compare X with ZPG)       | e4 addr-lb         | 6               |  N Z C - - -  |
+|CPX ABS (Compare X with ABS)       | ec addr-lb addr-hb | 7               |  N Z C - - -  |
+|CPX IMM (Compare X with IMM)       | e0 imm             | 5               |  N Z C - - -  |
+|CMP ZPG (Compare Acc with ZPG)     | c5 addr-lb         | 6               |  N Z C - - -  |
+|CMP ABS (Compare Acc with ABS)     | cd addr-lb addr-hb | 7               |  N Z C - - -  |
+|CMP IMM (Compare Acc with IMM)     | c9 imm             | 5               |  N Z C - - -  |
+|CPY ZPG (Compare Y with ZPG)       | c4 addr-lb         | 6               |  N Z C - - -  |
+|CPY ABS (Compare Y with ABS)       | cc addr-lb addr-hb | 7               |  N Z C - - -  |
+|CPY IMM (Compare Y with IMM)       | c0 imm             | 5               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
