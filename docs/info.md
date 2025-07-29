@@ -231,7 +231,7 @@ Table of Supported Instructions:
 |LDA ZPG (Load Accumulator)         | a5 addr-lb         | 6               |  - - - - - -  |
 |LDX ZPG (Load X)                   | a6 addr-lb         | 6               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
-|COMPARE ZPG INSTRUCTIONS                                                                  |
+|COMPARE INSTRUCTIONS                                                                      |
 |-----------------------------------|--------------------|-----------------|---------------|
 |CPX ZPG (Compare X with ZPG)       | e4 addr-lb         | 6               |  N Z C - - -  |
 |CPX ABS (Compare X with ABS)       | ec addr-lb addr-hb | 7               |  N Z C - - -  |
