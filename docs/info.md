@@ -248,6 +248,14 @@ On power-up or after a reset, the processor's internal state is initialized as f
 
 *   **Mandatory NOP Instruction:** For proper initialization and predictable execution, the first instruction at memory address `$0000` **must** be a `NOP` (`$EA`). The processor uses this initial two-cycle instruction to correctly align its internal state machine. Your program's main logic should begin at address `$0001`.
 
+### Contiguous Memory Layout
+
+Your program's machine code (the binary opcodes and operands) must be stored as a continuous block in memory. The processor fetches instructions sequentially, and after an instruction completes, the Program Counter will point to the very next memory address. It expects to find the opcode of the next instruction at that exact location.
+
+You cannot leave empty or unused bytes between your instructions, as the processor would attempt to interpret whatever data is in that gap as a valid instruction, leading to a crash or undefined behavior(though given how we have designed the CPU it will probably just be a NOP).
+
+For example, if a 3-byte instruction like `STA $0210` starts at address `$0003`, it will occupy addresses `$0003` (opcode), `$0004` (operand low byte), and `$0005` (operand high byte). The very next instruction in your program **should** begin at address `$0006`.
+
 ### Known Hardware Limitations
 
 *   **Page Boundary Bug:** There is a known limitation in this hardware implementation that prevents reliable memory access to the **final byte of any memory page**. Programmers must ensure that no instruction opcodes, operands, or data addresses are placed at a memory location ending in `$FF` (e.g., `$00FF`, `$01FF`, `$C3FF`, etc.). Accessing these specific addresses will lead to unpredictable behavior and program failure.
@@ -262,7 +270,7 @@ Here is a simple program that demonstrates the basic principles. This program lo
 
 $0000: EA          ; 1. Mandatory NOP for initialization. The PC is now $0001.
 
-; --- Main program logic begins here ---
+; --- Main program logic begins here, stored contiguously ---
 
 $0001: A9 42       ; 2. LDA #$42 - Load the immediate value $42 into the Accumulator.
                    ;    - Opcode A9 is at $0001.
@@ -276,11 +284,12 @@ $0003: 8D 10 02    ; 3. STA $0210 - Store the contents of the Accumulator ($42)
                    ;    - Address High Byte (02) is at $0005.
                    ;    - After this, PC is $0006.
 
-$0006: EA          ; 4. NOP - Halt execution by entering an infinite NOP loop.
+$0006: EA          ; 4. NOP - The next instruction starts immediately at $0006.
+                   ;    Used here to halt execution by entering an infinite NOP loop.
 $0007: EA          ; ...
 ```
 
-This program correctly follows all guidelines: it starts with a `NOP` at `$0000` and avoids placing any code or data at an `xxFF` address.
+This program correctly follows all guidelines: it starts with a `NOP` at `$0000`, the machine code is laid out sequentially without gaps, and it avoids placing any code or data at an `xxFF` address.
 
 ## Errata
 
