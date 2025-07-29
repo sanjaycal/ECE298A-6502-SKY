@@ -291,7 +291,7 @@ $0007: EA          ; ...
 
 This program correctly follows all guidelines: it starts with a `NOP` at `$0000`, the machine code is laid out sequentially without gaps, and it avoids placing any code or data at an `xxFF` address.
 
-## Errata
+## Addendum 1
 
 Table of Supported Instructions:
 
@@ -335,6 +335,15 @@ Table of Supported Instructions:
 |CPY ABS (Compare Y with ABS)       | cc addr-lb addr-hb | 7               |  N Z C - - -  |
 |CPY IMM (Compare Y with IMM)       | c0 imm             | 5               |  N Z C - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
+BRANCH INSTRUCTIONS                                                                |
+|-----------------------------------|--------------------|-----------------|---------------|
+|BPL REL (Branch if Negative flag is clear)       | 10 rel             | 4               |  - - - - - -  |
+|BMI REL (Branch if Negative flag is set)       | 30 rel             | 4               |  - - - - - -  |
+|BCC REL (Branch if Carry flag is clear)       | 90 rel             | 4               |  - - - - - -  |
+|BCS REL (Branch if Carry flag is set)       | b0 rel             | 4               |  - - - - - -  |
+|BNE REL (Branch if Zero flag is clear)       | d0 rel             | 4               |  - - - - - -  |
+|BEQ REL (Branch if Zero flag is set)       | f0 rel             | 4               |  - - - - - -  |
+|-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TXA (Transfer from X to Acc)       | 8a                 | 2               |  - - - - - -  |
@@ -374,6 +383,7 @@ Table of Supported Instructions:
 |LSR IMM (Logical Shift Right)      | 49 imm             | 5               |  0 Z C - - -  |
 |ROL IMM (Roll Byte Left)           | 29 imm             | 5               |  N Z C - - -  |
 |ROR IMM (Roll Byte Right)          | 49 imm             | 5               |  N Z C - - -  |
+|SBC IMM (Subtract Byte against Accumulator)|  e9 imm                | 5               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |LOAD IMM INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -394,13 +404,13 @@ Table of Supported Instructions:
 |LSR A (Logical Shift Right Acc)    | 4a                 | 4               |  N Z C - - -  |
 |ROL A (Roll Byte Left Acc)         | 2a                 | 4               |  N Z C - - -  |
 |ROR A (Roll Byte Right Acc)        | 6a                 | 4               |  N Z C - - -  |
-|SBC A (Subtract Byte with Acc)     | ea                 | 4               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |OTHER INSTRUCTIONS                                                                        |
 |-----------------------------------|--------------------|-----------------|---------------|
 |NOP (No Op)                        | ea                 | 2               |  - - - - - -  |
 |JMP ABS (Jump)                     | 4c addr-lb addr-hb | 4               |  - - - - - -  |
-
+|CLC REL (Clear Carry Flag)       | 18              | 2               |  - - C - - -  |
+|SEC REL (Set Carry Flag)       | 38              | 2               |  - - C - - -  |
 
 
 
