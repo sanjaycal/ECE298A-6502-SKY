@@ -1055,9 +1055,41 @@ async def test_BEQ_REL_Base(dut):
         
         await helper.reset_cpu(dut)
 
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.run_input_zpg_instruction(
+            dut, helper.hex_to_num("a5"), memory_addr_with_value, 1, 0
+        )  # LDA
+        await helper.run_transfer_instruction(dut, helper.hex_to_num("aa"), 3)  # TAX
         await helper.test_branch_instruction(
             dut,
             helper.hex_to_num("f0"),
+        4,
+            test_num
+        )
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("06"),
+            memory_addr_for_verify,
+            5 + test_num,
+            test_num,
+            (test_num * 2) % 256,
+        )
+
+@cocotb.test()
+async def test_BNE_REL_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(1,MAX_TESTS - 4):
+        memory_addr_for_verify = random.randint(10, 255)
+        
+        await helper.reset_cpu(dut)
+
+        await helper.test_branch_instruction(
+            dut,
+            helper.hex_to_num("d0"),
             1,
             test_num
         )
