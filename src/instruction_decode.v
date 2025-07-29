@@ -203,7 +203,7 @@ always @(*) begin
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `OR;
             processor_status_register_write = `ZERO_FLAG | `NEGATIVE_FLAG;
-        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS) begin
+        end else if(OPCODE == `OP_EOR_ZPG || OPCODE == `OP_EOR_ABS || OPCODE == `OP_EOR_IMM) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             accumulator_enable = `BUF_STORE2_THREE;
             alu_enable = `XOR;
