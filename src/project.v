@@ -184,7 +184,7 @@ module tt_um_6502 (
       next_index_register_y <= bus2;
     end
     //alu stuff
-    if(ALU_op != `NOP && ALU_op != `TMX) begin
+    if(ALU_op != `NOP && ALU_op == `TMX) begin
       next_processor_status_register <= (ALU_flags_output & processor_status_register_write) | (processor_status_register & ~processor_status_register_write);
     end else if (processor_status_register_value[7]==1) begin
       next_processor_status_register <= (processor_status_register_value[6:0] & processor_status_register_write) | (processor_status_register & ~processor_status_register_write);
@@ -198,7 +198,6 @@ module tt_um_6502 (
         pc <= 0;
 
       end else begin
-        processor_status_register <= next_processor_status_register;
         if(input_data_latch_enable == 1) begin
           input_data_latch <= uio_in;
         end
@@ -220,6 +219,7 @@ module tt_um_6502 (
         index_register_y <= 0;
 
       end else begin
+        processor_status_register <= next_processor_status_register;
         accumulator <= next_accumulator;
         data_bus_buffer <= next_data_bus_buffer;
         index_register_x <= next_index_register_x;

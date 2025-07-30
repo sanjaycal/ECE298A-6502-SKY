@@ -3,21 +3,21 @@
 
     //LOAD OPCODES
 
-    `define OP_LD_X_ZPG     8'b10100110
-    `define OP_LD_X_IMM     8'b10100010
+    `define OP_LD_X_ZPG     8'ha6
     `define OP_LD_X_ABS     8'hae
+    `define OP_LD_X_IMM     8'ha2
 
     `define OP_LD_A_ZPG     8'b10100101
-    `define OP_LD_A_IMM     8'ha9
     `define OP_LD_A_ABS     8'had
+    `define OP_LD_A_IMM     8'ha9
 
     `define OP_LD_Y_ZPG     8'ha4
+    `define OP_LD_Y_ABS     8'hac
     `define OP_LD_Y_IMM     8'b10100000
-    `define OP_LD_Y_ABS     8'b10101100
 
     //STORE OPCODES
 
-    `define OP_ST_X_ZPG     8'b10000110
+    `define OP_ST_X_ZPG     8'h86
     `define OP_ST_X_ABS     8'h8e
     
     `define OP_ST_A_ZPG     8'b10000101
@@ -99,8 +99,12 @@
     `define OP_TYA          8'h98
 
     //Branch instructions
-    `define OP_BEQ          8'b11110000
     `define OP_BCS          8'b10110000
+    `define OP_BCC          8'b10010000
+    `define OP_BPL          8'b00010000
+    `define OP_BMI          8'b00110000
+    `define OP_BEQ          8'b11110000
+    `define OP_BNE          8'b11010000
 
     //Set instructions
     `define OP_SEC          8'b00111000
@@ -108,9 +112,17 @@
     `define OP_CLV          8'b10111000
 
     //Compare instructions
-    `define OP_CMP_ZPG      8'b11000101
-    `define OP_CMP_ZPG_X    8'b11010101
-    `define OP_CMP_ABS      8'b11001101
+    `define OP_CPX_ZPG      8'he4
+    `define OP_CPX_ABS      8'hec
+    `define OP_CPX_IMM      8'he0
+
+    `define OP_CMP_ZPG      8'hc5
+    `define OP_CMP_ABS      8'hcd
+    `define OP_CMP_IMM      8'hc9
+
+    `define OP_CPY_ZPG      8'hc4
+    `define OP_CPY_ABS      8'hcc
+    `define OP_CPY_IMM      8'hc0
 
     // MISC OPCODES
     `define OP_JSR          8'b00100000
