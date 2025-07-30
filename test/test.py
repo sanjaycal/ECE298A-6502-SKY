@@ -14,7 +14,7 @@ MAX_TEST_NUM = 255  # for the instruction specific tests
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -43,7 +43,7 @@ async def test_ASL_ZPG_Clear(dut):
 @cocotb.test()
 async def test_ASL_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -63,7 +63,7 @@ async def test_ASL_ZPG_Base(dut):
 @cocotb.test()
 async def test_LSR_ZPG_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -92,7 +92,7 @@ async def test_LSR_ZPG_Clear(dut):
 @cocotb.test()
 async def test_LSR_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -111,7 +111,7 @@ async def test_LSR_ZPG_Base(dut):
 @cocotb.test()
 async def test_ROL_ZPG_Loop(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -143,7 +143,7 @@ async def test_ROL_ZPG_Loop(dut):
 @cocotb.test()
 async def test_ROL_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -162,7 +162,7 @@ async def test_ROL_ZPG_Base(dut):
 @cocotb.test()
 async def test_ROR_ZPG_Loop(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -194,7 +194,7 @@ async def test_ROR_ZPG_Loop(dut):
 @cocotb.test()
 async def test_ROR_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -213,7 +213,7 @@ async def test_ROR_ZPG_Base(dut):
 @cocotb.test()
 async def test_ASL_ABS_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -244,7 +244,7 @@ async def test_ASL_ABS_Clear(dut):
 @cocotb.test()
 async def test_ASL_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -265,7 +265,7 @@ async def test_ASL_ABS_Base(dut):
 @cocotb.test()
 async def test_LSR_ABS_Clear(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -296,7 +296,7 @@ async def test_LSR_ABS_Clear(dut):
 @cocotb.test()
 async def test_LSR_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -317,7 +317,7 @@ async def test_LSR_ABS_Base(dut):
 @cocotb.test()
 async def test_ROL_ABS_Loop(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -351,7 +351,7 @@ async def test_ROL_ABS_Loop(dut):
 @cocotb.test()
 async def test_ROL_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -372,7 +372,7 @@ async def test_ROL_ABS_Base(dut):
 @cocotb.test()
 async def test_ROR_ABS_Loop(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     # test instruction on it's own
@@ -406,7 +406,7 @@ async def test_ROR_ABS_Loop(dut):
 @cocotb.test()
 async def test_ROR_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -426,7 +426,7 @@ async def test_ROR_ABS_Base(dut):
 
 @cocotb.test()
 async def test_LDX_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -442,7 +442,7 @@ async def test_LDX_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_LDX_ABS_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -470,7 +470,7 @@ async def test_LDX_ABS_Base(dut):
 
 @cocotb.test()
 async def test_LDX_IMM_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -487,7 +487,7 @@ async def test_LDX_IMM_Base(dut):
 
 @cocotb.test()
 async def test_LDA_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -503,7 +503,7 @@ async def test_LDA_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_LDA_ABS_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -532,7 +532,7 @@ async def test_LDA_ABS_Base(dut):
 
 @cocotb.test()
 async def test_LDA_IMM_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -549,7 +549,7 @@ async def test_LDA_IMM_Base(dut):
 
 @cocotb.test()
 async def test_LDY_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -565,7 +565,7 @@ async def test_LDY_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_LDY_ABS_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, 256):
@@ -594,7 +594,7 @@ async def test_LDY_ABS_Base(dut):
 
 @cocotb.test()
 async def test_LDY_IMM_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -612,7 +612,7 @@ async def test_LDY_IMM_Base(dut):
 @cocotb.test()
 async def test_AND_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -638,7 +638,7 @@ async def test_AND_ZPG_Base(dut):
 @cocotb.test()
 async def test_AND_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -675,7 +675,7 @@ async def test_AND_ABS_Base(dut):
 @cocotb.test()
 async def test_AND_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -710,7 +710,7 @@ async def test_AND_IMM_Base(dut):
 @cocotb.test()
 async def test_ORA_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -736,7 +736,7 @@ async def test_ORA_ZPG_Base(dut):
 @cocotb.test()
 async def test_ORA_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -773,7 +773,7 @@ async def test_ORA_ABS_Base(dut):
 @cocotb.test()
 async def test_ORA_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -808,7 +808,7 @@ async def test_ORA_IMM_Base(dut):
 @cocotb.test()
 async def test_EOR_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -834,7 +834,7 @@ async def test_EOR_ZPG_Base(dut):
 @cocotb.test()
 async def test_EOR_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -871,7 +871,7 @@ async def test_EOR_ABS_Base(dut):
 @cocotb.test()
 async def test_EOR_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -906,7 +906,7 @@ async def test_EOR_IMM_Base(dut):
 @cocotb.test()
 async def test_CPX_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -953,7 +953,7 @@ async def test_CPX_ZPG_Base(dut):
 @cocotb.test()
 async def test_CPX_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1001,7 +1001,7 @@ async def test_CPX_ABS_Base(dut):
 @cocotb.test()
 async def test_CPX_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1047,7 +1047,7 @@ async def test_CPX_IMM_Base(dut):
 @cocotb.test()
 async def test_CMP_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1094,7 +1094,7 @@ async def test_CMP_ZPG_Base(dut):
 @cocotb.test()
 async def test_CMP_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1142,7 +1142,7 @@ async def test_CMP_ABS_Base(dut):
 @cocotb.test()
 async def test_CMP_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1188,7 +1188,7 @@ async def test_CMP_IMM_Base(dut):
 @cocotb.test()
 async def test_CPY_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1235,7 +1235,7 @@ async def test_CPY_ZPG_Base(dut):
 @cocotb.test()
 async def test_CPY_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1283,7 +1283,7 @@ async def test_CPY_ABS_Base(dut):
 @cocotb.test()
 async def test_CPY_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1329,7 +1329,7 @@ async def test_CPY_IMM_Base(dut):
 @cocotb.test()
 async def test_ADC_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -1355,7 +1355,7 @@ async def test_ADC_ZPG_Base(dut):
 @cocotb.test()
 async def test_ADC_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -1392,7 +1392,7 @@ async def test_ADC_ABS_Base(dut):
 @cocotb.test()
 async def test_ADC_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1427,7 +1427,7 @@ async def test_ADC_IMM_Base(dut):
 @cocotb.test()
 async def test_SBC_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1453,7 +1453,7 @@ async def test_SBC_ZPG_Base(dut):
 @cocotb.test()
 async def test_SBC_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1491,7 +1491,7 @@ async def test_SBC_ABS_Base(dut):
 @cocotb.test()
 async def test_SBC_IMM_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(256):
@@ -1526,7 +1526,7 @@ async def test_SBC_IMM_Base(dut):
 @cocotb.test()
 async def test_INC_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -1545,7 +1545,7 @@ async def test_INC_ZPG_Base(dut):
 @cocotb.test()
 async def test_INC_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -1567,7 +1567,7 @@ async def test_INC_ABS_Base(dut):
 @cocotb.test()
 async def test_DEC_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -1588,7 +1588,7 @@ async def test_DEC_ABS_Base(dut):
 @cocotb.test()
 async def test_JMP_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(MAX_TEST_NUM):
@@ -1619,7 +1619,7 @@ async def test_JMP_ABS_Base(dut):
 @cocotb.test()
 async def test_BCS_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM - 4):
@@ -1647,7 +1647,7 @@ async def test_BCS_REL_Base(dut):
 @cocotb.test()
 async def test_BCC_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM - 4):
@@ -1679,7 +1679,7 @@ async def test_BCC_REL_Base(dut):
 @cocotb.test()
 async def test_BEQ_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM - 5):
@@ -1707,7 +1707,7 @@ async def test_BEQ_REL_Base(dut):
 @cocotb.test()
 async def test_BNE_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM - 4):
@@ -1729,7 +1729,7 @@ async def test_BNE_REL_Base(dut):
 @cocotb.test()
 async def test_BPL_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM - 4):
@@ -1751,7 +1751,7 @@ async def test_BPL_REL_Base(dut):
 @cocotb.test()
 async def test_BMI_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM - 4):
@@ -1778,7 +1778,7 @@ async def test_BMI_REL_Base(dut):
 
 @cocotb.test()
 async def test_INX_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1800,7 +1800,7 @@ async def test_INX_Base(dut):
 
 @cocotb.test()
 async def test_INY_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1822,7 +1822,7 @@ async def test_INY_Base(dut):
 
 @cocotb.test()
 async def test_DEX_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1844,7 +1844,7 @@ async def test_DEX_Base(dut):
 
 @cocotb.test()
 async def test_DEY_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1866,7 +1866,7 @@ async def test_DEY_Base(dut):
 
 @cocotb.test()
 async def test_ASL_A_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1888,7 +1888,7 @@ async def test_ASL_A_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_LSR_A_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1910,7 +1910,7 @@ async def test_LSR_A_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_ROL_A_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1932,7 +1932,7 @@ async def test_ROL_A_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_ROR_A_ZPG_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1954,7 +1954,7 @@ async def test_ROR_A_ZPG_Base(dut):
 
 @cocotb.test()
 async def test_TAX_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1971,7 +1971,7 @@ async def test_TAX_Base(dut):
 
 @cocotb.test()
 async def test_TAY_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -1988,7 +1988,7 @@ async def test_TAY_Base(dut):
 
 @cocotb.test()
 async def test_TXA_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -2005,7 +2005,7 @@ async def test_TXA_Base(dut):
 
 @cocotb.test()
 async def test_TYA_Base(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
     for test_num in range(1, MAX_TEST_NUM):
@@ -2022,10 +2022,10 @@ async def test_TYA_Base(dut):
 
 @cocotb.test()
 async def test_all_load_transfer_store_fuzz(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(MAX_TESTS):
+    for _ in range(MAX_TESTS):
         await helper.reset_cpu(dut)
         register_state = [0, 0, 0]
         pc = 1
@@ -2100,10 +2100,10 @@ async def test_all_load_transfer_store_fuzz(dut):
 
 @cocotb.test()
 async def test_add_matrix_fuzz(dut):
-    clock = Clock(dut.clk, 50, units="ns")
+    clock = Clock(dut.clk, 25, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(MAX_TESTS):
+    for _ in range(MAX_TESTS):
         await helper.reset_cpu(dut)
 
         memory_page_0 = [
