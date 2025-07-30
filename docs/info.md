@@ -268,7 +268,7 @@ On power-up or after a reset, the processor's internal state is initialized as f
 
 Your program's machine code (the binary opcodes and operands) must be stored as a continuous block in memory. The processor fetches instructions sequentially, and after an instruction completes, the Program Counter will point to the very next memory address. It expects to find the opcode of the next instruction at that exact location.
 
-You cannot leave empty or unused bytes between your instructions, as the processor would attempt to interpret whatever data is in that gap as a valid instruction, leading to a crash or undefined behavior(though given how we have designed the CPU it will probably just be a NOP).
+You cannot leave empty or unused bytes between your instructions, as the processor would attempt to interpret whatever data is in that gap as a valid instruction, leading to a crash or undefined behavior (though given how we have designed the CPU, it will most likely just be a NOP).
 
 For example, if a 3-byte instruction like `STA $0210` starts at address `$0003`, it will occupy addresses `$0003` (opcode), `$0004` (operand low byte), and `$0005` (operand high byte). The very next instruction in your program **should** begin at address `$0006`.
 
@@ -276,32 +276,44 @@ For example, if a 3-byte instruction like `STA $0210` starts at address `$0003`,
 
 *   **Page Boundary Bug:** There is a known limitation in this hardware implementation that prevents reliable memory access to the **final byte of any memory page**. Programmers must ensure that no instruction opcodes, operands, or data addresses are placed at a memory location ending in `$FF` (e.g., `$00FF`, `$01FF`, `$C3FF`, etc.). Accessing these specific addresses will lead to unpredictable behavior and program failure.
 
-### Example Program: Load and Store
+### Example Program: 8-Bit Multiplication
 
-Here is a simple program that demonstrates the basic principles. This program loads the immediate value `$42` into the Accumulator (A) and then stores it at memory location `$0210`.
+Here is a program that multiplies two 8-bit numbers using repeated addition. This demonstrates looping, branching, and memory manipulation. The program multiplies the number at address `$00FA` by the number at `$00FB` and stores the 8-bit result at `$00FC`.
 
 ```assembly
-; Program Start
-; The processor begins execution at $0000 after reset.
+; Program to multiply Number A ($FA) by Number B ($FB).
+; The final 8-bit result is stored in $FC.
 
-$0000: EA          ; 1. Mandatory NOP for initialization.
-                   ;    The PC is now $0001.
+; --- Memory Setup ---
+; $FA: Multiplicand (Number A)
+; $FB: Multiplier   (Number B, used as the loop counter)
+; $FC: Result      (Initialized to 0)
 
-; --- Main program logic begins here, stored contiguously ---
+; --- Initialization ---
+$0000: EA          ; Mandatory NOP for startup.
 
-$0001: A9 42       ; 2. LDA #$42 - Load the immediate value $42 
-                   ;               into the Accumulator.
-                   ;    - Opcode A9 is at $0001.
-                   ;    - Operand 42 is at $0002.
-                   ;    - After this, PC is $0003.
+$0001: A9 00       ; LDA #$00. Clear the accumulator.
+$0003: 85 FC       ; STA $FC. Initialize the result location at $FC to zero.
 
-$0003: 8D 10 02    ; 3. STA $0210 - Store the contents of 
-                   ;                the Accumulator ($42)
-                   ;    at address $0210.
-                   ;    - Opcode 8D is at $0003.
-                   ;    - Address Low Byte (10) is at $0004.
-                   ;    - Address High Byte (02) is at $0005.
-                   ;    - After this, PC is $0006.
+; --- Main Loop and Comparison ---
+$0005: loop:
+       A5 FB       ; Load the counter (B) from memory into the accumulator.
+$0007: C9 00       ; CMP #$00. Compare the accumulator's value with the immediate value 0.
+                   ; This sets the Zero flag if the counter has reached zero.
+$0009: F0 0C       ; BEQ end_program. If the Zero flag is set (counter is 0), branch to the end.
+                   ; Branch target: Current PC+2+offset = $000B + $0C = $0017.
+
+; --- Loop Body (Executes if B is not zero) ---
+$000B: C6 FB       ; DEC $FB. Decrement the counter value in memory.
+$000D: A5 FC       ; LDA $FC. Load the current running total from memory into the accumulator.
+$000F: 65 FA       ; ADC $FA. Add number A to the running total.
+$0011: 85 FC       ; STA $FC. Store the new total back into the result location.
+$0013: 4C 05 00    ; JMP loop. Jump unconditionally back to the start of the loop.
+
+; --- End of Program ---
+; The final result is already in memory at $FC. We can halt here.
+$0016: end_program:
+       4C 16 00    ; JMP end_program. Halt the CPU by jumping to the same address indefinitely.
 ```
 
 This program correctly follows all guidelines: it starts with a `NOP` at `$0000`, the machine code is laid out sequentially without gaps, and it avoids placing any code or data at an `xxFF` address.
