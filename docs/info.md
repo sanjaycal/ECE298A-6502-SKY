@@ -318,8 +318,8 @@ Table of Supported Instructions:
 |LSR ZPG (Logical Shift Right)      | 46 addr-lb         | 7               |  0 Z C - - -  |
 |ROL ZPG (Roll Byte Left)           | 26 addr-lb         | 7               |  N Z C - - -  |
 |ROR ZPG (Roll Byte Right)          | 46 addr-lb         | 7               |  N Z C - - -  |
-|INC ZPG (Increment Byte)           | c6 addr-lb         | 7               |  N Z - - - -  |
-|DEC ZPG (Decrement Byte)           | e6 addr-lb         | 7               |  N Z - - - -  |
+|INC ZPG (Increment Byte)           | e6 addr-lb         | 7               |  N Z - - - -  |
+|DEC ZPG (Decrement Byte)           | c6 addr-lb         | 7               |  N Z - - - -  |
 |AND ZPG (AND Byte with Acc)        | 35 addr-lb         | 6               |  N Z - - - -  |
 |ORA ZPG (OR Byte with Acc)         | 05 addr-lb         | 6               |  N Z - - - -  |
 |EOR ZPG (XOR Byte with Acc)        | 55 addr-lb         | 6               |  N Z - - - -  |

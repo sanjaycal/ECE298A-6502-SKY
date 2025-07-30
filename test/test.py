@@ -1565,6 +1565,25 @@ async def test_INC_ABS_Base(dut):
 
 
 @cocotb.test()
+async def test_DEC_ZPG_Base(dut):
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 25, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(MAX_TEST_NUM):
+        memory_addr_with_value = random.randint(10, 255)
+        await helper.reset_cpu(dut)
+        await helper.test_zpg_instruction(
+            dut,
+            helper.hex_to_num("c6"),
+            memory_addr_with_value,
+            1,
+            test_num,
+            (test_num - 1) % 256,
+        )  # DEC ZPG
+
+
+@cocotb.test()
 async def test_DEC_ABS_Base(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 25, units="ns")
@@ -2108,7 +2127,7 @@ async def test_add_matrix_fuzz(dut):
 
         memory_page_0 = [
             helper.hex_to_num("ea"),  # NOP
-            helper.hex_to_num("a2"),  # LDX
+            helper.hex_to_num("a2"),  # LDX IMM
             0,
             helper.hex_to_num("6d"),  # ADC ABS
             5,
@@ -2205,3 +2224,123 @@ async def test_add_matrix_fuzz(dut):
         # now we check the final matrix
         for i in range(256):
             assert (memory_page_5[i] + memory_page_6[i]) % 256 == memory_page_7[i]
+
+
+@cocotb.test()
+async def test_multiply_nums_fuzz(dut):
+    clock = Clock(dut.clk, 25, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for _ in range(MAX_TESTS):
+        await helper.reset_cpu(dut)
+
+        # initialize memory page 0
+        memory_page_0 = [0 for _ in range(256)]
+
+        memory_page_0[0] = helper.hex_to_num("ea")  # NOP
+
+        memory_page_0[1] = helper.hex_to_num("c5")  # CMP ZPG
+        memory_page_0[2] = 251
+
+        memory_page_0[3] = helper.hex_to_num("d0")  # BNE
+        memory_page_0[4] = 4
+
+        # Jump if the second number is 0
+        memory_page_0[5] = helper.hex_to_num("4c")  # JMP ABS
+        memory_page_0[6] = 0
+        memory_page_0[7] = 100
+
+        # if the second number is not 0
+        memory_page_0[8] = helper.hex_to_num("65")  # ADC ZPG
+        memory_page_0[9] = 250
+        memory_page_0[10] = helper.hex_to_num("c6")  # DEC ZPG
+        memory_page_0[11] = 251
+
+        # return to the start
+        memory_page_0[12] = helper.hex_to_num("4c")  # JMP ABS
+        memory_page_0[13] = 0
+        memory_page_0[14] = 3
+
+        # Output Value
+        memory_page_0[100] = helper.hex_to_num("85")  # ADC ZPG
+        memory_page_0[101] = 252
+
+        # Trap Self meant to emulate the rest of the program
+        memory_page_0[102] = helper.hex_to_num("4c")  # JMP ABS
+        memory_page_0[103] = 0
+        memory_page_0[104] = 102
+
+        # starting nums
+        memory_page_0[250] = random.randint(0, 255)
+        memory_page_0[251] = random.randint(0, 255)
+        memory_page_0[252] = 0
+
+        a = memory_page_0[250]
+        b = memory_page_0[251]
+        acc = 0
+        t = 0
+
+        await helper.run_input_zpg_instruction(
+            dut,
+            memory_page_0[1],
+            memory_page_0[2],
+            1,
+            memory_page_0[memory_page_0[2]],
+        )  # CPX ZPG
+
+        while t < 500:  # guarantee that the number is multiplied by the end
+            await helper.test_branch_instruction(
+                dut, memory_page_0[3], 3, memory_page_0[4]
+            )
+            if memory_page_0[251] == 0:
+                await helper.run_jmp_abs_instruction(
+                    dut,
+                    memory_page_0[5],
+                    memory_page_0[6],
+                    memory_page_0[7],
+                    5,
+                )
+
+                await helper.test_zpg_instruction(
+                    dut, memory_page_0[100], memory_page_0[101], 100, 0, (a * b) % 256
+                )  # STA
+                memory_page_0[252] = (a * b) % 256
+
+                for _ in range(5):
+                    await helper.run_jmp_abs_instruction(
+                        dut,
+                        memory_page_0[102],
+                        memory_page_0[103],
+                        memory_page_0[104],
+                        102,
+                    )  # let the jump run a few times
+
+                t = 1000
+            else:
+                await helper.run_input_zpg_instruction(
+                    dut,
+                    memory_page_0[8],
+                    memory_page_0[9],
+                    8,
+                    memory_page_0[memory_page_0[9]],
+                )  # ADC
+                acc += a
+                await helper.test_zpg_instruction(
+                    dut,
+                    memory_page_0[10],
+                    memory_page_0[11],
+                    10,
+                    memory_page_0[memory_page_0[11]],
+                    (memory_page_0[251] - 1) % 256,
+                )  # DEC ZPG
+                memory_page_0[251] -= 1
+                memory_page_0[251] %= 256
+                await helper.run_jmp_abs_instruction(
+                    dut,
+                    memory_page_0[12],
+                    memory_page_0[13],
+                    memory_page_0[14],
+                    12,
+                )
+            t += 1
+        assert memory_page_0[252] == (a * b) % 256

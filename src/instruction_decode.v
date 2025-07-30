@@ -446,6 +446,8 @@ always @(*) begin
         end else if(OPCODE == `OP_BMI && processor_status_register_read[`NEGATIVE_FLAG] == 1) begin
             input_data_latch_enable = `BUF_STORE_TWO;
             pc_enable = `PC_TAKE_BRANCH;
+        end else begin
+            pc_enable = `PC_INC_ONE;
         end
         NEXT_STATE = S_IDLE;
     end
