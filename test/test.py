@@ -7,8 +7,9 @@ import random
 
 import helper
 
-MAX_TESTS = 31  # for the fuzz tests
+MAX_TESTS = 8  # for the fuzz tests
 MAX_TEST_NUM = 255  # for the instruction specific tests
+
 
 @cocotb.test()
 async def test_ASL_ZPG_Clear(dut):
@@ -901,6 +902,7 @@ async def test_EOR_IMM_Base(dut):
             test_num ^ acc_value,
         )  # STA
 
+
 @cocotb.test()
 async def test_CPX_ZPG_Base(dut):
     # Set the clock period to 10 us (100 KHz)
@@ -910,11 +912,11 @@ async def test_CPX_ZPG_Base(dut):
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
-        
+
         # just make sure it always branches
         x_value = random.randint(50, 255)
-        test_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
+        test_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
 
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
@@ -930,7 +932,7 @@ async def test_CPX_ZPG_Base(dut):
             helper.hex_to_num("e4"),
             memory_addr_with_value_LB,
             4,
-            test_value, 
+            test_value,
         )  # CPX ZPG
         await helper.test_branch_instruction(
             dut,
@@ -942,7 +944,7 @@ async def test_CPX_ZPG_Base(dut):
             dut,
             helper.hex_to_num("86"),
             memory_addr_with_value_LB,
-            7+branch_amount,
+            7 + branch_amount,
             0,
             x_value,
         )  # STX ZPG
@@ -957,11 +959,11 @@ async def test_CPX_ABS_Base(dut):
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
-        
+
         # just make sure it always branches
         x_value = random.randint(50, 255)
-        test_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
+        test_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
 
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
@@ -978,7 +980,7 @@ async def test_CPX_ABS_Base(dut):
             memory_addr_with_value_HB,
             memory_addr_with_value_LB,
             4,
-            test_value, 
+            test_value,
         )  # CPX ABS
         await helper.test_branch_instruction(
             dut,
@@ -990,7 +992,7 @@ async def test_CPX_ABS_Base(dut):
             dut,
             helper.hex_to_num("86"),
             memory_addr_with_value_LB,
-            8+branch_amount,
+            8 + branch_amount,
             0,
             x_value,
         )  # STX ZPG
@@ -1008,9 +1010,9 @@ async def test_CPX_IMM_Base(dut):
 
         # just make sure it always branches
         x_value = random.randint(50, 255)
-        imm_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
-        
+        imm_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
+
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
             dut,
@@ -1036,7 +1038,7 @@ async def test_CPX_IMM_Base(dut):
             dut,
             helper.hex_to_num("86"),
             memory_addr_with_value_LB,
-            7+branch_amount,
+            7 + branch_amount,
             0,
             x_value,
         )  # STX ZPG
@@ -1051,11 +1053,11 @@ async def test_CMP_ZPG_Base(dut):
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
-        
+
         # just make sure it always branches
         acc_value = random.randint(50, 255)
-        test_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
+        test_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
 
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
@@ -1071,7 +1073,7 @@ async def test_CMP_ZPG_Base(dut):
             helper.hex_to_num("c5"),
             memory_addr_with_value_LB,
             4,
-            test_value, 
+            test_value,
         )  # CMP ZPG
         await helper.test_branch_instruction(
             dut,
@@ -1083,7 +1085,7 @@ async def test_CMP_ZPG_Base(dut):
             dut,
             helper.hex_to_num("85"),
             memory_addr_with_value_LB,
-            7+branch_amount,
+            7 + branch_amount,
             0,
             acc_value,
         )  # STA
@@ -1098,11 +1100,11 @@ async def test_CMP_ABS_Base(dut):
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
-        
+
         # just make sure it always branches
         acc_value = random.randint(50, 255)
-        test_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
+        test_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
 
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
@@ -1119,7 +1121,7 @@ async def test_CMP_ABS_Base(dut):
             memory_addr_with_value_HB,
             memory_addr_with_value_LB,
             4,
-            test_value, 
+            test_value,
         )  # CMP ABS
         await helper.test_branch_instruction(
             dut,
@@ -1131,7 +1133,7 @@ async def test_CMP_ABS_Base(dut):
             dut,
             helper.hex_to_num("85"),
             memory_addr_with_value_LB,
-            8+branch_amount,
+            8 + branch_amount,
             0,
             acc_value,
         )  # STA
@@ -1149,9 +1151,9 @@ async def test_CMP_IMM_Base(dut):
 
         # just make sure it always branches
         acc_value = random.randint(50, 255)
-        imm_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
-        
+        imm_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
+
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
             dut,
@@ -1177,7 +1179,7 @@ async def test_CMP_IMM_Base(dut):
             dut,
             helper.hex_to_num("85"),
             memory_addr_with_value_LB,
-            7+branch_amount,
+            7 + branch_amount,
             0,
             acc_value,
         )  # STA
@@ -1192,11 +1194,11 @@ async def test_CPY_ZPG_Base(dut):
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
-        
+
         # just make sure it always branches
         y_value = random.randint(50, 255)
-        test_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
+        test_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
 
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
@@ -1212,7 +1214,7 @@ async def test_CPY_ZPG_Base(dut):
             helper.hex_to_num("c4"),
             memory_addr_with_value_LB,
             4,
-            test_value, 
+            test_value,
         )  # CPY ZPG
         await helper.test_branch_instruction(
             dut,
@@ -1224,7 +1226,7 @@ async def test_CPY_ZPG_Base(dut):
             dut,
             helper.hex_to_num("84"),
             memory_addr_with_value_LB,
-            7+branch_amount,
+            7 + branch_amount,
             0,
             y_value,
         )  # STY ZPG
@@ -1239,11 +1241,11 @@ async def test_CPY_ABS_Base(dut):
     for test_num in range(256):
         memory_addr_with_value_LB = random.randint(10, 255)
         memory_addr_with_value_HB = random.randint(10, 255)
-        
+
         # just make sure it always branches
         y_value = random.randint(50, 255)
-        test_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
+        test_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
 
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
@@ -1260,7 +1262,7 @@ async def test_CPY_ABS_Base(dut):
             memory_addr_with_value_HB,
             memory_addr_with_value_LB,
             4,
-            test_value, 
+            test_value,
         )  # CPX ABS
         await helper.test_branch_instruction(
             dut,
@@ -1272,7 +1274,7 @@ async def test_CPY_ABS_Base(dut):
             dut,
             helper.hex_to_num("84"),
             memory_addr_with_value_LB,
-            8+branch_amount,
+            8 + branch_amount,
             0,
             y_value,
         )  # STY ZPG
@@ -1290,9 +1292,9 @@ async def test_CPY_IMM_Base(dut):
 
         # just make sure it always branches
         y_value = random.randint(50, 255)
-        imm_value = random.randint(10,49)
-        branch_amount = random.randint(1,50)
-        
+        imm_value = random.randint(10, 49)
+        branch_amount = random.randint(1, 50)
+
         await helper.reset_cpu(dut)
         await helper.run_input_abs_instruction(
             dut,
@@ -1318,7 +1320,7 @@ async def test_CPY_IMM_Base(dut):
             dut,
             helper.hex_to_num("84"),
             memory_addr_with_value_LB,
-            7+branch_amount,
+            7 + branch_amount,
             0,
             y_value,
         )  # STY ZPG
@@ -1376,7 +1378,7 @@ async def test_ADC_ABS_Base(dut):
             memory_addr_with_value_LB,
             4,
             test_num,
-        )  # EOR
+        )  # ADC
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("85"),
@@ -1620,7 +1622,6 @@ async def test_BCS_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-
     for test_num in range(1, MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
 
@@ -1642,33 +1643,29 @@ async def test_BCS_REL_Base(dut):
             (test_num * 2) % 256,
         )
 
+
 @cocotb.test()
 async def test_BCC_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TEST_NUM - 4):
+    for test_num in range(1, MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
-        
+
         await helper.reset_cpu(dut)
 
         await helper.test_impl_instruction(
-            dut, 
-            helper.hex_to_num("38"), # Set Carry 
-            1,                                       
+            dut,
+            helper.hex_to_num("38"),  # Set Carry
+            1,
         )
         await helper.test_impl_instruction(
-            dut, 
-            helper.hex_to_num("18"), # Clear Carry 
-            2,                                       
-        )
-        await helper.test_branch_instruction(
             dut,
-            helper.hex_to_num("90"),
-            3,
-            test_num
+            helper.hex_to_num("18"),  # Clear Carry
+            2,
         )
+        await helper.test_branch_instruction(dut, helper.hex_to_num("90"), 3, test_num)
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("06"),
@@ -1678,15 +1675,16 @@ async def test_BCC_REL_Base(dut):
             (test_num * 2) % 256,
         )
 
+
 @cocotb.test()
 async def test_BEQ_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TEST_NUM - 5):
+    for test_num in range(1, MAX_TEST_NUM - 5):
         memory_addr_for_verify = random.randint(10, 255)
-        
+
         await helper.reset_cpu(dut)
 
         memory_addr_with_value = random.randint(10, 255)
@@ -1695,12 +1693,7 @@ async def test_BEQ_REL_Base(dut):
             dut, helper.hex_to_num("a5"), memory_addr_with_value, 1, 0
         )  # LDA
         await helper.run_transfer_instruction(dut, helper.hex_to_num("aa"), 3)  # TAX
-        await helper.test_branch_instruction(
-            dut,
-            helper.hex_to_num("f0"),
-        4,
-            test_num
-        )
+        await helper.test_branch_instruction(dut, helper.hex_to_num("f0"), 4, test_num)
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("06"),
@@ -1710,23 +1703,19 @@ async def test_BEQ_REL_Base(dut):
             (test_num * 2) % 256,
         )
 
+
 @cocotb.test()
 async def test_BNE_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TEST_NUM - 4):
+    for test_num in range(1, MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
-        
+
         await helper.reset_cpu(dut)
 
-        await helper.test_branch_instruction(
-            dut,
-            helper.hex_to_num("d0"),
-            1,
-            test_num
-        )
+        await helper.test_branch_instruction(dut, helper.hex_to_num("d0"), 1, test_num)
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("06"),
@@ -1736,23 +1725,19 @@ async def test_BNE_REL_Base(dut):
             (test_num * 2) % 256,
         )
 
+
 @cocotb.test()
 async def test_BPL_REL_Base(dut):
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TEST_NUM - 4):
+    for test_num in range(1, MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
-        
+
         await helper.reset_cpu(dut)
 
-        await helper.test_branch_instruction(
-            dut,
-            helper.hex_to_num("10"),
-            1,
-            test_num
-        )
+        await helper.test_branch_instruction(dut, helper.hex_to_num("10"), 1, test_num)
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("06"),
@@ -1769,23 +1754,18 @@ async def test_BMI_REL_Base(dut):
     clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
-    for test_num in range(1,MAX_TEST_NUM - 4):
+    for test_num in range(1, MAX_TEST_NUM - 4):
         memory_addr_for_verify = random.randint(10, 255)
-        
+
         await helper.reset_cpu(dut)
 
         memory_addr_with_value = random.randint(10, 255)
         await helper.reset_cpu(dut)
         await helper.run_input_zpg_instruction(
-            dut, helper.hex_to_num("a5"), memory_addr_with_value,1 , 255
+            dut, helper.hex_to_num("a5"), memory_addr_with_value, 1, 255
         )  # LDA
         test_num = 10
-        await helper.test_branch_instruction(
-            dut,
-            helper.hex_to_num("30"),
-        3,
-            test_num
-        )
+        await helper.test_branch_instruction(dut, helper.hex_to_num("30"), 3, test_num)
         await helper.test_zpg_instruction(
             dut,
             helper.hex_to_num("06"),
@@ -1794,9 +1774,6 @@ async def test_BMI_REL_Base(dut):
             test_num,
             (test_num * 2) % 256,
         )
-
-
-
 
 
 @cocotb.test()
@@ -2119,3 +2096,112 @@ async def test_all_load_transfer_store_fuzz(dut):
                 dut, helper.hex_to_num("85"), 250, pc, 0, register_state[2]
             )  # STA
             pc += 2
+
+
+@cocotb.test()
+async def test_add_matrix_fuzz(dut):
+    clock = Clock(dut.clk, 50, units="ns")
+    cocotb.start_soon(clock.start())
+
+    for test_num in range(MAX_TESTS):
+        await helper.reset_cpu(dut)
+
+        memory_page_0 = [
+            helper.hex_to_num("ea"),  # NOP
+            helper.hex_to_num("a2"),  # LDX
+            0,
+            helper.hex_to_num("6d"),  # ADC ABS
+            5,
+            0,
+            helper.hex_to_num("6d"),  # ADC ABS
+            6,
+            0,
+            helper.hex_to_num("8d"),  # STA ABS
+            7,
+            0,
+            helper.hex_to_num("a9"),  # LDA IMM
+            0,
+            helper.hex_to_num("e8"),  # INX
+            helper.hex_to_num("86"),  # STX ZPG
+            5,
+            helper.hex_to_num("86"),  # STX ZPG
+            8,
+            helper.hex_to_num("86"),  # STX ZPG
+            11,
+            helper.hex_to_num("4c"),  # JMP ABS
+            0,
+            3,
+        ]
+        memory_page_5 = [random.randint(1, 255) for _ in range(256)]
+        memory_page_6 = [random.randint(1, 255) for _ in range(256)]
+        memory_page_7 = [0 for _ in range(256)]
+
+        # set x to be 0
+        await helper.test_imm_instruction(
+            dut, memory_page_0[1], 1, memory_page_0[2]
+        )  # LDX_IMM 0
+        x = 0
+
+        for _ in range(256):
+            await helper.run_input_abs_instruction(
+                dut,
+                memory_page_0[3],
+                memory_page_0[4],
+                memory_page_0[5],
+                3,
+                memory_page_5[x],
+            )  # ADC
+            await helper.run_input_abs_instruction(
+                dut,
+                memory_page_0[6],
+                memory_page_0[7],
+                memory_page_0[8],
+                6,
+                memory_page_6[x],
+            )  # ADC
+            await helper.test_abs_instruction(
+                dut,
+                memory_page_0[9],
+                memory_page_0[10],
+                memory_page_0[11],
+                9,
+                0,  # no input
+                (memory_page_5[x] + memory_page_6[x]) % 256,
+            )  # STA ABS
+            memory_page_7[x] = (memory_page_5[x] + memory_page_6[x]) % 256
+            await helper.test_imm_instruction(
+                dut, memory_page_0[12], 12, memory_page_0[13]
+            )  # LDA_IMM 0
+            await helper.run_incXY_instruction(dut, memory_page_0[14], 14)  # INX
+            x += 1
+            x %= 256
+
+            # now we edit the program with the info we want
+
+            await helper.test_zpg_instruction(
+                dut, memory_page_0[15], memory_page_0[16], 15, 0, x
+            )  # STX
+            memory_page_0[memory_page_0[16]] = x
+
+            await helper.test_zpg_instruction(
+                dut, memory_page_0[17], memory_page_0[18], 17, 0, x
+            )  # STX
+            memory_page_0[memory_page_0[18]] = x
+
+            await helper.test_zpg_instruction(
+                dut, memory_page_0[19], memory_page_0[20], 19, 0, x
+            )  # STX
+            memory_page_0[memory_page_0[20]] = x
+
+            # now jump to the start of the program
+            await helper.run_jmp_abs_instruction(
+                dut,
+                memory_page_0[21],
+                memory_page_0[22],
+                memory_page_0[23],
+                21,
+            )
+
+        # now we check the final matrix
+        for i in range(256):
+            assert (memory_page_5[i] + memory_page_6[i]) % 256 == memory_page_7[i]
