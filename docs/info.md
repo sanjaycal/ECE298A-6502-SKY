@@ -65,7 +65,7 @@ A unique characteristic of this design is its clocking scheme. The internal CPU 
 This is a deliberate design choice to manage the physical pin limitations of the hardware.
 
 *   **Address Bus:** The 16-bit address bus (`ab`) is too wide for the available output pins. It is therefore multiplexed and output via the 8-bit `uo_out` port over two consecutive clock cycles.
-*   **Data Bus:** The 8-bit bidirectional data bus is handled by the `uio_in`, `uio_out`, and `uio_oe` pins, with the `rw` signal controlling the direction of data flow.
+*   **Data Bus:** The 8-bit bidirectional data bus is handled by the `uio_in`, `uio_out`, and `uio_oe` pins, whether to read or write to memory is multiplexed with the data we want on the bus(though this is a vestige of before we realized we could just use `uio_oe` and that is the recommended method now, thus you can just ignore the rw flag on the off cycle)
 
 *  **External Memory:** We make the assumption that as soon as the full address has been put to the `uo_out` port, the external memory can return with the value, or finish a write transaction **By the start of the next clock cycle**
 
