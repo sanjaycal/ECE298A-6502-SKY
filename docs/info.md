@@ -130,7 +130,7 @@ The operand for the instruction is the literal value contained in the byte immed
     *   **Cycle 4 (Hold):** The accumulator reads from `bus2` with the final value
 ---
 
-### 3. Relative Addressing
+### 4. Relative Addressing
 
 Like the previous addressing mode, the operand for the instruction is the literal value contained in the byte immediately following the opcode. The operand is an unsigned number who's value is added to the program counter if the branch condition is true.
 
