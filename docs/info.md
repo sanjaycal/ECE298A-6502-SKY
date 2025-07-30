@@ -290,25 +290,25 @@ Here is a program that multiplies two 8-bit numbers using repeated addition. Thi
 ; $FC: Result      (Initialized to 0)
 
 ; --- Initialization ---
-$0000: EA          ; Mandatory NOP for startup.
+$0000: EA      ; Mandatory NOP for startup.
 
-$0001: A9 00       ; LDA #$00. Clear the accumulator.
-$0003: 85 FC       ; STA $FC. Initialize the result location at $FC to zero.
+$0001: A9 00   ; LDA #$00. Clear the accumulator.
+$0003: 85 FC   ; STA $FC. Initialize the result location at $FC to zero.
 
 ; --- Main Loop and Comparison ---
 $0005: loop:
-       A5 FB       ; Load the counter (B) from memory into the accumulator.
-$0007: C9 00       ; CMP #$00. Compare the accumulator's value with the immediate value 0.
-                   ; This sets the Zero flag if the counter has reached zero.
-$0009: F0 0C       ; BEQ end_program. If the Zero flag is set (counter is 0), branch to the end.
-                   ; Branch target: Current PC+2+offset = $000B + $0C = $0017.
+       A5 FB   ; Load the counter (B) from memory into the accumulator.
+$0007: C9 00   ; CMP #$00. Compare the accumulator's value with the immediate value 0.
+               ; This sets the Zero flag if the counter has reached zero.
+$0009: F0 0C   ; BEQ end_program. If the Zero flag is set (counter is 0), branch to the end.
+               ; Branch target: Current PC+2+offset = $000B + $0C = $0017.
 
 ; --- Loop Body (Executes if B is not zero) ---
-$000B: C6 FB       ; DEC $FB. Decrement the counter value in memory.
-$000D: A5 FC       ; LDA $FC. Load the current running total from memory into the accumulator.
-$000F: 65 FA       ; ADC $FA. Add number A to the running total.
-$0011: 85 FC       ; STA $FC. Store the new total back into the result location.
-$0013: 4C 05 00    ; JMP loop. Jump unconditionally back to the start of the loop.
+$000B: C6 FB   ; DEC $FB. Decrement the counter value in memory.
+$000D: A5 FC   ; LDA $FC. Load the current running total from memory into the accumulator.
+$000F: 65 FA   ; ADC $FA. Add number A to the running total.
+$0011: 85 FC   ; STA $FC. Store the new total back into the result location.
+$0013: 4C 05 00   ; JMP loop. Jump unconditionally back to the start of the loop.
 
 ; --- End of Program ---
 ; The final result is already in memory at $FC. We can halt here.
