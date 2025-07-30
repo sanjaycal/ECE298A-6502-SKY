@@ -367,12 +367,12 @@ Table of Supported Instructions:
 |-----------------------------------|--------------------|-----------------|---------------|
 BRANCH INSTRUCTIONS                                                                |
 |-----------------------------------|--------------------|-----------------|---------------|
-|BPL REL (Branch if Negative flag is clear)       | 10 rel             | 4               |  - - - - - -  |
-|BMI REL (Branch if Negative flag is set)       | 30 rel             | 4               |  - - - - - -  |
-|BCC REL (Branch if Carry flag is clear)       | 90 rel             | 4               |  - - - - - -  |
-|BCS REL (Branch if Carry flag is set)       | b0 rel             | 4               |  - - - - - -  |
-|BNE REL (Branch if Zero flag is clear)       | d0 rel             | 4               |  - - - - - -  |
-|BEQ REL (Branch if Zero flag is set)       | f0 rel             | 4               |  - - - - - -  |
+|BPL REL (Branch if Negative flag is 0)       | 10 rel             | 4               |  - - - - - -  |
+|BMI REL (Branch if Negative flag is 1)       | 30 rel             | 4               |  - - - - - -  |
+|BCC REL (Branch if Carry flag is 0)       | 90 rel             | 4               |  - - - - - -  |
+|BCS REL (Branch if Carry flag is 1)       | b0 rel             | 4               |  - - - - - -  |
+|BNE REL (Branch if Zero flag is 0)       | d0 rel             | 4               |  - - - - - -  |
+|BEQ REL (Branch if Zero flag is 1)       | f0 rel             | 4               |  - - - - - -  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |TRANSFER INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -413,7 +413,7 @@ BRANCH INSTRUCTIONS                                                             
 |LSR IMM (Logical Shift Right)      | 49 imm             | 5               |  0 Z C - - -  |
 |ROL IMM (Roll Byte Left)           | 29 imm             | 5               |  N Z C - - -  |
 |ROR IMM (Roll Byte Right)          | 49 imm             | 5               |  N Z C - - -  |
-|SBC IMM (Subtract Byte against Accumulator)|  e9 imm                | 5               |  N Z C - - V  |
+|SBC IMM (Subtract Byte against Acc)| e9 imm             | 5               |  N Z C - - V  |
 |-----------------------------------|--------------------|-----------------|---------------|
 |LOAD IMM INSTRUCTIONS                                                                     |
 |-----------------------------------|--------------------|-----------------|---------------|
@@ -439,8 +439,8 @@ BRANCH INSTRUCTIONS                                                             
 |-----------------------------------|--------------------|-----------------|---------------|
 |NOP (No Op)                        | ea                 | 2               |  - - - - - -  |
 |JMP ABS (Jump)                     | 4c addr-lb addr-hb | 4               |  - - - - - -  |
-|CLC REL (Clear Carry Flag)       | 18              | 2               |  - - C - - -  |
-|SEC REL (Set Carry Flag)       | 38              | 2               |  - - C - - -  |
+|CLC REL (Clear Carry Flag)       | 18              | 2               |  - - 0 - - -  |
+|SEC REL (Set Carry Flag)       | 38              | 2               |  - - 1 - - -  |
 
 
 
