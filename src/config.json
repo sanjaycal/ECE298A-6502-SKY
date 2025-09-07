@@ -20,7 +20,7 @@
   "CLOCK_PERIOD": 25,
 
   "//": "Hold slack margin - Increase them in case you are getting hold violations.",
-  "PL_RESIZER_HOLD_SLACK_MARGIN": 2.5,
+  "PL_RESIZER_HOLD_SLACK_MARGIN": 2,
   "GRT_RESIZER_HOLD_SLACK_MARGIN": 2,
 
   "//": "RUN_LINTER, LINTER_INCLUDE_PDK_MODELS - Disabling the linter is not recommended!",
